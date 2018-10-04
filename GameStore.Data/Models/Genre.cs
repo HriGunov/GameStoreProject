@@ -1,8 +1,8 @@
 ﻿namespace GameStore.Data.Models
 {
-    public class GenreType
+    public class Genre
     {
         public int GenreId { get; set; }
-        public string Type { get; set; }
+        public string Name { get; set; }
     }
 }

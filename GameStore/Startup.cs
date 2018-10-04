@@ -2,9 +2,9 @@
 
 namespace GameStore
 {
-    class Program
+    static class Startup
     {
-        static void Main(string[] args)
+        static void Main()
         {
             Console.WriteLine("Hello World!");
         }
