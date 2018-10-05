@@ -9,4 +9,7 @@
     <ProjectReference Include="..\GameStore.Data\GameStore.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="4.8.1" />
+  </ItemGroup>
 </Project>

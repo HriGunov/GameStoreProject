@@ -5,10 +5,8 @@ namespace GameStore.Data.Models
     public class ShoppingCart
     {
         public int Id { get; set; }
-
-        public int CustomerId { get; set; }
-
-        public Account Customer { get; set; }
+        public int AccountId { get; set; }
+        public Account Account { get; set; }
 
         public List<Product> Products { get; set; }
     }

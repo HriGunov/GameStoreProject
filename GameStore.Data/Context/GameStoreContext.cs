@@ -16,17 +16,14 @@ namespace GameStore.Data.Context
             if (!optionsBuilder.IsConfigured)
             {
                 optionsBuilder
-                    .UseSqlServer("TODO: Connection String");
+                    .UseSqlServer("Server=tcp:gamestoretp.database.windows.net,1433;Initial Catalog=gamestore;Persist Security Info=False;User ID=gamestoreroot;Password=Root123#$;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-          /*  modelBuilder.Entity<Order>()
-                .HasKey(o => new { o.CustomerId, o.ProductId });*/
-
             base.OnModelCreating(modelBuilder);
         }
-       
+
     }
 }

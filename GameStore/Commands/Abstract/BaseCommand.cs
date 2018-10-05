@@ -5,18 +5,16 @@ using System.Text;
 using GameStore.Data.Context;
 namespace GameStore.Commands.Abstract
 {
-   abstract class BaseCommand : ICommand
+    public abstract class BaseCommand : ICommand
     {
-        private readonly IGameStoreContext scope;
-
         public BaseCommand(IGameStoreContext scope)
         {
-            this.scope = scope;
+            this.Scope = scope;
         }
 
-        public IGameStoreContext Scope => scope;
+        public IGameStoreContext Scope { get; }
 
         public abstract string Execute(IEnumerable<string> parameters);
-         
+
     }
 }
