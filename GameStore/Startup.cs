@@ -15,8 +15,7 @@ namespace GameStore
             var builder = new ContainerBuilder();
 
             builder.RegisterAssemblyModules(Assembly.GetExecutingAssembly());
-            var container = builder.Build();
-
+            var container = builder.Build();             
             container.Resolve<IEngine>().Run();
         }
     }

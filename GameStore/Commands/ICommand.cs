@@ -2,7 +2,7 @@
 
 namespace GameStore.Commands
 {
-    internal interface ICommand
+    public interface ICommand
     {
         string Execute(IEnumerable<string> parameters);
     }

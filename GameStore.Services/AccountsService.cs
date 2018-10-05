@@ -77,6 +77,10 @@ namespace GameStore.Services
             return $"Account {accountName} has been successfully restored.";
         }
 
+        /// <summary>
+        /// Checks if a account has admin privileges
+        /// </summary>
+        /// <param name="accountName"></param>        
         public bool IsAdmin(string accountName)
         {
             return this.storeContext.Accounts.SingleOrDefault(acc => acc.Username == accountName && acc.IsAdmin).IsAdmin;
