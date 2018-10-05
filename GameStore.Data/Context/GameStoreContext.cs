@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GameStore.Data.Context
 {
-    public class GameStoreContext : DbContext
+    public class GameStoreContext : DbContext, IGameStoreContext
     {
         public DbSet<Product> Products { get; set; }
         public DbSet<Account> Accounts { get; set; }
@@ -22,10 +22,11 @@ namespace GameStore.Data.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Order>()
-                .HasKey(o => new { o.CustomerId, o.ProductId });
+          /*  modelBuilder.Entity<Order>()
+                .HasKey(o => new { o.CustomerId, o.ProductId });*/
 
             base.OnModelCreating(modelBuilder);
         }
+       
     }
 }

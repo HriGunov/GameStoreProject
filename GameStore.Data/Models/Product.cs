@@ -1,14 +1,17 @@
-﻿namespace GameStore.Data.Models
+﻿using System.Collections.Generic;
+
+namespace GameStore.Data.Models
 {
     public class Product
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
 
         public decimal Price { get; set; }
-        public int GenreId { get; set; }
-        public Genre Genre { get; set; }
+ 
+        public ICollection<Comment> Comments { get; set; }
+        public ICollection<Genre> Genre { get; set; }
 
         public bool IsDeleted { get; set; }
         public bool IsOnSale { get; set; }

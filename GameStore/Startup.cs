@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Autofac;
+using System;
+using System.Reflection;
 
 namespace GameStore
 {
@@ -7,6 +9,8 @@ namespace GameStore
         static void Main()
         {
             Console.WriteLine("Hello World!");
+            var builder = new ContainerBuilder();
+            builder.RegisterAssemblyModules(Assembly.GetExecutingAssembly());
         }
     }
 }

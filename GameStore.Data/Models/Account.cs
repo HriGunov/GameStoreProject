@@ -1,4 +1,6 @@
-﻿namespace GameStore.Data.Models
+﻿using System.Collections.Generic;
+
+namespace GameStore.Data.Models
 {
     public class Account
     {
@@ -15,6 +17,9 @@
         
         public bool IsAdmin { get; set; }
 
+        ICollection<Comment> Comments { get; set; }
+
         public string CreditCard { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }
