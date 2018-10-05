@@ -23,6 +23,10 @@ namespace GameStore.Data.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Account>()
+                        .HasIndex(a => a.Username)
+                        .IsUnique(true);
+
             base.OnModelCreating(modelBuilder);
         }
 
