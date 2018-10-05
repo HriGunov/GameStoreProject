@@ -7,7 +7,6 @@ namespace GameStore.Data.Models
     public class Comment
     {
         public int Id { get; set; }
-
         public int AccountId { get; set; }
         public Account Account { get; set; }
 
@@ -16,7 +15,5 @@ namespace GameStore.Data.Models
         public DateTime TimeStamp { get; set; }
 
         public bool IsDeleted { get; set; }
-
-
     }
 }

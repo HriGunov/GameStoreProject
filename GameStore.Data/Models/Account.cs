@@ -12,7 +12,7 @@ namespace GameStore.Data.Models
         public string Password { get; set; }
         public string CreditCard { get; set; }
 
-        ICollection<Comment> Comments { get; set; }
+        public ICollection<Comment> Comments { get; set; }
 
         public bool IsDeleted { get; set; }
         public bool IsAdmin { get; set; }
