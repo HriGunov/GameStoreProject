@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using GameStore.Core;
 using GameStore.Data.Context;
+using GameStore.Services;
 
 namespace GameStore.Injections
 {
@@ -10,6 +11,7 @@ namespace GameStore.Injections
         {
             builder.RegisterType<Engine>().As<IEngine>();
             builder.RegisterType<GameStoreContext>().As<IGameStoreContext>();
+            builder.RegisterType<AccountsService>().As<IAccountsService>();
             base.Load(builder);
         }
     }
