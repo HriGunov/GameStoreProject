@@ -1,16 +1,23 @@
-﻿using Autofac;
-using System;
+﻿using System;
 using System.Reflection;
+using Autofac;
+using GameStore.Core;
+using GameStore.Data.Context;
 
 namespace GameStore
 {
-    static class Startup
+    internal static class Startup
     {
-        static void Main()
+        private static void Main()
         {
             Console.WriteLine("Hello World!");
+
             var builder = new ContainerBuilder();
+
             builder.RegisterAssemblyModules(Assembly.GetExecutingAssembly());
+            var container = builder.Build();
+
+            container.Resolve<IEngine>().Run();
         }
     }
 }

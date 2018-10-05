@@ -9,15 +9,4 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.1.4" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Migrations\20181005095653_Initial.cs" />
-    <Compile Remove="Migrations\20181005095653_Initial.Designer.cs" />
-    <Compile Remove="Migrations\GameStoreContextModelSnapshot.cs" />
-    <Compile Remove="Migrations\20181005101111_InitialNew.cs" />
-    <Compile Remove="Migrations\20181005101111_InitialNew.Designer.cs" />
-    <Compile Remove="Migrations\20181005101415_CommentsMigration.cs" />
-    <Compile Remove="Migrations\20181005101415_CommentsMigration.Designer.cs" />
-    <Compile Remove="Migrations\20181005102345_Initial.cs" />
-  </ItemGroup>
 </Project>

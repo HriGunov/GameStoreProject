@@ -147,6 +147,12 @@ namespace GameStore.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Accounts_Username",
+                table: "Accounts",
+                column: "Username",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Comments_AccountId",
                 table: "Comments",
                 column: "AccountId");

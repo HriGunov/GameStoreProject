@@ -1,8 +1,5 @@
 ﻿using GameStore.Data.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace GameStore.Data.Context
 {
@@ -14,6 +11,5 @@ namespace GameStore.Data.Context
         DbSet<ShoppingCart> ShoppingCarts { get; set; }
         DbSet<Order> Orders { get; set; }
         int SaveChanges();
-
     }
 }
