@@ -16,13 +16,14 @@ namespace GameStore.Services
             this.storeContext = storeContext ?? throw new ArgumentNullException(nameof(storeContext));
         }
 
-        public Account AddAccount(string firstName, string lastName, string userName, bool isAdmin = false)
+        public Account AddAccount(string firstName, string lastName, string userName, string password, bool isAdmin = false)
         {
             var account = new Account
             {
                 FirstName = firstName,
                 LastName = lastName,
                 Username = userName,
+                Password = password,
                 CreatedOn = DateTime.Now,
                 IsAdmin = isAdmin
             };
@@ -42,6 +43,7 @@ namespace GameStore.Services
             if (account == null || account.IsDeleted) return $"Account {accountName} was not found.";
 
             account.IsDeleted = true;
+            account.DeletedBy = commandExecutor;
             this.storeContext.SaveChanges();
             return $"Account {accountName} has been successfully removed.";
         }
@@ -56,6 +58,7 @@ namespace GameStore.Services
             if (!account.IsDeleted) return $"Account {accountName} is already restored.";
 
             account.IsDeleted = false;
+            account.DeletedBy = null;
             this.storeContext.SaveChanges();
             return $"Account {accountName} has been successfully restored.";
         }

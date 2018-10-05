@@ -17,7 +17,7 @@ namespace GameStore.Core
 
         public void Run()
         {
-            
+
         }
 
         public void AddCommentToProduct(Comment comment, Product product)
