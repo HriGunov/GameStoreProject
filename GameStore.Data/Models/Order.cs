@@ -9,7 +9,7 @@ namespace GameStore.Data.Models
         public int AccountId { get; set; }
         public Account Account { get; set; }
 
-        public ICollection<Product> PurchasedProducts { get; set; }
+        public ICollection<Product> PurchasedProducts { get; set; } = new List<Product>();
 
         public DateTime OrderTimestamp { get; set; }
     }

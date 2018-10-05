@@ -14,6 +14,6 @@ namespace GameStore.Data.Models
 
         public DateTime TimeStamp { get; set; }
 
-        public bool IsDeleted { get; set; }
+        public bool IsDeleted { get; set; } = false;
     }
 }

@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace GameStore.Core
 {
-    class Engine
+    public class Engine
     {
         private readonly IGameStoreContext gameStoreContext;
 
@@ -18,6 +18,7 @@ namespace GameStore.Core
         {
 
         }
+
         public void CreateAccount(string username, string password)
         {
             var newAccount = new Account() { Username = username, Password = password };
@@ -51,8 +52,6 @@ namespace GameStore.Core
         public void AddOrder(Account account, ShoppingCart cart)
         {
             throw new NotImplementedException();
-
-
         }
     }
 }

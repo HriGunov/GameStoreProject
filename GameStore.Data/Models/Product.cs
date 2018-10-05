@@ -11,10 +11,10 @@ namespace GameStore.Data.Models
 
         public decimal Price { get; set; }
 
-        public ICollection<Comment> Comments { get; set; }
-        public ICollection<Genre> Genre { get; set; }
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
+        public ICollection<Genre> Genre { get; set; } = new List<Genre>();
 
-        public bool IsDeleted { get; set; }
-        public bool IsOnSale { get; set; }
+        public bool IsDeleted { get; set; } = false;
+        public bool IsOnSale { get; set; } = false;
     }
 }
