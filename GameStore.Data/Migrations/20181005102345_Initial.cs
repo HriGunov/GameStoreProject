@@ -98,7 +98,7 @@ namespace GameStore.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Comment",
+                name: "Comments",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -111,15 +111,15 @@ namespace GameStore.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Comment", x => x.Id);
+                    table.PrimaryKey("PK_Comments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Comment_Accounts_AccountId",
+                        name: "FK_Comments_Accounts_AccountId",
                         column: x => x.AccountId,
                         principalTable: "Accounts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Comment_Products_ProductId",
+                        name: "FK_Comments_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "Id",
@@ -147,13 +147,13 @@ namespace GameStore.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comment_AccountId",
-                table: "Comment",
+                name: "IX_Comments_AccountId",
+                table: "Comments",
                 column: "AccountId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comment_ProductId",
-                table: "Comment",
+                name: "IX_Comments_ProductId",
+                table: "Comments",
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
@@ -185,7 +185,7 @@ namespace GameStore.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Comment");
+                name: "Comments");
 
             migrationBuilder.DropTable(
                 name: "Genres");
