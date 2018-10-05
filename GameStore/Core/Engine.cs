@@ -20,21 +20,5 @@ namespace GameStore.Core
 
         }
 
-        public void AddCommentToProduct(Comment comment, Product product)
-        {
-            product.Comments.Add(comment);
-            gameStoreContext.SaveChanges();
-        }
-
-        public void AddProductToCart(ShoppingCart cartToAddTo, Product productToAdd)
-        {
-            cartToAddTo.Products.Add(productToAdd);
-            gameStoreContext.SaveChanges();
-        }
-
-        public void AddOrder(Account account, ShoppingCart cart)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

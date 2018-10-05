@@ -16,6 +16,9 @@ namespace GameStore.Services
             this.storeContext = storeContext ?? throw new ArgumentNullException(nameof(storeContext));
         }
 
+        /// <summary>
+        /// Creats a Account Entitiy and adds it to the DB
+        /// </summary>  
         public Account AddAccount(string firstName, string lastName, string userName, string password, bool isAdmin = false)
         {
             var account = new Account
@@ -34,6 +37,12 @@ namespace GameStore.Services
             return account;
         }
 
+        /// <summary>
+        /// Deletes an account by changing it's IsDeleted flag and sets the deletion timestamp.
+        /// </summary>
+        /// <param name="commandExecutor">The username of the command giver.</param>
+        /// <param name="accountName">The username of the account to be removed/undeleted</param>
+        /// <returns></returns>
         public string RemoveAccount(string commandExecutor, string accountName)
         {
             if (!IsAdmin(commandExecutor))
@@ -47,7 +56,12 @@ namespace GameStore.Services
             this.storeContext.SaveChanges();
             return $"Account {accountName} has been successfully removed.";
         }
-
+        /// <summary>
+        /// Restores an account by changing it's IsDeleted flag and removes the deletion timestamp.
+        /// </summary>
+        /// <param name="commandExecutor">The username of the command giver.</param>
+        /// <param name="accountName">The username of the account to be restored/undeleted</param>
+        /// <returns></returns>
         public string RestoreAccount(string commandExecutor, string accountName)
         {
             if (!IsAdmin(commandExecutor))
@@ -65,8 +79,7 @@ namespace GameStore.Services
 
         public bool IsAdmin(string accountName)
         {
-            return this.storeContext.Accounts.SingleOrDefault(acc => acc.Username == accountName && acc.IsAdmin) !=
-                   null;
+            return this.storeContext.Accounts.SingleOrDefault(acc => acc.Username == accountName && acc.IsAdmin).IsAdmin;
         }
     }
 }
