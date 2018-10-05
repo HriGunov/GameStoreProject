@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace GameStore.Data.Models
@@ -14,8 +15,10 @@ namespace GameStore.Data.Models
         [Required] [MaxLength(20)] public string Username { get; set; }
 
         // SHA-256
-        public string Password { get; set; }
+        [Required] public string Password { get; set; }
         public string CreditCard { get; set; }
+
+        public DateTime CreatedOn { get; set; }
 
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
