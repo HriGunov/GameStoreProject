@@ -24,17 +24,12 @@ namespace GameStore.Services
         /// <returns></returns>
         public ShoppingCart AddToCart(Product product, Account account)
         {
-            var cart = storeContext.ShoppingCarts.ToList().FirstOrDefault(c => c.Account.Username == account.Username);
-            if (cart == null)
-            {
-                AddCart(account);
-                return AddToCart(product, account);
-            }
+            var tempAccount = storeContext.Accounts.ToList().FirstOrDefault(c => c.Username == account.Username)?.ShoppingCart;
 
-            cart?.Products.Add(product);
+            tempAccount?.Products.Add(product);
             storeContext.SaveChanges();
 
-            return cart;
+            return tempAccount;
         }
 
         /// <summary>
@@ -45,33 +40,13 @@ namespace GameStore.Services
         /// <returns></returns>
         public ShoppingCart AddToCart(IEnumerable<Product> product, Account account)
         {
-            var cart = storeContext.ShoppingCarts.ToList().FirstOrDefault(c => c.Account.Username == account.Username);
-            if (cart == null)
-            {
-                AddCart(account);
-                return AddToCart(product, account);
-            }
+            var tempAccount = storeContext.Accounts.ToList().FirstOrDefault(c => c.Username == account.Username)?.ShoppingCart;
 
-            foreach (var p in product) cart?.Products.Add(p);
+            foreach (var p in product) tempAccount?.Products.Add(p);
 
             storeContext.SaveChanges();
 
-            return cart;
-        }
-
-        /// <summary>
-        ///     Creates a cart for the given account in the parameters.
-        /// </summary>
-        /// <param name="account">Account</param>
-        /// <returns></returns>
-        private ShoppingCart AddCart(Account account)
-        {
-            var tempCart = new ShoppingCart {Account = account, AccountId = account.Id, Products = new List<Product>()};
-
-            storeContext.ShoppingCarts.Add(tempCart);
-            storeContext.SaveChanges();
-
-            return tempCart;
+            return tempAccount;
         }
     }
 }

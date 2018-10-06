@@ -18,13 +18,15 @@ namespace GameStore.Core
 
         public void Run()
         {
-            var accounts = new AccountsService(gameStoreContext);
+            /*var accounts = new AccountsService(gameStoreContext);
             var products = new ProductsService(gameStoreContext);
             var shoppingCarts = new ShoppingCartsService(gameStoreContext);
-            //products.AddProduct("Banana", "Golden Banana to Eat", 10);
+            products.AddProduct("Banana", "Golden Banana to Eat", 10);
             var tempProduct = products.FindProducts("Banana");
             var tempAccount = accounts.FindAccount("hrigunov");
+            var tempAccount2 = accounts.FindAccount("dngrozdanov");
             var tempCart = shoppingCarts.AddToCart(tempProduct, tempAccount);
+            var tempCart2 = shoppingCarts.AddToCart(tempProduct, tempAccount2);*/
 
             string input;
             while ((input = Console.ReadLine()) != "end")

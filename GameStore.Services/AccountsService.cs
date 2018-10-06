@@ -28,6 +28,7 @@ namespace GameStore.Services
                 Username = userName,
                 Password = password,
                 CreatedOn = DateTime.Now,
+                ShoppingCart = new ShoppingCart(),
                 IsAdmin = isAdmin
             };
 

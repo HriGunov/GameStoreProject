@@ -23,6 +23,9 @@ namespace GameStore.Data.Models
 
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
+        public int ShoppingCartId { get; set; }
+        public ShoppingCart ShoppingCart { get; set; }
+
         public bool IsDeleted { get; set; } = false;
         public bool IsAdmin { get; set; } = false;
     }
