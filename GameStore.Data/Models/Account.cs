@@ -17,7 +17,7 @@ namespace GameStore.Data.Models
         // SHA-256
         [Required] public string Password { get; set; }
         public string CreditCard { get; set; }
-        public string DeletedBy { get;set; }
+        public string DeletedBy { get; set; }
 
         public DateTime CreatedOn { get; set; }
 

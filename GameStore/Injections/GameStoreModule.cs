@@ -13,8 +13,8 @@ namespace GameStore.Injections
             builder.RegisterType<Engine>().As<IEngine>();
             builder.RegisterType<GameStoreContext>().As<IGameStoreContext>();
             builder.RegisterType<AccountsService>().As<IAccountsService>();
-            builder.RegisterType<CommandsManager>().As<ICommandsManager>();
-            
+            builder.RegisterType<CommandManager>().As<ICommandManager>();
+
             base.Load(builder);
         }
     }

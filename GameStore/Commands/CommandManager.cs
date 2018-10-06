@@ -1,39 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Autofac;
 
 namespace GameStore.Commands
 {
-    public class CommandsManager : ICommandsManager
+    public class CommandManager : ICommandManager
     {
-
-        public CommandsManager(ILifetimeScope scope)
+        public CommandManager(ILifetimeScope scope)
         {
             Scope = scope;
         }
 
         public ILifetimeScope Scope { get; }
 
-
         public string Execute(string commandLine)
         {
             if (string.IsNullOrEmpty(commandLine))
-            {
                 throw new ArgumentException("Null commandline passed.", nameof(commandLine));
-            }
 
-            var tokens = commandLine.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            var args = commandLine.Split();
 
-            var commandToExecute = FindCommand(tokens[0]);
+            var commandToExecute = FindCommand(args[0]);
 
-            return commandToExecute.Execute(tokens.Skip(1));
+            return commandToExecute.Execute(args.Skip(1));
         }
+
         public ICommand FindCommand(string commandName)
         {
             return Scope.ResolveNamed<ICommand>(commandName.ToLower());
         }
- 
     }
 }

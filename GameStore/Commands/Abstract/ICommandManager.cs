@@ -1,6 +1,6 @@
 ﻿namespace GameStore.Commands
 {
-    public interface ICommandsManager
+    public interface ICommandManager
     {
         ICommand FindCommand(string commandName);
         string Execute(string commandLine);
