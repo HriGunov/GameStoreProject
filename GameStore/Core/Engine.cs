@@ -1,6 +1,7 @@
 ﻿using System;
 using GameStore.Commands;
 using GameStore.Data.Context;
+using GameStore.Services;
 
 namespace GameStore.Core
 {
@@ -17,6 +18,14 @@ namespace GameStore.Core
 
         public void Run()
         {
+            var accounts = new AccountsService(gameStoreContext);
+            var products = new ProductsService(gameStoreContext);
+            var shoppingCarts = new ShoppingCartsService(gameStoreContext);
+            //products.AddProduct("Banana", "Golden Banana to Eat", 10);
+            var tempProduct = products.FindProducts("Banana");
+            var tempAccount = accounts.FindAccount("hrigunov");
+            var tempCart = shoppingCarts.AddToCart(tempProduct, tempAccount);
+
             string input;
             while ((input = Console.ReadLine()) != "end")
             {

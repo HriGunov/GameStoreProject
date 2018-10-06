@@ -15,6 +15,7 @@ namespace GameStore.Injections
             builder.RegisterType<GameStoreContext>().As<IGameStoreContext>();
             builder.RegisterType<AccountsService>().As<IAccountsService>();
             builder.RegisterType<ProductsService>().As<IProductsService>();
+            builder.RegisterType<ShoppingCartsService>().As<IShoppingCartsService>();
             builder.RegisterType<CommandManager>().As<ICommandManager>();
 
             base.Load(builder);

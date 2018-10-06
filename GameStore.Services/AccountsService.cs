@@ -48,7 +48,7 @@ namespace GameStore.Services
             if (!IsAdmin(commandExecutor))
                 return @"You don't have enough permissions.";
 
-            var account = storeContext.Accounts.FirstOrDefault(acc => acc.Username == accountName);
+            var account = storeContext.Accounts.ToList().FirstOrDefault(acc => acc.Username == accountName);
             if (account == null || account.IsDeleted) return $"Account {accountName} was not found.";
 
             account.IsDeleted = true;
@@ -63,8 +63,22 @@ namespace GameStore.Services
         /// <param name="accountName"></param>
         public bool IsAdmin(string accountName)
         {
-            return storeContext.Accounts.SingleOrDefault(acc => acc.Username == accountName && acc.IsAdmin) !=
+            return storeContext.Accounts.ToList().SingleOrDefault(acc => acc.Username == accountName && acc.IsAdmin) !=
                    null;
+        }
+
+        /// <summary>
+        ///     Finds the account in the database that matches the given accountName in the parameters and returns it as Account
+        ///     type.
+        /// </summary>
+        /// <param name="accountName">Account Name</param>
+        /// <returns></returns>
+        public Account FindAccount(string accountName)
+        {
+            var account = storeContext.Accounts.ToList().FirstOrDefault(p => p.Username == accountName);
+            if (account == null || account.IsDeleted) return null;
+
+            return account;
         }
 
         /// <summary>
@@ -78,7 +92,7 @@ namespace GameStore.Services
             if (!IsAdmin(commandExecutor))
                 return @"You don't have enough permissions.";
 
-            var account = storeContext.Accounts.FirstOrDefault(acc => acc.Username == accountName);
+            var account = storeContext.Accounts.ToList().FirstOrDefault(acc => acc.Username == accountName);
             if (account == null) return $"Account {accountName} was not found.";
             if (!account.IsDeleted) return $"Account {accountName} is already restored.";
 
