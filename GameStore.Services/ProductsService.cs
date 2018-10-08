@@ -83,19 +83,32 @@ namespace GameStore.Services
             return product == null || product.IsDeleted ? null : product;
         }
 
-        /// <summary>
-        ///     Finds the products in the database that match the given productName in the parameters and returns them as Product
-        ///     type in a collection.
-        /// </summary>
-        /// <param name="productName">Product Name</param>
-        /// <returns></returns>
-        public IEnumerable<Product> FindProducts(string productName)
+        public IEnumerable<Product> FindProductsByGenre(Genre productGenre)
         {
             var products = storeContext.Products
                                        .Include(c => c.Comments)
                                        .Include(g => g.Genre)
                                        .ToList()
-                                       .Where(p => p.Name == productName);
+                                       .Where(p => p.Genre.Contains(productGenre));
+
+            return !products.Any() ? null : products;
+        }
+
+        public IEnumerable<Product> FindProductsByGenre(IEnumerable<Genre> productGenre)
+        {
+            var products = storeContext.Products
+                                       .Include(c => c.Comments)
+                                       .Include(g => g.Genre)
+                                       .ToList()
+                                       .Where(p =>
+            {
+                foreach (var genre in productGenre)
+                {
+                    if (!p.Genre.Contains(genre))
+                        return false;
+                }
+                return true;
+            });
 
             return !products.Any() ? null : products;
         }
