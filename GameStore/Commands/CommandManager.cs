@@ -22,7 +22,7 @@ namespace GameStore.Commands
 
             var commandToExecute = FindCommand(args[0]);
 
-            return commandToExecute.Execute(args.Skip(1));
+            return commandToExecute.Execute(args.Skip(1).ToList());
         }
 
         public ICommand FindCommand(string commandName)

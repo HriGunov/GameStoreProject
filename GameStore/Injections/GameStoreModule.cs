@@ -21,6 +21,7 @@ namespace GameStore.Injections
             builder.RegisterType<ShoppingCartsService>().As<IShoppingCartsService>();
             builder.RegisterType<CommandManager>().As<ICommandManager>();
             RegisterCommands(builder);
+
             base.Load(builder);
         }
 

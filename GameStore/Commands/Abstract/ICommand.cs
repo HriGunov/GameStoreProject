@@ -4,6 +4,6 @@ namespace GameStore.Commands
 {
     public interface ICommand
     {
-        string Execute(IEnumerable<string> parameters);
+        string Execute(List<string> parameters);
     }
 }

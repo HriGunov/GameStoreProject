@@ -1,6 +1,7 @@
 ﻿using System;
 using GameStore.Commands;
 using GameStore.Data.Context;
+using GameStore.Data.Models;
 using GameStore.Services;
 
 namespace GameStore.Core
@@ -9,13 +10,15 @@ namespace GameStore.Core
     {
         private readonly ICommandManager commandManager;
         private readonly IGameStoreContext gameStoreContext;
-
+        
         public Engine(IGameStoreContext gameStoreContext, ICommandManager commandManager)
         {
             this.gameStoreContext = gameStoreContext;
             this.commandManager = commandManager;
+
         }
 
+        public Account CurrentUser { get; set; }
         public void Run()
         {
             var accounts = new AccountsService(gameStoreContext);
@@ -31,10 +34,12 @@ namespace GameStore.Core
             var tempCart = shoppingCarts.AddToCart(tempProduct, tempAccount);
             var tempCart2 = shoppingCarts.AddToCart(tempProduct, tempAccount2);
 
+            
             string input;
             while ((input = Console.ReadLine()) != "end")
             {
-                var commandExecute = commandManager.Execute(input);
+                var line = Console.ReadLine();
+                commandManager.Execute(line);
             }
         }
     }
