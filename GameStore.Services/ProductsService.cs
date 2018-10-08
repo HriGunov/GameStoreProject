@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GameStore.Data.Context;
+using GameStore.Data.Context.Abstract;
 using GameStore.Data.Models;
 using GameStore.Services.Abstract;
 using Microsoft.EntityFrameworkCore;
@@ -79,9 +80,7 @@ namespace GameStore.Services
                                        .ToList()
                                        .SingleOrDefault(p => p.Name == productName);
 
-            if (product == null || product.IsDeleted) return null;
-
-            return product;
+            return product == null || product.IsDeleted ? null : product;
         }
 
         /// <summary>

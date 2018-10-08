@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using GameStore.Data.Context;
+using GameStore.Data.Context.Abstract;
 using GameStore.Data.Models;
 using GameStore.Services.Abstract;
 using Microsoft.EntityFrameworkCore;
@@ -47,8 +48,9 @@ namespace GameStore.Services
         /// <returns></returns>
         public string RemoveAccount(string commandExecutor, string accountName)
         {
+            // Move that to Command.
             if (!IsAdmin(commandExecutor))
-                return @"You don't have enough permissions.";
+                throw new NotSupportedException("You don't have enough permissions.");
 
             var account = storeContext.Accounts.ToList().FirstOrDefault(acc => acc.Username == accountName);
             if (account == null || account.IsDeleted) return $"Account {accountName} was not found.";
@@ -83,9 +85,7 @@ namespace GameStore.Services
                                       .ToList()
                                       .FirstOrDefault(p => p.Username == accountName);
 
-            if (account == null || account.IsDeleted) return null;
-
-            return account;
+            return account == null || account.IsDeleted ? null : account;
         }
 
         /// <summary>
@@ -96,8 +96,9 @@ namespace GameStore.Services
         /// <returns></returns>
         public string RestoreAccount(string commandExecutor, string accountName)
         {
+            // Move that to Command.
             if (!IsAdmin(commandExecutor))
-                return @"You don't have enough permissions.";
+                throw new NotSupportedException("You don't have enough permissions.");
 
             var account = storeContext.Accounts.ToList().FirstOrDefault(acc => acc.Username == accountName);
             if (account == null) return $"Account {accountName} was not found.";

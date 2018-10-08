@@ -14,7 +14,7 @@ namespace GameStore.Data.Models
 
         [Required] [MaxLength(20)] public string Username { get; set; }
 
-        // SHA-256
+        // SHA-512
         [Required] public string Password { get; set; }
         public string CreditCard { get; set; }
         public string DeletedBy { get; set; }

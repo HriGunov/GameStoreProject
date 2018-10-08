@@ -1,4 +1,5 @@
 ﻿using GameStore.Core;
+using GameStore.Core.Abstract;
 using GameStore.Services;
 using GameStore.Services.Abstract;
 using System;
@@ -21,16 +22,18 @@ namespace GameStore.Commands
             this.authenticationService = authenticationService;
             this.cryptographicService = cryptographicService;
         }
+
         //LogIn {username} {password}
         //LogIn 
         public string Execute(List<string> parameters)
         {
+            Console.WriteLine("=== Log In ===");
             string username;
             string password;
             if (parameters.Count == 2)
-            {                 
+            {
                 username = parameters[0];
-                password = cryptographicService.ComputeHash(parameters[1]);               
+                password = cryptographicService.ComputeHash(parameters[1]);
             }
             else
             {
@@ -40,13 +43,12 @@ namespace GameStore.Commands
                 password = Console.ReadLine();
             }
 
-
             var result = authenticationService.Authenticate(username, password);
 
             if (result != null)
             {
                 engine.CurrentUser = result;
-                return "Successful Login.";
+                return $"Successful Login.{Environment.NewLine}Welcome {engine.CurrentUser.Username}!";
             }
             return "Invalid Password or Username";
         }

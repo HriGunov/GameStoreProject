@@ -1,7 +1,7 @@
 ﻿using GameStore.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace GameStore.Data.Context
+namespace GameStore.Data.Context.Abstract
 {
     public interface IGameStoreContext
     {

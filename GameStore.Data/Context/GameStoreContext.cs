@@ -1,4 +1,5 @@
-﻿using GameStore.Data.Models;
+﻿using GameStore.Data.Context.Abstract;
+using GameStore.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace GameStore.Data.Context

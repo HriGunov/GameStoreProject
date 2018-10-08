@@ -1,5 +1,7 @@
 ﻿using GameStore.Commands;
+using GameStore.Core.Abstract;
 using GameStore.Data.Context;
+using GameStore.Data.Context.Abstract;
 using GameStore.Data.Models;
 using GameStore.Services;
 using System;
@@ -19,6 +21,7 @@ namespace GameStore.Core
         }
 
         public Account CurrentUser { get; set; }
+
         public void Run()
         {
             var accounts = new AccountsService(gameStoreContext);
@@ -34,15 +37,11 @@ namespace GameStore.Core
                var tempCart = shoppingCarts.AddToCart(tempProduct, tempAccount);
                var tempCart2 = shoppingCarts.AddToCart(tempProduct, tempAccount2);
                */
-
-            commandManager.Execute("SiGnUp");
-
-            string input;
-            do
+            string line;
+            while ((line = Console.ReadLine()) != "end")
             {
-                input = Console.ReadLine();
-                commandManager.Execute("Login test1 test1");
-            } while (input != "end");
+                commandManager.Execute(line);
+            }
         }
     }
 }

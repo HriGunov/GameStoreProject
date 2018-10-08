@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using GameStore.Services.Abstract;
 
 namespace GameStore.Services
 {
@@ -10,6 +8,7 @@ namespace GameStore.Services
         {
             return SHA512(stringToHash);
         }
+
         private string SHA512(string input)
         {
             var bytes = System.Text.Encoding.UTF8.GetBytes(input);

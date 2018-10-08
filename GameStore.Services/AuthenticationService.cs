@@ -4,7 +4,7 @@ using System;
 
 namespace GameStore.Services
 {
-   public class AuthenticationService : IAuthenticationService
+    public class AuthenticationService : IAuthenticationService
     {
 
         private readonly IAccountsService accountsService;
@@ -17,24 +17,14 @@ namespace GameStore.Services
         }
 
         /// <summary>
-        /// Checks if username exists and  passwords match
+        /// Checks if username exists and passwords match
         /// </summary>
         /// <param name="username"></param>
         /// <param name="password"></param>        
         public Account Authenticate(string username, string password)
         {
             var foundAccount = accountsService.FindAccount(username);
-            if (foundAccount == null)
-            {
-                return null;
-            }
-           
-            if (foundAccount.Password == password)
-            {
-                return foundAccount;
-            }
-            return null;
+            return foundAccount == null ? null : foundAccount.Password == password ? foundAccount : null;
         }
- 
     }
 }

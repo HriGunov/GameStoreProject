@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using GameStore.Data.Context;
+using GameStore.Data.Context.Abstract;
 using GameStore.Data.Models;
 using GameStore.Services.Abstract;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace GameStore.Services
 {
@@ -24,6 +26,13 @@ namespace GameStore.Services
         /// <returns></returns>
         public ShoppingCart AddToCart(Product product, Account account)
         {
+            // Move this check to Commands
+            if (account.IsGuest)
+                throw new NotSupportedException("Guests cannot add to their carts.");
+
+            if (product == null)
+                throw new NotSupportedException($"Product {product.Name} doesn't exist.");
+
             var tempCart = storeContext.Accounts.ToList().FirstOrDefault(c => c.Username == account.Username)?.ShoppingCart;
 
             var shoppingCart = new ShoppingCartProducts
@@ -46,6 +55,13 @@ namespace GameStore.Services
         /// <returns></returns>
         public ShoppingCart AddToCart(IEnumerable<Product> product, Account account)
         {
+            // Move this check to Commands
+            if (account.IsGuest)
+                throw new NotSupportedException("Guests cannot add to their carts.");
+
+            if (!product.Any())
+                throw new NotSupportedException("No products given to add.");
+
             var tempCart = storeContext.Accounts.ToList().FirstOrDefault(c => c.Username == account.Username)?.ShoppingCart;
 
             foreach (var p in product)
