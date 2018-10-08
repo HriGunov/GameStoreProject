@@ -5,6 +5,8 @@ using GameStore.Data.Context.Abstract;
 using GameStore.Data.Models;
 using GameStore.Services.Abstract;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
 
 namespace GameStore.Services
 {
@@ -108,6 +110,11 @@ namespace GameStore.Services
             account.DeletedBy = null;
             storeContext.SaveChanges();
             return $"Account {accountName} has been successfully restored.";
+        }
+
+        public Account GetGuestAccount()
+        {
+            return storeContext.Accounts.SingleOrDefault(acc => acc.IsGuest);
         }
     }
 }
