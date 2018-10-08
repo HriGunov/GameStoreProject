@@ -4,6 +4,7 @@ using GameStore.Data.Context;
 using GameStore.Data.Context.Abstract;
 using GameStore.Data.Models;
 using GameStore.Services;
+using GameStore.Services.Abstract;
 using System;
 
 namespace GameStore.Core
@@ -11,13 +12,14 @@ namespace GameStore.Core
     public class Engine : IEngine
     {
         private readonly ICommandManager commandManager;
+        private readonly ICommentService commentService;
         private readonly IGameStoreContext gameStoreContext;
 
-        public Engine(IGameStoreContext gameStoreContext, ICommandManager commandManager)
+        public Engine(IGameStoreContext gameStoreContext, ICommandManager commandManager, ICommentService commentService)
         {
             this.gameStoreContext = gameStoreContext;
             this.commandManager = commandManager;
-
+            this.commentService = commentService;
         }
 
         public Account CurrentUser { get; set; }
@@ -37,6 +39,7 @@ namespace GameStore.Core
                var tempCart = shoppingCarts.AddToCart(tempProduct, tempAccount);
                var tempCart2 = shoppingCarts.AddToCart(tempProduct, tempAccount2);
                */
+          //  commentService.AddCommentToProduct("Banana", "hrigunov", "Top KeK");
             string line;
             while ((line = Console.ReadLine()) != "end")
             {

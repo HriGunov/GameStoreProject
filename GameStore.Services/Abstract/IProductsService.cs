@@ -10,6 +10,6 @@ namespace GameStore.Services.Abstract
 
         string RemoveProduct(string productName);
         Product FindProduct(string productName);
-        IEnumerable<Product> FindProducts(string productName);
+        IEnumerable<Product> FindProductsByGenre(IEnumerable<Genre> productGenre);
     }
 }
