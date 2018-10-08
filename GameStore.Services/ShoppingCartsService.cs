@@ -24,12 +24,18 @@ namespace GameStore.Services
         /// <returns></returns>
         public ShoppingCart AddToCart(Product product, Account account)
         {
-            var tempAccount = storeContext.Accounts.ToList().FirstOrDefault(c => c.Username == account.Username)?.ShoppingCart;
+            var tempCart = storeContext.Accounts.ToList().FirstOrDefault(c => c.Username == account.Username)?.ShoppingCart;
 
-            tempAccount?.Products.Add(product);
+            var shoppingCart = new ShoppingCartProducts
+            {
+                ShoppingCart = tempCart,
+                Product = product
+            };
+
+            tempCart?.ShoppingCartProducts.Add(shoppingCart);
             storeContext.SaveChanges();
 
-            return tempAccount;
+            return tempCart;
         }
 
         /// <summary>
@@ -40,13 +46,22 @@ namespace GameStore.Services
         /// <returns></returns>
         public ShoppingCart AddToCart(IEnumerable<Product> product, Account account)
         {
-            var tempAccount = storeContext.Accounts.ToList().FirstOrDefault(c => c.Username == account.Username)?.ShoppingCart;
+            var tempCart = storeContext.Accounts.ToList().FirstOrDefault(c => c.Username == account.Username)?.ShoppingCart;
 
-            foreach (var p in product) tempAccount?.Products.Add(p);
+            foreach (var p in product)
+            {
+                var shoppingCart = new ShoppingCartProducts
+                {
+                    ShoppingCart = tempCart,
+                    Product = p
+                };
+
+                tempCart?.ShoppingCartProducts.Add(shoppingCart);
+            }
 
             storeContext.SaveChanges();
 
-            return tempAccount;
+            return tempCart;
         }
     }
 }

@@ -6,6 +6,6 @@ namespace GameStore.Data.Models
     {
         public int Id { get; set; }
 
-        public ICollection<Product> Products { get; set; } = new List<Product>();
+        public ICollection<ShoppingCartProducts> ShoppingCartProducts { get; set; } = new List<ShoppingCartProducts>();
     }
 }

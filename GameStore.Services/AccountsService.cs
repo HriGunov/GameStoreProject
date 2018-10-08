@@ -3,6 +3,7 @@ using System.Linq;
 using GameStore.Data.Context;
 using GameStore.Data.Models;
 using GameStore.Services.Abstract;
+using Microsoft.EntityFrameworkCore;
 
 namespace GameStore.Services
 {
@@ -19,7 +20,7 @@ namespace GameStore.Services
         ///     Creates an Account entity and adds it to the DB
         /// </summary>
         public Account AddAccount(string firstName, string lastName, string userName, string password,
-            bool isAdmin = false)
+            bool isAdmin = false, bool isGuest = false)
         {
             var account = new Account
             {
@@ -76,7 +77,12 @@ namespace GameStore.Services
         /// <returns></returns>
         public Account FindAccount(string accountName)
         {
-            var account = storeContext.Accounts.ToList().FirstOrDefault(p => p.Username == accountName);
+            var account = storeContext.Accounts
+                                      .Include(s => s.ShoppingCart)
+                                      .Include(c => c.Comments)
+                                      .ToList()
+                                      .FirstOrDefault(p => p.Username == accountName);
+
             if (account == null || account.IsDeleted) return null;
 
             return account;

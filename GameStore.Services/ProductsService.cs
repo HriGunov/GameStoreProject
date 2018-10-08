@@ -4,6 +4,7 @@ using System.Linq;
 using GameStore.Data.Context;
 using GameStore.Data.Models;
 using GameStore.Services.Abstract;
+using Microsoft.EntityFrameworkCore;
 
 namespace GameStore.Services
 {
@@ -25,27 +26,23 @@ namespace GameStore.Services
         /// <param name="productGenres">Product Genres (ICollection)</param>
         /// <returns></returns>
         public Product AddProduct(string productName, string productDescription, decimal productPrice,
-            ICollection<Genre> productGenres = null)
+            ICollection<Genre> productGenres = null, ICollection<Comment> productComments = null)
         {
             Product product;
 
-            if (productGenres == null)
-                product = new Product
-                {
-                    Name = productName,
-                    Description = productDescription,
-                    Price = productPrice,
-                    CreatedOn = DateTime.Now
-                };
-            else
-                product = new Product
-                {
-                    Name = productName,
-                    Description = productDescription,
-                    Price = productPrice,
-                    Genre = productGenres,
-                    CreatedOn = DateTime.Now
-                };
+            product = new Product
+            {
+                Name = productName,
+                Description = productDescription,
+                Price = productPrice,
+                CreatedOn = DateTime.Now
+            };
+
+            if (productGenres != null)
+                product.Genre = productGenres;
+
+            if (productComments != null)
+                product.Comments = productComments;
 
             storeContext.Products.Add(product);
             storeContext.SaveChanges();
@@ -60,7 +57,7 @@ namespace GameStore.Services
         /// <returns></returns>
         public string RemoveProduct(string productName)
         {
-            var product = storeContext.Products.ToList().FirstOrDefault(p => p.Name == productName);
+            var product = storeContext.Products.ToList().SingleOrDefault(p => p.Name == productName);
             if (product == null || product.IsDeleted) return $"Product {productName} was not found.";
 
             product.IsDeleted = true;
@@ -76,7 +73,12 @@ namespace GameStore.Services
         /// <returns></returns>
         public Product FindProduct(string productName)
         {
-            var product = storeContext.Products.ToList().FirstOrDefault(p => p.Name == productName);
+            var product = storeContext.Products
+                                       .Include(c => c.Comments)
+                                       .Include(g => g.Genre)
+                                       .ToList()
+                                       .SingleOrDefault(p => p.Name == productName);
+
             if (product == null || product.IsDeleted) return null;
 
             return product;
@@ -90,7 +92,12 @@ namespace GameStore.Services
         /// <returns></returns>
         public IEnumerable<Product> FindProducts(string productName)
         {
-            var products = storeContext.Products.ToList().Where(p => p.Name == productName).ToList();
+            var products = storeContext.Products
+                                       .Include(c => c.Comments)
+                                       .Include(g => g.Genre)
+                                       .ToList()
+                                       .Where(p => p.Name == productName);
+
             return !products.Any() ? null : products;
         }
     }

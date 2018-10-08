@@ -27,6 +27,7 @@ namespace GameStore.Data.Models
         public ShoppingCart ShoppingCart { get; set; }
 
         public bool IsDeleted { get; set; } = false;
+        public bool IsGuest { get; set; } = false;
         public bool IsAdmin { get; set; } = false;
     }
 }

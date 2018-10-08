@@ -10,6 +10,7 @@ namespace GameStore.Data.Context
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
+        public DbSet<ShoppingCartProducts> ShoppingCartProducts { get; set; }
         public DbSet<Order> Orders { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -22,8 +23,15 @@ namespace GameStore.Data.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<ShoppingCartProducts>()
+                .HasKey(p => new { p.ProductId, p.ShoppingCartId });
+
             modelBuilder.Entity<Account>()
                 .HasIndex(a => a.Username)
+                .IsUnique(true);
+
+            modelBuilder.Entity<Product>()
+                .HasIndex(p => p.Name)
                 .IsUnique(true);
 
             base.OnModelCreating(modelBuilder);

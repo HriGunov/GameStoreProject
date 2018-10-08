@@ -26,14 +26,12 @@ namespace GameStore.Injections
 
         private void RegisterCommands(ContainerBuilder builder)
         {
-            var type = typeof(ICommand);
-            var commands = AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).Where(p => type.IsAssignableFrom(p) && !p.IsAbstract &&!p.IsInterface);
-
-            foreach (var command in commands)
-            {
-                builder.RegisterType(command).Named<ICommand>(command.Name.ToLower()).SingleInstance();
-            }
-            
+            AppDomain.CurrentDomain
+                     .GetAssemblies()
+                     .SelectMany(s => s.GetTypes())
+                     .Where(p => typeof(ICommand).IsAssignableFrom(p) && !p.IsAbstract && !p.IsInterface)
+                     .ToList()
+                     .ForEach(command => { builder.RegisterType(command).Named<ICommand>(command.Name.ToLower()).SingleInstance(); });
         }
     }
 }
