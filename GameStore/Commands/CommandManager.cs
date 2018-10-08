@@ -27,7 +27,7 @@ namespace GameStore.Commands
 
         public ICommand FindCommand(string commandName)
         {
-            return Scope.ResolveNamed<ICommand>(commandName.ToLower());
+            return Scope.ResolveNamed<ICommand>(commandName.ToLower()+"command");
         }
     }
 }

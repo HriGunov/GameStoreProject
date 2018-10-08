@@ -1,18 +1,19 @@
 ﻿using GameStore.Core;
 using GameStore.Services;
 using GameStore.Services.Abstract;
+using System;
 using System.Collections.Generic;
 
 namespace GameStore.Commands
 {
-    class LogInCommand : ICommand
+    public class LoginCommand : ICommand
     {
         private readonly IEngine engine;
         private readonly IAccountsService accountsService;
         private readonly IAuthenticationService authenticationService;
         private readonly ICryptographicService cryptographicService;
 
-        public LogInCommand(IEngine engine, IAccountsService accountsService,
+        public LoginCommand(IEngine engine, IAccountsService accountsService,
             IAuthenticationService authenticationService, ICryptographicService cryptographicService)
         {
             this.engine = engine;
@@ -20,11 +21,26 @@ namespace GameStore.Commands
             this.authenticationService = authenticationService;
             this.cryptographicService = cryptographicService;
         }
-        //LogIn {username} {password}        
+        //LogIn {username} {password}
+        //LogIn 
         public string Execute(List<string> parameters)
         {
-            var username = parameters[0];
-            var password = cryptographicService.ComputeHash(parameters[1]);
+            string username;
+            string password;
+            if (parameters.Count == 2)
+            {                 
+                username = parameters[0];
+                password = cryptographicService.ComputeHash(parameters[1]);               
+            }
+            else
+            {
+                Console.Write("Enter Username: ");
+                username = Console.ReadLine();
+                Console.Write("Enter Password: ");
+                password = Console.ReadLine();
+            }
+
+
             var result = authenticationService.Authenticate(username, password);
 
             if (result != null)
@@ -33,7 +49,6 @@ namespace GameStore.Commands
                 return "Successful Login.";
             }
             return "Invalid Password or Username";
-            
         }
     }
 }

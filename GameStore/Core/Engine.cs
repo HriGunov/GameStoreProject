@@ -1,8 +1,8 @@
-﻿using System;
-using GameStore.Commands;
+﻿using GameStore.Commands;
 using GameStore.Data.Context;
 using GameStore.Data.Models;
 using GameStore.Services;
+using System;
 
 namespace GameStore.Core
 {
@@ -10,7 +10,7 @@ namespace GameStore.Core
     {
         private readonly ICommandManager commandManager;
         private readonly IGameStoreContext gameStoreContext;
-        
+
         public Engine(IGameStoreContext gameStoreContext, ICommandManager commandManager)
         {
             this.gameStoreContext = gameStoreContext;
@@ -24,23 +24,25 @@ namespace GameStore.Core
             var accounts = new AccountsService(gameStoreContext);
             var products = new ProductsService(gameStoreContext);
             var shoppingCarts = new ShoppingCartsService(gameStoreContext);
-            //products.AddProduct("Normal Banana", "Normal Banana to Eat", 2);
-            //accounts.AddAccount("Danail", "Grozdanov", "dngrozdanov", "dntest", true);
-            //accounts.AddAccount("Hristo", "Gunov", "hrigunov", "hritest", true);
-            //accounts.AddAccount("Guest", "Guest", "guest", "guest", false, true);
-            var tempProduct = products.FindProducts("Normal Banana");
-            var tempAccount = accounts.FindAccount("hrigunov");
-            var tempAccount2 = accounts.FindAccount("dngrozdanov");
-            var tempCart = shoppingCarts.AddToCart(tempProduct, tempAccount);
-            var tempCart2 = shoppingCarts.AddToCart(tempProduct, tempAccount2);
+            /*   //products.AddProduct("Normal Banana", "Normal Banana to Eat", 2);
+               //accounts.AddAccount("Danail", "Grozdanov", "dngrozdanov", "dntest", true);
+               //accounts.AddAccount("Hristo", "Gunov", "hrigunov", "hritest", true);
+               //accounts.AddAccount("Guest", "Guest", "guest", "guest", false, true);
+               var tempProduct = products.FindProducts("Normal Banana");
+               var tempAccount = accounts.FindAccount("hrigunov");
+               var tempAccount2 = accounts.FindAccount("dngrozdanov");
+               var tempCart = shoppingCarts.AddToCart(tempProduct, tempAccount);
+               var tempCart2 = shoppingCarts.AddToCart(tempProduct, tempAccount2);
+               */
 
-            
+            commandManager.Execute("SiGnUp");
+
             string input;
-            while ((input = Console.ReadLine()) != "end")
+            do
             {
-                var line = Console.ReadLine();
-                commandManager.Execute(line);
-            }
+                input = Console.ReadLine();
+                commandManager.Execute("Login test1 test1");
+            } while (input != "end");
         }
     }
 }

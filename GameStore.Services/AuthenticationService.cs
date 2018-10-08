@@ -8,9 +8,9 @@ namespace GameStore.Services
     {
 
         private readonly IAccountsService accountsService;
-        private readonly CryptographicService cryptographicService;
+        private readonly ICryptographicService cryptographicService;
 
-        public AuthenticationService(IAccountsService accountsService, CryptographicService cryptographicService)
+        public AuthenticationService(IAccountsService accountsService, ICryptographicService cryptographicService)
         {
             this.accountsService = accountsService ?? throw new ArgumentNullException(nameof(accountsService));
             this.cryptographicService = cryptographicService ?? throw new ArgumentNullException(nameof(cryptographicService));
@@ -28,8 +28,8 @@ namespace GameStore.Services
             {
                 return null;
             }
-            var passwordHash = cryptographicService.ComputeHash(password);
-            if (foundAccount.Password == passwordHash)
+           
+            if (foundAccount.Password == password)
             {
                 return foundAccount;
             }

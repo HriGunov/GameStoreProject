@@ -18,8 +18,12 @@ namespace GameStore.Injections
             builder.RegisterType<GameStoreContext>().As<IGameStoreContext>();
             builder.RegisterType<AccountsService>().As<IAccountsService>();
             builder.RegisterType<ProductsService>().As<IProductsService>();
+            builder.RegisterType<CryptographicService>().As<ICryptographicService>();
+            builder.RegisterType<AuthenticationService>().As<IAuthenticationService>();
+
             builder.RegisterType<ShoppingCartsService>().As<IShoppingCartsService>();
             builder.RegisterType<CommandManager>().As<ICommandManager>();
+
             RegisterCommands(builder);
 
             base.Load(builder);
@@ -32,7 +36,9 @@ namespace GameStore.Injections
                      .SelectMany(s => s.GetTypes())
                      .Where(p => typeof(ICommand).IsAssignableFrom(p) && !p.IsAbstract && !p.IsInterface)
                      .ToList()
-                     .ForEach(command => { builder.RegisterType(command).Named<ICommand>(command.Name.ToLower()).SingleInstance(); });
+                     .ForEach(command => {
+                         builder.RegisterType(command).Named<ICommand>(command.Name.ToLower()).SingleInstance();
+                     });
         }
     }
 }
