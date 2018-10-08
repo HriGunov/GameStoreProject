@@ -1,7 +1,9 @@
 ﻿using Autofac;
 using GameStore.Commands;
 using GameStore.Core;
+using GameStore.Core.Abstract;
 using GameStore.Data.Context;
+using GameStore.Data.Context.Abstract;
 using GameStore.Services;
 using GameStore.Services.Abstract;
 using System;
@@ -36,7 +38,8 @@ namespace GameStore.Injections
                      .SelectMany(s => s.GetTypes())
                      .Where(p => typeof(ICommand).IsAssignableFrom(p) && !p.IsAbstract && !p.IsInterface)
                      .ToList()
-                     .ForEach(command => {
+                     .ForEach(command =>
+                     {
                          builder.RegisterType(command).Named<ICommand>(command.Name.ToLower()).SingleInstance();
                      });
         }

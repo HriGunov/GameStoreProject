@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using Autofac;
-using GameStore.Core;
+using GameStore.Core.Abstract;
 
 namespace GameStore
 {
