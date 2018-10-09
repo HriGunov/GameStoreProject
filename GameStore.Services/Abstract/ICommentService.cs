@@ -6,5 +6,6 @@ namespace GameStore.Services.Abstract
     {
         Comment AddCommentToProduct(string productName, string username, string commentText);
         void RemoveCommentsFromProduct(string productName);
+        void RemoveCommentsFromAccount(Account account);
     }
 }

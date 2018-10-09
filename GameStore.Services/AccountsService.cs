@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Linq;
-using GameStore.Data.Context;
 using GameStore.Data.Context.Abstract;
 using GameStore.Data.Models;
 using GameStore.Services.Abstract;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Linq;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace GameStore.Services
 {
@@ -33,6 +32,7 @@ namespace GameStore.Services
                 Password = password,
                 CreatedOn = DateTime.Now,
                 ShoppingCart = new ShoppingCart(),
+                Comments = new List<Comment>(),
                 IsAdmin = isAdmin
             };
 
@@ -83,9 +83,17 @@ namespace GameStore.Services
         {
             var account = storeContext.Accounts
                                       .Include(s => s.ShoppingCart)
+                                      .ThenInclude(s => s.ShoppingCartProducts)
+                                       .ThenInclude(cart => cart.Product)
+                                      .Include(s => s.ShoppingCart)
+                                       .ThenInclude(s => s.ShoppingCartProducts)
+                                        .ThenInclude(cart => cart.ShoppingCart)
                                       .Include(c => c.Comments)
+                                       .ThenInclude(comment => comment.Account)
+                                      .Include(c => c.Comments)
+                                       .ThenInclude(comment => comment.Product)
                                       .ToList()
-                                      .FirstOrDefault(p => p.Username == accountName);
+                                      .SingleOrDefault(p => p.Username == accountName);
 
             return account == null || account.IsDeleted ? null : account;
         }
@@ -114,7 +122,7 @@ namespace GameStore.Services
 
         public Account GetGuestAccount()
         {
-            return storeContext.Accounts.SingleOrDefault(acc => acc.IsGuest);
+            return storeContext.Accounts.ToList().SingleOrDefault(acc => acc.IsGuest);
         }
     }
 }

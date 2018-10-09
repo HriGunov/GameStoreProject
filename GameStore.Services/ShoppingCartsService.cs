@@ -33,6 +33,9 @@ namespace GameStore.Services
             if (product == null)
                 throw new NotSupportedException($"Product {product.Name} doesn't exist.");
 
+            if (ProductExistsInCart(product, account))
+                throw new ArgumentException($"Product {product.Name} already exists in the user's cart.");
+
             var tempCart = storeContext.Accounts.ToList().FirstOrDefault(c => c.Username == account.Username)?.ShoppingCart;
 
             var shoppingCart = new ShoppingCartProducts
@@ -66,6 +69,9 @@ namespace GameStore.Services
 
             foreach (var p in product)
             {
+                if (ProductExistsInCart(p, account))
+                    throw new ArgumentException($"Product {p.Name} already exists in the user's cart.");
+
                 var shoppingCart = new ShoppingCartProducts
                 {
                     ShoppingCart = tempCart,
@@ -78,6 +84,11 @@ namespace GameStore.Services
             storeContext.SaveChanges();
 
             return tempCart;
+        }
+
+        private bool ProductExistsInCart(Product product, Account account)
+        {
+            return storeContext.ShoppingCartProducts.Any(s => s.ShoppingCartId == account.ShoppingCartId && s.ProductId == product.Id);
         }
     }
 }

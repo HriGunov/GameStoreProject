@@ -75,7 +75,14 @@ namespace GameStore.Services
         public Product FindProduct(string productName)
         {
             var product = storeContext.Products
+                                       .Include(s => s.ShoppingCartProducts)
+                                        .ThenInclude(cart => cart.Product)
+                                       .Include(s => s.ShoppingCartProducts)
+                                        .ThenInclude(cart => cart.ShoppingCart)
                                        .Include(c => c.Comments)
+                                        .ThenInclude(comment => comment.Account)
+                                       .Include(c => c.Comments)
+                                        .ThenInclude(comment => comment.Product)
                                        .Include(g => g.Genre)
                                        .ToList()
                                        .SingleOrDefault(p => p.Name == productName);
@@ -87,6 +94,9 @@ namespace GameStore.Services
         {
             var products = storeContext.Products
                                        .Include(c => c.Comments)
+                                            .ThenInclude(acc => acc.Select(x => x.Account))
+                                       .Include(c => c.Comments)
+                                            .ThenInclude(p => p.Select(x => x.Product))
                                        .Include(g => g.Genre)
                                        .ToList()
                                        .Where(p => p.Genre.Contains(productGenre));
@@ -111,7 +121,7 @@ namespace GameStore.Services
             });
 
             return !products.Any() ? null : products;
-        } 
-       
+        }
+
     }
 }

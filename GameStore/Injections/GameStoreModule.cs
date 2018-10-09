@@ -23,9 +23,6 @@ namespace GameStore.Injections
             builder.RegisterType<CryptographicService>().As<ICryptographicService>();
             builder.RegisterType<AuthenticationService>().As<IAuthenticationService>();
             builder.RegisterType<CommentService>().As<ICommentService>();
-
-            
-
             builder.RegisterType<ShoppingCartsService>().As<IShoppingCartsService>();
             builder.RegisterType<CommandManager>().As<ICommandManager>();
 
