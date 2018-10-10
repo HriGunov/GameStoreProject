@@ -25,7 +25,7 @@ namespace GameStore.Injections
             builder.RegisterType<CommentService>().As<ICommentService>();
             builder.RegisterType<ShoppingCartsService>().As<IShoppingCartsService>();
             builder.RegisterType<CommandManager>().As<ICommandManager>();
-            builder.RegisterType<ConsoleManager>().As<IConsoleManager>();
+            //builder.RegisterType<ConsoleManager>().As<IConsoleManager>();
 
 
 

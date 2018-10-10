@@ -1,5 +1,6 @@
 ﻿using GameStore.Commands;
 using GameStore.Core.Abstract;
+using GameStore.Core.ConsoleSections;
 using GameStore.Data.Context;
 using GameStore.Data.Context.Abstract;
 using GameStore.Data.Models;
@@ -13,22 +14,23 @@ namespace GameStore.Core
     {
         private readonly ICommandManager commandManager;
         private readonly ICommentService commentService;
-        private readonly IConsoleManager consoleManager;
+        private IConsoleManager consoleManager;
         private readonly IGameStoreContext gameStoreContext;
 
         public Engine(IGameStoreContext gameStoreContext, ICommandManager commandManager,
-            ICommentService commentService, IConsoleManager consoleManager)
+            ICommentService commentService)
         {
             this.gameStoreContext = gameStoreContext;
             this.commandManager = commandManager;
             this.commentService = commentService;
-            this.consoleManager = consoleManager;
+          
         }
 
         public Account CurrentUser { get; set; }
 
         public void Run()
         {
+            consoleManager = new ConsoleManager(this);
             var accounts = new AccountsService(gameStoreContext);
             var products = new ProductsService(gameStoreContext);
             var shoppingCarts = new ShoppingCartsService(gameStoreContext);
@@ -44,18 +46,23 @@ namespace GameStore.Core
                */
             //var comment = commentService.AddCommentToProduct("Banana", "dngrozdanov", "Top KeK");
             //commentService.RemoveCommentsFromAccount(accounts.FindAccount("hrigunov"));
-           // var tempProduct = products.FindProduct("Banana");
-           // var tempAccount = accounts.FindAccount("hrigunov");
-           // var tempAccount2 = accounts.FindAccount("dngrozdanov");
+            // var tempProduct = products.FindProduct("Banana");
+            // var tempAccount = accounts.FindAccount("hrigunov");
+            // var tempAccount2 = accounts.FindAccount("dngrozdanov");
             //var tempCart = shoppingCarts.AddToCart(tempProduct, tempAccount);
             //var tempCart2 = shoppingCarts.AddToCart(tempProduct, tempAccount2);
             //var acc = accounts.FindAccount("dngrozdanov");
-            //var acc2 = accounts.FindAccount("hrigunov");
+            // var acc2 = accounts.FindAccount("hrigunov");
+            var mockAcc = new Account() { FirstName = "Hristo", LastName = "Gunov", Username = "hrigunov", Password = "hritest", IsGuest = false };
             string line;
             int counter = 0;
             while ((line = consoleManager.ListenForCommand()) != "end")
             {
                 consoleManager.SetText(line, counter,0);
+
+                var nameSection = new TopLeftCornerUserSection(consoleManager,0,0);
+                nameSection.ImprintOnConsoleMatrix(mockAcc);
+
                 consoleManager.Print();
 
                 // commandManager.Execute(line);

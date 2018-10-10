@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GameStore.Core.Abstract;
+using System;
 using System.Text;
 
 namespace GameStore.Core
@@ -10,11 +11,14 @@ namespace GameStore.Core
         private char[][] ConsoleMatrix;
         private int Width;
         private int Heigth;
-        public ConsoleManager()
+        private readonly IEngine engine;
+
+        public ConsoleManager(IEngine engine)
         {
             Console.SetBufferSize(Console.WindowWidth, Console.WindowHeight);
 
             InitializeConsoleMatrix();
+            this.engine = engine;
         }
 
         /// <summary>
