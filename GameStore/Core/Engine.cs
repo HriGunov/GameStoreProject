@@ -13,13 +13,16 @@ namespace GameStore.Core
     {
         private readonly ICommandManager commandManager;
         private readonly ICommentService commentService;
+        private readonly IConsoleManager consoleManager;
         private readonly IGameStoreContext gameStoreContext;
 
-        public Engine(IGameStoreContext gameStoreContext, ICommandManager commandManager, ICommentService commentService)
+        public Engine(IGameStoreContext gameStoreContext, ICommandManager commandManager,
+            ICommentService commentService, IConsoleManager consoleManager)
         {
             this.gameStoreContext = gameStoreContext;
             this.commandManager = commandManager;
             this.commentService = commentService;
+            this.consoleManager = consoleManager;
         }
 
         public Account CurrentUser { get; set; }
@@ -41,17 +44,22 @@ namespace GameStore.Core
                */
             //var comment = commentService.AddCommentToProduct("Banana", "dngrozdanov", "Top KeK");
             //commentService.RemoveCommentsFromAccount(accounts.FindAccount("hrigunov"));
-            var tempProduct = products.FindProduct("Banana");
-            var tempAccount = accounts.FindAccount("hrigunov");
-            var tempAccount2 = accounts.FindAccount("dngrozdanov");
+           // var tempProduct = products.FindProduct("Banana");
+           // var tempAccount = accounts.FindAccount("hrigunov");
+           // var tempAccount2 = accounts.FindAccount("dngrozdanov");
             //var tempCart = shoppingCarts.AddToCart(tempProduct, tempAccount);
             //var tempCart2 = shoppingCarts.AddToCart(tempProduct, tempAccount2);
             //var acc = accounts.FindAccount("dngrozdanov");
             //var acc2 = accounts.FindAccount("hrigunov");
             string line;
-            while ((line = Console.ReadLine()) != "end")
+            int counter = 0;
+            while ((line = consoleManager.ListenForCommand()) != "end")
             {
-                commandManager.Execute(line);
+                consoleManager.SetText(line, counter,0);
+                consoleManager.Print();
+
+                // commandManager.Execute(line);
+                counter++;
             }
         }
     }
