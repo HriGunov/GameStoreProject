@@ -14,7 +14,7 @@ namespace GameStore.Core
     {
         private readonly ICommandManager commandManager;
         private readonly ICommentService commentService;
-        private readonly IConsoleManager consoleManager;
+        private  IConsoleManager consoleManager;
         private readonly IGameStoreContext gameStoreContext;
 
         public Engine(IGameStoreContext gameStoreContext, ICommandManager commandManager,
@@ -80,7 +80,7 @@ namespace GameStore.Core
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+                   // Console.WriteLine(ex.Message);
                 }
 
                 //counter++;
