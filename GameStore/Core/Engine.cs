@@ -57,9 +57,9 @@ namespace GameStore.Core
             int counter = 0;
 
             var nameSection = new TopLeftCornerUserSection(consoleManager, 0, 0);
-            var testFrameSmall = new FramedSection(1, 1, 35, 25);
-            var testFrameBig = new FramedSection(1, 36, 25, 119);
-            var testLogger = new LoggerFramedSection(1, 1, 25, 35);
+            
+            var testFrameBig = new FramedSection(1, 36, 28, 119,"Main View");
+            var testLogger = new LoggerFramedSection(1, 0, 28, 35,"Message Log");
 
             while ((line = consoleManager.ListenForCommand()) != "end")
             {

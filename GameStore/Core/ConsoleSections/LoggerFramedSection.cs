@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace GameStore.Core.ConsoleSections
 {
@@ -9,13 +10,13 @@ namespace GameStore.Core.ConsoleSections
     {
         private List<string> log;
         
-        public LoggerFramedSection(Position topLeftCorner, Position bottomRight) : base(topLeftCorner, bottomRight)
+        public LoggerFramedSection(Position topLeftCorner, Position bottomRight,string title ="") : base(topLeftCorner, bottomRight, title)
         {
             Log = new List<string>();
         }
 
-        public LoggerFramedSection(int topLeftY, int topLeftX, int bottomRightY, int bottomRightX) :
-            this(new Position(topLeftY, topLeftX), new Position(bottomRightY, bottomRightX))
+        public LoggerFramedSection(int topLeftY, int topLeftX, int bottomRightY, int bottomRightX, string title = "") :
+            this(new Position(topLeftY, topLeftX), new Position(bottomRightY, bottomRightX), title)
         {
         }
 
@@ -23,7 +24,42 @@ namespace GameStore.Core.ConsoleSections
 
         public void AddToLog(string msg)
         {
-            Log.Add(msg);
+            var sectionWidth = BottomRight.X - TopLeftCorner.X - 2;
+
+            if (msg.Length > sectionWidth)
+            {
+                var wordsQueue = new Queue<string>(msg.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
+                if (wordsQueue.Max(word => word.Length) > sectionWidth)
+                {
+                    throw new ArgumentException("Message is too long and in incorect format.");
+                }
+                else
+                {
+                    var sb = new StringBuilder();
+                    sb.Append(">");
+                    while (wordsQueue.Any())
+                    {
+                        if ((sb.Length + wordsQueue.Peek().Length + 1) <= sectionWidth)
+                        {
+                            sb.Append(" " + wordsQueue.Dequeue());
+                        }
+                        else
+                        {
+                            Log.Add(sb.ToString());
+                            sb.Clear();                            
+                        }
+                    }
+                    if (sb.Length>0)
+                    {
+                        Log.Add(sb.ToString());
+                    }
+                }
+            }
+            else
+            {
+                Log.Add(">" + msg);
+            }
+            Log.Add("");
         }
 
         public override void DrawSection(IConsoleManager consoleManager)
@@ -33,21 +69,16 @@ namespace GameStore.Core.ConsoleSections
         }
         public void ShowLog(IConsoleManager consoleManager)
         {
-            var topMsgs = Log.TakeLast(10);
-            int msgCounter = 0;
+            var topMsgs = Log.TakeLast(BottomRight.Y - TopLeftCorner.Y-1);
 
+            int lineCounter = 0;
+            var sectionWidth = BottomRight.X - TopLeftCorner.X-2;
             foreach (var msg in topMsgs)
             {
-                if (msg.Length >= BottomRight.X - TopLeftCorner.X - 1)
-                {
-                    consoleManager.SetText("Message was too long.".PadRight(BottomRight.X - TopLeftCorner.X - 1), TopLeftCorner.X + 1 + msgCounter, TopLeftCorner.X + 1);
-                }
-                else
-                {
-                consoleManager.SetText(msg.PadRight(BottomRight.X- TopLeftCorner.X-1), TopLeftCorner.X + 1 + msgCounter, TopLeftCorner.X + 1);
-
-                }
-                msgCounter++;
+                 
+                consoleManager.SetText(msg.PadRight(BottomRight.X- TopLeftCorner.X-1), TopLeftCorner.Y + 1 + lineCounter, TopLeftCorner.X + 1);
+                 
+                lineCounter++;
             }
              
         }
