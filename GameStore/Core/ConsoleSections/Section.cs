@@ -1,8 +1,9 @@
-﻿using System;
+﻿using GameStore.Core.ConsoleSections.Abstract;
+using System;
 
 namespace GameStore.Core.ConsoleSections
 {
-    internal class Section
+    internal class Section : ISection
     {
         public char[][] SectionMatrix;
 

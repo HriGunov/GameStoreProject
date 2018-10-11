@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using GameStore.Commands.Abstract;
+using GameStore.Core;
 using GameStore.Core.Abstract;
 using GameStore.Services.Abstract;
 
@@ -12,11 +13,14 @@ namespace GameStore.Commands
         private readonly IAuthenticationService authenticationService;
         private readonly ICryptographicService cryptographicService;
         private readonly IEngine engine;
+        private readonly IConsoleManager consoleManager;
 
-        public LoginCommand(IEngine engine, IAccountsService accountsService,
+        public LoginCommand(IEngine engine, IConsoleManager consoleManager,
+            IAccountsService accountsService,
             IAuthenticationService authenticationService, ICryptographicService cryptographicService)
         {
             this.engine = engine;
+            this.consoleManager = consoleManager;
             this.accountsService = accountsService;
             this.authenticationService = authenticationService;
             this.cryptographicService = cryptographicService;
@@ -29,7 +33,7 @@ namespace GameStore.Commands
             if (engine.CurrentUser != null)
                 return "You're already logged in.";
 
-            Console.WriteLine("=== Log In ===");
+            consoleManager.LogMessage("Logging in ...");            
             string username;
             string password;
             if (parameters.Count == 2)
@@ -39,10 +43,11 @@ namespace GameStore.Commands
             }
             else
             {
-                Console.Write("Enter Username: ");
-                username = Console.ReadLine();
-                Console.Write("Enter Password: ");
-                password = Console.ReadLine();
+                
+                consoleManager.LogMessage("Please Enter Your Username.");
+                username = consoleManager.ListenForCommand();
+                consoleManager.LogMessage("Please Enter Password.");
+                password = consoleManager.ListenForCommand();
             }
 
             var result = authenticationService.Authenticate(username, password);

@@ -1,33 +1,40 @@
-﻿using System;
+﻿using GameStore.Core.ConsoleSections;
+using GameStore.Core.ConsoleSections.Abstract;
+using System;
 using System.Text;
-using GameStore.Core.Abstract;
 
 namespace GameStore.Core
 {
     public class ConsoleManager : IConsoleManager
     {
-        private readonly IEngine engine;
+
 
 
         private char[][] ConsoleMatrix;
         private int Heigth;
         private int Width;
+        private readonly IMessageLog messageLog;
 
-        public ConsoleManager(IEngine engine)
+        public ConsoleManager(IMessageLog messageLog)
         {
             Console.SetWindowSize(120, 30);
             Console.SetBufferSize(Console.WindowWidth, Console.WindowHeight);
+            Console.CursorVisible = false;
             InitializeConsoleMatrix();
-            this.engine = engine;
+            this.messageLog = messageLog;
+            LoggerSection = new LoggerFramedSection(messageLog, 1, 0, 28, 35, "Message Log");
         }
 
+
+
+        public ILoggerSection LoggerSection { get; set; }
         /// <summary>
         ///     Sets the cursor position to the bottom left of the console and adds a visual cue for waiting command.
         /// </summary>
         public string ListenForCommand()
         {
             Console.SetCursorPosition(0, Heigth - 1);
-            Console.Write("Enter action -> ");
+            Console.Write("Enter command -> ");
             return Console.ReadLine();
         }
 
@@ -48,8 +55,8 @@ namespace GameStore.Core
         public void Clear()
         {
             for (var y = 0; y < ConsoleMatrix.Length; y++)
-            for (var x = 0; x < ConsoleMatrix[0].Length; x++)
-                ConsoleMatrix[y][x] = ' ';
+                for (var x = 0; x < ConsoleMatrix[0].Length; x++)
+                    ConsoleMatrix[y][x] = ' ';
         }
 
         /// <summary>
@@ -83,6 +90,13 @@ namespace GameStore.Core
                 ConsoleMatrix[y] = new char[Width];
                 for (var x = 0; x < Width; x++) ConsoleMatrix[y][x] = ' ';
             }
+        }
+
+        public void LogMessage(string message)
+        {
+            messageLog.AddToLog(message);
+            LoggerSection.DrawSection(this);
+            Print();
         }
     }
 }

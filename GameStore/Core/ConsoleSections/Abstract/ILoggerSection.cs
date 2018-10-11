@@ -1,8 +1,8 @@
 ﻿namespace GameStore.Core.ConsoleSections.Abstract
 {
-    internal interface ILoggerSection
+    public interface ILoggerSection: ISection
     {
-        void AddToLog(string msg);
+       
         void ShowLog(IConsoleManager consoleManager);
     }
 }

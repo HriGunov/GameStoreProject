@@ -14,11 +14,13 @@ namespace GameStore.Injections
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<Engine>().As<IEngine>();
-            builder.RegisterType<CommandManager>().As<ICommandManager>();
+            builder.RegisterType<Engine>().As<IEngine>().SingleInstance();
+            builder.RegisterType<CommandManager>().As<ICommandManager>().SingleInstance();
             builder.RegisterModule<GameStoreDataModule>();
             builder.RegisterModule<GameStoreServicesModule>();
-            //builder.RegisterType<ConsoleManager>().As<IConsoleManager>();
+            builder.RegisterType<ConsoleManager>().As<IConsoleManager>().SingleInstance();
+            builder.RegisterType<MessageLog>().As<IMessageLog>().SingleInstance();
+
 
             RegisterCommands(builder);
 

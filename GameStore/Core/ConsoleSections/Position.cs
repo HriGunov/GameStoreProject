@@ -1,6 +1,6 @@
 ﻿namespace GameStore.Core.ConsoleSections
 {
-    internal class Position
+    public class Position
     {
         public Position(int y, int x)
         {
