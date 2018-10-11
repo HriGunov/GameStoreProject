@@ -1,11 +1,8 @@
-﻿using System.Collections.Generic;
-
-namespace GameStore.Core.ConsoleSections.Abstract
+﻿namespace GameStore.Core.ConsoleSections.Abstract
 {
-    interface ILoggerSection
+    internal interface ILoggerSection
     {
-        
-        void AddToLog( string msg);
+        void AddToLog(string msg);
         void ShowLog(IConsoleManager consoleManager);
     }
 }

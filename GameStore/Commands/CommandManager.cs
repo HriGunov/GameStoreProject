@@ -2,6 +2,7 @@
 using System.Linq;
 using Autofac;
 using Autofac.Core.Registration;
+using GameStore.Commands.Abstract;
 
 namespace GameStore.Commands
 {

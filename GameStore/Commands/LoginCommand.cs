@@ -1,18 +1,17 @@
-﻿using GameStore.Core;
-using GameStore.Core.Abstract;
-using GameStore.Services;
-using GameStore.Services.Abstract;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using GameStore.Commands.Abstract;
+using GameStore.Core.Abstract;
+using GameStore.Services.Abstract;
 
 namespace GameStore.Commands
 {
     public class LoginCommand : ICommand
     {
-        private readonly IEngine engine;
         private readonly IAccountsService accountsService;
         private readonly IAuthenticationService authenticationService;
         private readonly ICryptographicService cryptographicService;
+        private readonly IEngine engine;
 
         public LoginCommand(IEngine engine, IAccountsService accountsService,
             IAuthenticationService authenticationService, ICryptographicService cryptographicService)
@@ -53,6 +52,7 @@ namespace GameStore.Commands
                 engine.CurrentUser = result;
                 return $"Successful Login.{Environment.NewLine}Welcome {engine.CurrentUser.Username}!";
             }
+
             return "Invalid Password or Username";
         }
     }

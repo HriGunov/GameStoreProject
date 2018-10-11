@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace GameStore.Core.ConsoleSections
+﻿namespace GameStore.Core.ConsoleSections
 {
-    class Position
+    internal class Position
     {
         public Position(int y, int x)
         {

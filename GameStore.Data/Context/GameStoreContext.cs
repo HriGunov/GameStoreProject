@@ -25,7 +25,7 @@ namespace GameStore.Data.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ShoppingCartProducts>()
-                .HasKey(p => new { p.ProductId, p.ShoppingCartId });
+                .HasKey(p => new {p.ProductId, p.ShoppingCartId});
 
             modelBuilder.Entity<Account>()
                 .HasIndex(a => a.Username)

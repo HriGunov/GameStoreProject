@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GameStore.Data.Context;
 using GameStore.Data.Context.Abstract;
 using GameStore.Data.Models;
 using GameStore.Services.Abstract;
@@ -74,29 +73,27 @@ namespace GameStore.Services
         /// <returns></returns>
         public Product FindProduct(string productName)
         {
-            var product = this.GetProducts().SingleOrDefault(p => p.Name == productName);
+            var product = GetProducts().SingleOrDefault(p => p.Name == productName);
 
             return product == null || product.IsDeleted ? null : product;
         }
 
-        public IEnumerable<Product> FindProductsByGenre(Genre productGenre)
+        public IEnumerable<Product> FindProductsByGenre(IEnumerable<Genre> productGenre)
         {
-            var products = this.GetProducts().Where(p => p.Genre.Contains(productGenre));
+            var products = GetProducts().Where(p =>
+            {
+                foreach (var genre in productGenre)
+                    if (!p.Genre.Contains(genre))
+                        return false;
+                return true;
+            });
 
             return !products.Any() ? null : products;
         }
 
-        public IEnumerable<Product> FindProductsByGenre(IEnumerable<Genre> productGenre)
+        public IEnumerable<Product> FindProductsByGenre(Genre productGenre)
         {
-            var products = this.GetProducts().Where(p =>
-            {
-                foreach (var genre in productGenre)
-                {
-                    if (!p.Genre.Contains(genre))
-                        return false;
-                }
-                return true;
-            });
+            var products = GetProducts().Where(p => p.Genre.Contains(productGenre));
 
             return !products.Any() ? null : products;
         }
@@ -104,16 +101,16 @@ namespace GameStore.Services
         private IEnumerable<Product> GetProducts()
         {
             return storeContext.Products
-                                       .Include(s => s.ShoppingCartProducts)
-                                        .ThenInclude(cart => cart.Product)
-                                       .Include(s => s.ShoppingCartProducts)
-                                        .ThenInclude(cart => cart.ShoppingCart)
-                                       .Include(c => c.Comments)
-                                        .ThenInclude(comment => comment.Account)
-                                       .Include(c => c.Comments)
-                                        .ThenInclude(comment => comment.Product)
-                                       .Include(g => g.Genre)
-                               .ToList();
+                .Include(s => s.ShoppingCartProducts)
+                .ThenInclude(cart => cart.Product)
+                .Include(s => s.ShoppingCartProducts)
+                .ThenInclude(cart => cart.ShoppingCart)
+                .Include(c => c.Comments)
+                .ThenInclude(comment => comment.Account)
+                .Include(c => c.Comments)
+                .ThenInclude(comment => comment.Product)
+                .Include(g => g.Genre)
+                .ToList();
         }
     }
 }

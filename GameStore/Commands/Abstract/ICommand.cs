@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace GameStore.Commands
+namespace GameStore.Commands.Abstract
 {
     public interface ICommand
     {
