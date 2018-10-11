@@ -6,12 +6,15 @@ namespace GameStore.Core.ConsoleSections
 {
     class FramedSection : Section
     {
-        public FramedSection(Position topLeftCorner, Position bottomRigth) : base(topLeftCorner, bottomRigth)
+        private readonly string title;
+
+        public FramedSection(Position topLeftCorner, Position bottomright,string title = "") : base(topLeftCorner, bottomright)
         {
+            this.title = title;
         }
 
-        public FramedSection(int topLeftY, int topLeftX, int bottomRigthY, int bottomRigthX) : 
-            this(new Position(topLeftY,topLeftX),new Position(bottomRigthY,bottomRigthX))
+        public FramedSection(int topLeftY, int topLeftX, int bottomrightY, int bottomrightX,string title = "") : 
+            this(new Position(topLeftY,topLeftX),new Position(bottomrightY,bottomrightX), title)
         {
             
         }
@@ -20,28 +23,37 @@ namespace GameStore.Core.ConsoleSections
         {
             base.DrawSection(consoleManager);
 
-            int width = BottomRigth.X - TopLeftCorner.X;
-            int heigth = BottomRigth.Y - TopLeftCorner.Y;
-
+            int width = BottomRight.X - TopLeftCorner.X;
+            int heigth = BottomRight.Y - TopLeftCorner.Y;
+                     
             if (width <= 0 || heigth <= 0)
             {
                 throw new Exception("Wrong corners of frame section.");
             }
+            
             consoleManager.SetChar('╔', TopLeftCorner.Y, TopLeftCorner.X);
-            consoleManager.SetChar('╗', TopLeftCorner.Y, BottomRigth.X);
-            consoleManager.SetChar('╚', BottomRigth.Y, TopLeftCorner.X);
-            consoleManager.SetChar('╝', BottomRigth.Y, BottomRigth.X);
+            consoleManager.SetChar('╗', TopLeftCorner.Y, BottomRight.X);
+            consoleManager.SetChar('╚', BottomRight.Y, TopLeftCorner.X);
+            consoleManager.SetChar('╝', BottomRight.Y, BottomRight.X);
 
+          /*  if (title != "")
+            {
+                for (int x = 0; x < (width-2)/2 -title.Length/2; x++)
+                {
+                    consoleManager.SetChar('═', TopLeftCorner.Y, TopLeftCorner.X + x);
+                    consoleManager.SetChar('═', BottomRight.Y, TopLeftCorner.X + x);
+                }
+            }*/
             for (int x = 1; x < width; x++)
             {
                 consoleManager.SetChar('═', TopLeftCorner.Y, TopLeftCorner.X + x);
-                consoleManager.SetChar('═', BottomRigth.Y, TopLeftCorner.X + x);
+                consoleManager.SetChar('═', BottomRight.Y, TopLeftCorner.X + x);
             }
 
             for (int y = 1; y < heigth; y++)
             {
                 consoleManager.SetChar('║', TopLeftCorner.Y + y, TopLeftCorner.X);
-                consoleManager.SetChar('║', TopLeftCorner.Y + y, BottomRigth.X);
+                consoleManager.SetChar('║', TopLeftCorner.Y + y, BottomRight.X);
             }
 
         }

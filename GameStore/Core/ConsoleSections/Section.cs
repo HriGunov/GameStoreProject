@@ -8,19 +8,19 @@ namespace GameStore.Core.ConsoleSections
     {
         public char[][] SectionMatrix;
 
-        public Section(Position topLeftCorner, Position bottomRigth)
+        public Section(Position topLeftCorner, Position bottomRight)
         {
             TopLeftCorner = topLeftCorner;
-            BottomRigth = bottomRigth;
+            BottomRight = bottomRight;
         }
 
         public Position TopLeftCorner { get; set; }
-        public Position BottomRigth { get; set; }
+        public Position BottomRight { get; set; }
 
         private void CheckSectionState()
         {
-            int width = BottomRigth.X - TopLeftCorner.X;
-            int heigth = BottomRigth.X - TopLeftCorner.Y;
+            int width = BottomRight.X - TopLeftCorner.X;
+            int heigth = BottomRight.X - TopLeftCorner.Y;
 
             if (width <= 0 || heigth <= 0)
             {

@@ -24,7 +24,7 @@ namespace GameStore.Core.ConsoleSections
         public void ImprintOnConsoleMatrix(Account currentUser)
         {
             string topLeftMessage;
-            string topRigthMessage;
+            string topRightMessage;
 
 
             if (currentUser.IsDeleted)
@@ -35,19 +35,19 @@ namespace GameStore.Core.ConsoleSections
             if (currentUser.IsGuest)
             {
                 topLeftMessage = $"Currenly signed in as Guest";
-                topRigthMessage = "Please sign in!";
+                topRightMessage = "Please sign in!";
             }
             else
             {
                 topLeftMessage = $"Hello, {currentUser.FirstName}";
                 if (currentUser.ShoppingCart == null)
                 {
-                    topRigthMessage = $"Shopping Cart(0) {0:F2} BGN";
+                    topRightMessage = $"Shopping Cart(0) {0:F2} BGN";
 
                 }
                 else
                 {
-                    topRigthMessage = $"Shopping Cart({currentUser.ShoppingCart.ShoppingCartProducts.Count}) {String.Format("F2", currentUser.ShoppingCart.ShoppingCartProducts.Sum(x => x.Product.Price))} BGN";
+                    topRightMessage = $"Shopping Cart({currentUser.ShoppingCart.ShoppingCartProducts.Count}) {String.Format("F2", currentUser.ShoppingCart.ShoppingCartProducts.Sum(x => x.Product.Price))} BGN";
 
                 }
 
@@ -60,7 +60,7 @@ namespace GameStore.Core.ConsoleSections
             var storeTitle = "GameStore";
             consoleManager.SetText(topLeftMessage, PositionY, PositionX);
             consoleManager.SetText(storeTitle, 0, Console.WindowWidth / 2 - storeTitle.Length / 2);
-            consoleManager.SetText(topRigthMessage, PositionY, Console.WindowWidth - 1 - topRigthMessage.Length);
+            consoleManager.SetText(topRightMessage, PositionY, Console.WindowWidth - 1 - topRightMessage.Length);
         }
     }
 }

@@ -63,8 +63,6 @@ namespace GameStore.Core
 
             while ((line = consoleManager.ListenForCommand()) != "end")
             {
-                consoleManager.SetText(line, counter,0);
-
               
                 nameSection.ImprintOnConsoleMatrix(mockAcc);
                 //testFrameSmall.DrawSection(consoleManager);
