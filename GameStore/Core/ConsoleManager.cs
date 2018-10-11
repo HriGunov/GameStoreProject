@@ -95,7 +95,8 @@ namespace GameStore.Core
             }
 
             Console.SetCursorPosition(0, 0);
-            Console.Write(sb.ToString());
+            var str = sb.ToString();
+            Console.Write(str);
         }
 
     }
