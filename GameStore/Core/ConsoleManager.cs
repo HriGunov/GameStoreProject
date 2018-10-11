@@ -1,17 +1,17 @@
-﻿using GameStore.Core.Abstract;
-using System;
+﻿using System;
 using System.Text;
+using GameStore.Core.Abstract;
 
 namespace GameStore.Core
 {
     public class ConsoleManager : IConsoleManager
     {
+        private readonly IEngine engine;
 
 
         private char[][] ConsoleMatrix;
-        private int Width;
         private int Heigth;
-        private readonly IEngine engine;
+        private int Width;
 
         public ConsoleManager(IEngine engine)
         {
@@ -22,7 +22,7 @@ namespace GameStore.Core
         }
 
         /// <summary>
-        /// Sets the cursor position to the bottom left of the console and adds a visual cue for waiting command.
+        ///     Sets the cursor position to the bottom left of the console and adds a visual cue for waiting command.
         /// </summary>
         public string ListenForCommand()
         {
@@ -31,8 +31,45 @@ namespace GameStore.Core
             return Console.ReadLine();
         }
 
+
+        public void SetChar(char charToSet, int y, int x)
+        {
+            ConsoleMatrix[y][x] = charToSet;
+        }
+
+        public void SetText(string text, int y, int x)
+        {
+            for (var i = 0; i < text.Length; i++) SetChar(text[i], y, x + i);
+        }
+
         /// <summary>
-        /// Used on class construction and when the console is resized
+        ///     Clears the matrix
+        /// </summary>
+        public void Clear()
+        {
+            for (var y = 0; y < ConsoleMatrix.Length; y++)
+            for (var x = 0; x < ConsoleMatrix[0].Length; x++)
+                ConsoleMatrix[y][x] = ' ';
+        }
+
+        /// <summary>
+        ///     Prints ConsoleMatrix on to the real Console
+        /// </summary>
+        public void Print()
+        {
+            var sb = new StringBuilder(ConsoleMatrix.Length * ConsoleMatrix[0].Length);
+
+            for (var y = 0; y < ConsoleMatrix.Length; y++)
+                foreach (var ch in ConsoleMatrix[y])
+                    sb.Append(ch);
+
+            Console.SetCursorPosition(0, 0);
+            var str = sb.ToString();
+            Console.Write(str);
+        }
+
+        /// <summary>
+        ///     Used on class construction and when the console is resized
         /// </summary>
         private void InitializeConsoleMatrix()
         {
@@ -41,64 +78,11 @@ namespace GameStore.Core
 
             //The heigth of the Console matrix is smaller by 1 because the last row is reserved for the command line input.
             ConsoleMatrix = new char[Heigth - 1][];
-            for (int y = 0; y < Heigth - 1; y++)
+            for (var y = 0; y < Heigth - 1; y++)
             {
                 ConsoleMatrix[y] = new char[Width];
-                for (int x = 0; x < Width; x++)
-                {
-                    ConsoleMatrix[y][x] = ' ';
-                }
+                for (var x = 0; x < Width; x++) ConsoleMatrix[y][x] = ' ';
             }
         }
-
-
-        public void SetChar(char charToSet, int y, int x)
-        {
-            ConsoleMatrix[y][x] = charToSet;
-        }
-        public void SetText(string text, int y, int x)
-        {
-            for (int i = 0; i < text.Length; i++)
-            {
-                SetChar(text[i], y, x + i);
-            }
-        }
-
-        /// <summary>
-        /// Clears the matrix
-        /// </summary>
-        public void Clear()
-        {
-
-            for (int y = 0; y < ConsoleMatrix.Length; y++)
-            {
-                for (int x = 0; x < ConsoleMatrix[0].Length; x++)
-                {
-                    ConsoleMatrix[y][x] = ' ';
-                }
-            }
-        }
-
-        /// <summary>
-        /// Prints ConsoleMatrix on to the real Console
-        /// </summary>
-        public void Print()
-        {
-            var sb = new StringBuilder(ConsoleMatrix.Length * ConsoleMatrix[0].Length);
-
-            for (int y = 0; y < ConsoleMatrix.Length; y++)
-            {
-
-                foreach (var ch in ConsoleMatrix[y])
-                {
-                    sb.Append(ch);
-                }
-            }
-
-            Console.SetCursorPosition(0, 0);
-            var str = sb.ToString();
-            Console.Write(str);
-        }
-
     }
 }

@@ -1,30 +1,23 @@
-﻿using Autofac;
+﻿using System;
+using System.Linq;
+using Autofac;
 using GameStore.Commands;
+using GameStore.Commands.Abstract;
 using GameStore.Core;
 using GameStore.Core.Abstract;
-using GameStore.Data.Context;
-using GameStore.Data.Context.Abstract;
-using GameStore.Services;
-using GameStore.Services.Abstract;
-using System;
-using System.Linq;
-using System.Reflection;
+using GameStore.Data.Injections;
+using GameStore.Services.Injections;
 
 namespace GameStore.Injections
 {
-    public class GameStoreModule : Autofac.Module
+    public class GameStoreModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<Engine>().As<IEngine>();
-            builder.RegisterType<GameStoreContext>().As<IGameStoreContext>();
-            builder.RegisterType<AccountsService>().As<IAccountsService>();
-            builder.RegisterType<ProductsService>().As<IProductsService>();
-            builder.RegisterType<CryptographicService>().As<ICryptographicService>();
-            builder.RegisterType<AuthenticationService>().As<IAuthenticationService>();
-            builder.RegisterType<CommentService>().As<ICommentService>();
-            builder.RegisterType<ShoppingCartsService>().As<IShoppingCartsService>();
             builder.RegisterType<CommandManager>().As<ICommandManager>();
+            builder.RegisterModule<GameStoreDataModule>();
+            builder.RegisterModule<GameStoreServicesModule>();
             //builder.RegisterType<ConsoleManager>().As<IConsoleManager>();
 
             RegisterCommands(builder);
@@ -35,14 +28,14 @@ namespace GameStore.Injections
         private void RegisterCommands(ContainerBuilder builder)
         {
             AppDomain.CurrentDomain
-                     .GetAssemblies()
-                     .SelectMany(s => s.GetTypes())
-                     .Where(p => typeof(ICommand).IsAssignableFrom(p) && !p.IsAbstract && !p.IsInterface)
-                     .ToList()
-                     .ForEach(command =>
-                     {
-                         builder.RegisterType(command).Named<ICommand>(command.Name.ToLower()).SingleInstance();
-                     });
+                .GetAssemblies()
+                .SelectMany(s => s.GetTypes())
+                .Where(p => typeof(ICommand).IsAssignableFrom(p) && !p.IsAbstract && !p.IsInterface)
+                .ToList()
+                .ForEach(command =>
+                {
+                    builder.RegisterType(command).Named<ICommand>(command.Name.ToLower()).SingleInstance();
+                });
         }
     }
 }

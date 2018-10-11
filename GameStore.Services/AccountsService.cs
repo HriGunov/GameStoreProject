@@ -1,11 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GameStore.Data.Context.Abstract;
 using GameStore.Data.Models;
 using GameStore.Services.Abstract;
 using Microsoft.EntityFrameworkCore;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace GameStore.Services
 {
@@ -84,7 +83,7 @@ namespace GameStore.Services
         /// <returns></returns>
         public Account FindAccount(string accountName)
         {
-            var account = this.GetAccounts().SingleOrDefault(p => p.Username == accountName);
+            var account = GetAccounts().SingleOrDefault(p => p.Username == accountName);
 
             return account == null || account.IsDeleted ? null : account;
         }
@@ -119,17 +118,17 @@ namespace GameStore.Services
         private IEnumerable<Account> GetAccounts()
         {
             return storeContext.Accounts
-                                      .Include(s => s.ShoppingCart)
-                                      .ThenInclude(s => s.ShoppingCartProducts)
-                                       .ThenInclude(cart => cart.Product)
-                                      .Include(s => s.ShoppingCart)
-                                       .ThenInclude(s => s.ShoppingCartProducts)
-                                        .ThenInclude(cart => cart.ShoppingCart)
-                                      .Include(c => c.Comments)
-                                       .ThenInclude(comment => comment.Account)
-                                      .Include(c => c.Comments)
-                                       .ThenInclude(comment => comment.Product)
-                               .ToList();
+                .Include(s => s.ShoppingCart)
+                .ThenInclude(s => s.ShoppingCartProducts)
+                .ThenInclude(cart => cart.Product)
+                .Include(s => s.ShoppingCart)
+                .ThenInclude(s => s.ShoppingCartProducts)
+                .ThenInclude(cart => cart.ShoppingCart)
+                .Include(c => c.Comments)
+                .ThenInclude(comment => comment.Account)
+                .Include(c => c.Comments)
+                .ThenInclude(comment => comment.Product)
+                .ToList();
         }
     }
 }

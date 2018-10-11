@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace GameStore.Data.Models
+﻿namespace GameStore.Data.Models
 {
     public class ShoppingCartProducts
     {

@@ -1,4 +1,4 @@
-﻿namespace GameStore.Commands
+﻿namespace GameStore.Commands.Abstract
 {
     public interface ICommandManager
     {

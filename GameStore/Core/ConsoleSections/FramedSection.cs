@@ -2,7 +2,7 @@
 
 namespace GameStore.Core.ConsoleSections
 {
-    class FramedSection : Section
+    internal class FramedSection : Section
     {
         private readonly string title;
 
@@ -21,21 +21,24 @@ namespace GameStore.Core.ConsoleSections
         {
             base.DrawSection(consoleManager);
 
-            int width = BottomRight.X - TopLeftCorner.X;
-            int heigth = BottomRight.Y - TopLeftCorner.Y;
+            var width = BottomRight.X - TopLeftCorner.X;
+            var heigth = BottomRight.Y - TopLeftCorner.Y;
 
-            if (width <= 0 || heigth <= 0)
-            {
-                throw new Exception("Wrong corners of frame section.");
-            }
+            if (width <= 0 || heigth <= 0) throw new Exception("Wrong corners of frame section.");
 
             consoleManager.SetChar('╔', TopLeftCorner.Y, TopLeftCorner.X);
             consoleManager.SetChar('╗', TopLeftCorner.Y, BottomRight.X);
             consoleManager.SetChar('╚', BottomRight.Y, TopLeftCorner.X);
             consoleManager.SetChar('╝', BottomRight.Y, BottomRight.X);
 
-           
-
+          /*  if (title != "")
+            {
+                for (int x = 0; x < (width-2)/2 -title.Length/2; x++)
+                {
+                    consoleManager.SetChar('═', TopLeftCorner.Y, TopLeftCorner.X + x);
+                    consoleManager.SetChar('═', BottomRight.Y, TopLeftCorner.X + x);
+                }
+            }*/
             for (int x = 1; x < width; x++)
             {
                 consoleManager.SetChar('═', TopLeftCorner.Y, TopLeftCorner.X + x);
@@ -59,9 +62,8 @@ namespace GameStore.Core.ConsoleSections
                 consoleManager.SetChar('║', TopLeftCorner.Y + y, TopLeftCorner.X);
                 consoleManager.SetChar('║', TopLeftCorner.Y + y, BottomRight.X);
             }
-
         }
-
+        
 
 
     }

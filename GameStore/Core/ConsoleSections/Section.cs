@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace GameStore.Core.ConsoleSections
 {
-    class Section 
+    internal class Section
     {
         public char[][] SectionMatrix;
 
@@ -19,28 +17,22 @@ namespace GameStore.Core.ConsoleSections
 
         private void CheckSectionState()
         {
-            int width = BottomRight.X - TopLeftCorner.X;
-            int heigth = BottomRight.X - TopLeftCorner.Y;
+            var width = BottomRight.X - TopLeftCorner.X;
+            var heigth = BottomRight.X - TopLeftCorner.Y;
 
-            if (width <= 0 || heigth <= 0)
-            {
-                throw new Exception("Wrong corners of frame section.");
-            }
+            if (width <= 0 || heigth <= 0) throw new Exception("Wrong corners of frame section.");
 
             if (SectionMatrix == null)
             {
                 SectionMatrix = new char[heigth][];
-                for (int y = 0; y < heigth ; y++)
+                for (var y = 0; y < heigth; y++)
                 {
                     SectionMatrix[y] = new char[width];
-                    for (int x = 0; x < width; x++)
-                    {
-                        SectionMatrix[y][x] = ' ';
-                    }
+                    for (var x = 0; x < width; x++) SectionMatrix[y][x] = ' ';
                 }
             }
-
         }
+
         public virtual void DrawSection(IConsoleManager consoleManager)
         {
             CheckSectionState();
@@ -50,13 +42,10 @@ namespace GameStore.Core.ConsoleSections
         {
             SectionMatrix[y][x] = charToSet;
         }
+
         public void SetText(string text, int y, int x)
         {
-            for (int i = 0; i < text.Length; i++)
-            {
-                SetChar(text[i], y, x + i);
-            }
+            for (var i = 0; i < text.Length; i++) SetChar(text[i], y, x + i);
         }
-
     }
 }

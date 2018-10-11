@@ -6,7 +6,7 @@ using System.Text;
 
 namespace GameStore.Core.ConsoleSections
 {
-    class LoggerFramedSection : FramedSection, ILoggerSection
+    internal class LoggerFramedSection : FramedSection, ILoggerSection
     {
         private List<string> log;
         
@@ -20,7 +20,7 @@ namespace GameStore.Core.ConsoleSections
         {
         }
 
-        public List<string> Log { get => log;  private set => log = value; }
+        public List<string> Log { get; }
 
         public void AddToLog(string msg)
         {
@@ -62,11 +62,6 @@ namespace GameStore.Core.ConsoleSections
             Log.Add("");
         }
 
-        public override void DrawSection(IConsoleManager consoleManager)
-        {
-            base.DrawSection(consoleManager);
-            ShowLog(consoleManager);
-        }
         public void ShowLog(IConsoleManager consoleManager)
         {
             var topMsgs = Log.TakeLast(BottomRight.Y - TopLeftCorner.Y-1);
@@ -80,7 +75,12 @@ namespace GameStore.Core.ConsoleSections
                  
                 lineCounter++;
             }
-             
+        }
+
+        public override void DrawSection(IConsoleManager consoleManager)
+        {
+            base.DrawSection(consoleManager);
+            ShowLog(consoleManager);
         }
     }
 }

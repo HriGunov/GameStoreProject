@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GameStore.Data.Context;
 using GameStore.Data.Context.Abstract;
 using GameStore.Data.Models;
 using GameStore.Services.Abstract;
-using Microsoft.EntityFrameworkCore.Internal;
 
 namespace GameStore.Services
 {
@@ -36,7 +34,8 @@ namespace GameStore.Services
             if (ProductExistsInCart(product, account))
                 throw new ArgumentException($"Product {product.Name} already exists in the user's cart.");
 
-            var tempCart = storeContext.Accounts.ToList().FirstOrDefault(c => c.Username == account.Username)?.ShoppingCart;
+            var tempCart = storeContext.Accounts.ToList().FirstOrDefault(c => c.Username == account.Username)
+                ?.ShoppingCart;
 
             var shoppingCart = new ShoppingCartProducts
             {
@@ -65,7 +64,8 @@ namespace GameStore.Services
             if (!product.Any())
                 throw new NotSupportedException("No products given to add.");
 
-            var tempCart = storeContext.Accounts.ToList().FirstOrDefault(c => c.Username == account.Username)?.ShoppingCart;
+            var tempCart = storeContext.Accounts.ToList().FirstOrDefault(c => c.Username == account.Username)
+                ?.ShoppingCart;
 
             foreach (var p in product)
             {
@@ -88,7 +88,8 @@ namespace GameStore.Services
 
         private bool ProductExistsInCart(Product product, Account account)
         {
-            return storeContext.ShoppingCartProducts.Any(s => s.ShoppingCartId == account.ShoppingCartId && s.ProductId == product.Id);
+            return storeContext.ShoppingCartProducts.Any(s =>
+                s.ShoppingCartId == account.ShoppingCartId && s.ProductId == product.Id);
         }
     }
 }
