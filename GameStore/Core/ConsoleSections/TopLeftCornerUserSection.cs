@@ -37,17 +37,17 @@ namespace GameStore.Core.ConsoleSections
                 topLeftMessage = $"Currenly signed in as Guest";
                 topRigthMessage = "Please sign in!";
             }
-            else 
+            else
             {
                 topLeftMessage = $"Hello, {currentUser.FirstName}";
                 if (currentUser.ShoppingCart == null)
                 {
-                    topRigthMessage = $"Shoping Cart(0) {0 :F2} BGN";
+                    topRigthMessage = $"Shopping Cart(0) {0:F2} BGN";
 
                 }
                 else
                 {
-                    topRigthMessage = $"Shoping Cart({currentUser.ShoppingCart.ShoppingCartProducts.Count}) {String.Format("F2", currentUser.ShoppingCart.ShoppingCartProducts.Sum(x => x.Product.Price))} BGN";
+                    topRigthMessage = $"Shopping Cart({currentUser.ShoppingCart.ShoppingCartProducts.Count}) {String.Format("F2", currentUser.ShoppingCart.ShoppingCartProducts.Sum(x => x.Product.Price))} BGN";
 
                 }
 
@@ -55,14 +55,12 @@ namespace GameStore.Core.ConsoleSections
 
             if (currentUser.IsAdmin)
             {
-                topLeftMessage = topLeftMessage+ "(Admin)";
+                topLeftMessage = topLeftMessage + "(Admin)";
             }
             var storeTitle = "GameStore";
             consoleManager.SetText(topLeftMessage, PositionY, PositionX);
             consoleManager.SetText(storeTitle, 0, Console.WindowWidth / 2 - storeTitle.Length / 2);
-            consoleManager.SetText(topRigthMessage, PositionY, Console.WindowWidth-1 - topRigthMessage.Length);
-
-             
+            consoleManager.SetText(topRigthMessage, PositionY, Console.WindowWidth - 1 - topRigthMessage.Length);
         }
     }
 }

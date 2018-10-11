@@ -27,6 +27,9 @@ namespace GameStore.Commands
         //LogIn 
         public string Execute(List<string> parameters)
         {
+            if (engine.CurrentUser != null)
+                return "You're already logged in.";
+
             Console.WriteLine("=== Log In ===");
             string username;
             string password;

@@ -2,6 +2,7 @@
 using System.Reflection;
 using Autofac;
 using GameStore.Core.Abstract;
+using GameStore.Core.Logo;
 
 namespace GameStore
 {
@@ -9,7 +10,7 @@ namespace GameStore
     {
         private static void Main()
         {
-            Console.WriteLine("Hello World!");
+            Console.WriteLine(Logo.Text);
 
             var builder = new ContainerBuilder();
 

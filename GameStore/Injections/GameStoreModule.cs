@@ -27,8 +27,6 @@ namespace GameStore.Injections
             builder.RegisterType<CommandManager>().As<ICommandManager>();
             //builder.RegisterType<ConsoleManager>().As<IConsoleManager>();
 
-
-
             RegisterCommands(builder);
 
             base.Load(builder);

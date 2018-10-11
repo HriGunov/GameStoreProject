@@ -15,8 +15,7 @@ namespace GameStore.Core
 
         public ConsoleManager(IEngine engine)
         {
-            Console.SetBufferSize(Console.WindowWidth, Console.WindowHeight);
-
+            //Console.SetBufferSize(Console.WindowWidth, Console.WindowHeight);
             InitializeConsoleMatrix();
             this.engine = engine;
         }

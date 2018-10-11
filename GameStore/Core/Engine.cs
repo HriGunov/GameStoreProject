@@ -14,7 +14,7 @@ namespace GameStore.Core
     {
         private readonly ICommandManager commandManager;
         private readonly ICommentService commentService;
-        private IConsoleManager consoleManager;
+        private readonly IConsoleManager consoleManager;
         private readonly IGameStoreContext gameStoreContext;
 
         public Engine(IGameStoreContext gameStoreContext, ICommandManager commandManager,
@@ -23,50 +23,35 @@ namespace GameStore.Core
             this.gameStoreContext = gameStoreContext;
             this.commandManager = commandManager;
             this.commentService = commentService;
-          
         }
 
         public Account CurrentUser { get; set; }
 
         public void Run()
         {
-            consoleManager = new ConsoleManager(this);
-            var accounts = new AccountsService(gameStoreContext);
-            var products = new ProductsService(gameStoreContext);
-            var shoppingCarts = new ShoppingCartsService(gameStoreContext);
-            /*   //products.AddProduct("Normal Banana", "Normal Banana to Eat", 2);
-               //accounts.AddAccount("Danail", "Grozdanov", "dngrozdanov", "dntest", true);
-               //accounts.AddAccount("Hristo", "Gunov", "hrigunov", "hritest", true);
-               //accounts.AddAccount("Guest", "Guest", "guest", "guest", false, true);
-               var tempProduct = products.FindProducts("Normal Banana");
-               var tempAccount = accounts.FindAccount("hrigunov");
-               var tempAccount2 = accounts.FindAccount("dngrozdanov");
-               var tempCart = shoppingCarts.AddToCart(tempProduct, tempAccount);
-               var tempCart2 = shoppingCarts.AddToCart(tempProduct, tempAccount2);
-               */
-            //var comment = commentService.AddCommentToProduct("Banana", "dngrozdanov", "Top KeK");
-            //commentService.RemoveCommentsFromAccount(accounts.FindAccount("hrigunov"));
-            // var tempProduct = products.FindProduct("Banana");
-            // var tempAccount = accounts.FindAccount("hrigunov");
-            // var tempAccount2 = accounts.FindAccount("dngrozdanov");
-            //var tempCart = shoppingCarts.AddToCart(tempProduct, tempAccount);
-            //var tempCart2 = shoppingCarts.AddToCart(tempProduct, tempAccount2);
-            //var acc = accounts.FindAccount("dngrozdanov");
-            // var acc2 = accounts.FindAccount("hrigunov");
-            var mockAcc = new Account() { FirstName = "Hristo", LastName = "Gunov", Username = "hrigunov", Password = "hritest", IsGuest = false };
+            //consoleManager = new ConsoleManager(this);
             string line;
-            int counter = 0;
-            while ((line = consoleManager.ListenForCommand()) != "end")
+            //int counter = 0;
+            while ((line = Console.ReadLine()) != "end")
             {
-                consoleManager.SetText(line, counter,0);
+                //consoleManager.SetText(line, counter, 0);
 
-                var nameSection = new TopLeftCornerUserSection(consoleManager,0,0);
-                nameSection.ImprintOnConsoleMatrix(mockAcc);
+                //var nameSection = new TopLeftCornerUserSection(consoleManager, 0, 0);
+                //nameSection.ImprintOnConsoleMatrix(acc);
 
-                consoleManager.Print();
+                //consoleManager.Print();
 
-                // commandManager.Execute(line);
-                counter++;
+                // Change that to custom exceptions
+                try
+                {
+                    Console.WriteLine(commandManager.Execute(line));
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+
+                //counter++;
             }
         }
     }

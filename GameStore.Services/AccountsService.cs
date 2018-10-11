@@ -24,6 +24,9 @@ namespace GameStore.Services
         public Account AddAccount(string firstName, string lastName, string userName, string password,
             bool isAdmin = false, bool isGuest = false)
         {
+            if (FindAccount(userName) != null)
+                throw new ArgumentException($"Account ({userName}) already exists.");
+
             var account = new Account
             {
                 FirstName = firstName,
@@ -81,19 +84,7 @@ namespace GameStore.Services
         /// <returns></returns>
         public Account FindAccount(string accountName)
         {
-            var account = storeContext.Accounts
-                                      .Include(s => s.ShoppingCart)
-                                      .ThenInclude(s => s.ShoppingCartProducts)
-                                       .ThenInclude(cart => cart.Product)
-                                      .Include(s => s.ShoppingCart)
-                                       .ThenInclude(s => s.ShoppingCartProducts)
-                                        .ThenInclude(cart => cart.ShoppingCart)
-                                      .Include(c => c.Comments)
-                                       .ThenInclude(comment => comment.Account)
-                                      .Include(c => c.Comments)
-                                       .ThenInclude(comment => comment.Product)
-                                      .ToList()
-                                      .SingleOrDefault(p => p.Username == accountName);
+            var account = this.GetAccounts().SingleOrDefault(p => p.Username == accountName);
 
             return account == null || account.IsDeleted ? null : account;
         }
@@ -123,6 +114,22 @@ namespace GameStore.Services
         public Account GetGuestAccount()
         {
             return storeContext.Accounts.ToList().SingleOrDefault(acc => acc.IsGuest);
+        }
+
+        private IEnumerable<Account> GetAccounts()
+        {
+            return storeContext.Accounts
+                                      .Include(s => s.ShoppingCart)
+                                      .ThenInclude(s => s.ShoppingCartProducts)
+                                       .ThenInclude(cart => cart.Product)
+                                      .Include(s => s.ShoppingCart)
+                                       .ThenInclude(s => s.ShoppingCartProducts)
+                                        .ThenInclude(cart => cart.ShoppingCart)
+                                      .Include(c => c.Comments)
+                                       .ThenInclude(comment => comment.Account)
+                                      .Include(c => c.Comments)
+                                       .ThenInclude(comment => comment.Product)
+                               .ToList();
         }
     }
 }

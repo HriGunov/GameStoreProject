@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Autofac;
+using Autofac.Core.Registration;
 
 namespace GameStore.Commands
 {
@@ -27,7 +28,14 @@ namespace GameStore.Commands
 
         public ICommand FindCommand(string commandName)
         {
-            return Scope.ResolveNamed<ICommand>(commandName.ToLower()+"command");
+            try
+            {
+                return Scope.ResolveNamed<ICommand>(commandName.ToLower() + "command");
+            }
+            catch (ComponentNotRegisteredException)
+            {
+                throw new ArgumentException($"Command ({commandName}) doesn't exist.");
+            }
         }
     }
 }
