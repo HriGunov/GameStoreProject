@@ -14,18 +14,13 @@ namespace GameStore.Commands
         public CommandManager(ILifetimeScope scope)
         {
             Scope = scope;
-            knownCommands = new HashSet<string>(FindAllCommands());
-
+            knownCommands = new HashSet<string>(FindAllCommands()); 
         }
 
         public ILifetimeScope Scope { get; }
 
         public string Execute(string commandLine)
-        {
-            if (string.IsNullOrEmpty(commandLine))
-                throw new CommandNull("Null Command");
-
-            
+        {              
             var args = commandLine.Split();
 
             if (!knownCommands.Contains(args[0].ToLower()))
@@ -58,10 +53,7 @@ namespace GameStore.Commands
                .Where(p => typeof(ICommand).IsAssignableFrom(p) && !p.IsAbstract && !p.IsInterface).Select(command =>
                {
                    return command.Name.ToLower().Replace("command","");                    
-            });
-
-              
-            
+            }); 
         }
 
     }

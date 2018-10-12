@@ -1,8 +1,7 @@
 ﻿using GameStore.Commands.Abstract;
-using GameStore.Core;
 using GameStore.Core.Abstract;
 using GameStore.Services.Abstract;
-using System;
+using GameStore.Services.Exceptions;
 using System.Collections.Generic;
 
 namespace GameStore.Commands
@@ -29,16 +28,31 @@ namespace GameStore.Commands
                 return "You're already logged in.";
 
             consoleManager.LogMessage("=== Signing Up ===", true);
+
             consoleManager.LogMessage("Enter Username", true);
             var username = consoleManager.ListenForCommand();
-            consoleManager.LogMessage("Enter Password",true);
+            consoleManager.LogMessage(username);
+
+            consoleManager.LogMessage("Enter Password", true);
             var password = consoleManager.ListenForCommand();
+            consoleManager.LogMessage(new string('*', password.Length));
+
             consoleManager.LogMessage("Enter First Name", true);
             var firstName = consoleManager.ListenForCommand();
+            consoleManager.LogMessage(firstName);
+
             consoleManager.LogMessage("Enter Last Name", true);
             var lastName = consoleManager.ListenForCommand();
-
-            accountsService.AddAccount(firstName, lastName, username, cryptographicService.ComputeHash(password));
+            consoleManager.LogMessage(lastName);
+            
+            try
+            {
+                accountsService.AddAccount(firstName, lastName, username, cryptographicService.ComputeHash(password));
+            }
+            catch (AccountAlreadyExists e)
+            {
+                return e.Message;
+            }
             return $"Account {username} has been created.";
         }
     }

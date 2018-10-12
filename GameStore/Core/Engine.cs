@@ -8,6 +8,7 @@ using GameStore.Data.Context.Abstract;
 using GameStore.Data.Models;
 using GameStore.Services.Abstract;
 using GameStore.Commands.Exceptions;
+using GameStore.Core.ConsoleSections.MainWindowSections;
 
 namespace GameStore.Core
 {
@@ -20,13 +21,14 @@ namespace GameStore.Core
         private readonly IMessageLog messageLog;
 
         public Engine(IGameStoreContext gameStoreContext, ICommandManager commandManager,
-            ICommentService commentService, IConsoleManager consoleManager, IMessageLog messageLog)
+            ICommentService commentService, IConsoleManager consoleManager, IMessageLog messageLog,IAccountsService accountsService)
         {
             this.gameStoreContext = gameStoreContext;
             this.commandManager = commandManager;
             this.commentService = commentService;
             this.consoleManager = consoleManager;
-            this.messageLog = messageLog;
+            this.messageLog = messageLog; 
+
         }
 
         public Account CurrentUser { get; set; }
@@ -35,38 +37,37 @@ namespace GameStore.Core
         {
             string line;
 
-            var nameSection = new TopLeftCornerUserSection(consoleManager, 0, 0);
+            var headerSection = new HeaderSection(this);
 
-            var testFrameBig = new FramedSection(1, 36, 28, 119, "Main View");
+            var testFrameBig = new HomeSection(1, 36, 28, 119, "Main View");
             //Message logger uses the width of this section as constraint
             consoleManager.LogMessage("Welcome to GameStore!",true);
             consoleManager.LogMessage("For more information use the Help commmand.");
             var testLogger = new LoggerFramedSection(messageLog, 1, 0, 28, 35, "Message Log");
 
-            nameSection.ImprintOnConsoleMatrix(CurrentUser);
+            headerSection.DrawSection(consoleManager);
             testFrameBig.DrawSection(consoleManager);
             testLogger.DrawSection(consoleManager);
             consoleManager.Print();
 
             while ((line = consoleManager.ListenForCommand()) != "end")
             {
-                consoleManager.LogMessage(line);
-
-
-                nameSection.ImprintOnConsoleMatrix(CurrentUser);                
-                testFrameBig.DrawSection(consoleManager);
-                testLogger.DrawSection(consoleManager);
-                consoleManager.Print();
-
                 // Change that to custom exceptions
                 try
                 {
-                   consoleManager.LogMessage(commandManager.Execute(line));
+                    consoleManager.LogMessage(commandManager.Execute(line));
                 }
                 catch (CommandDoesNotExist)
                 {
                     consoleManager.LogMessage("Invalid command.");
                 }
+
+                headerSection.DrawSection(consoleManager);                
+                testFrameBig.DrawSection(consoleManager);
+                testLogger.DrawSection(consoleManager);
+                consoleManager.Print();
+
+               
             }
         }
     }

@@ -33,7 +33,7 @@ namespace GameStore.Commands
             if (engine.CurrentUser != null)
                 return "You're already logged in.";
 
-            consoleManager.LogMessage("Logging in");            
+            consoleManager.LogMessage("=== Logging In ===", true);            
             string username;
             string password;
             if (parameters.Count == 2)
