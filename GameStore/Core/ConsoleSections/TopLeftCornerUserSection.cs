@@ -2,6 +2,7 @@
 using System.Linq;
 using GameStore.Core.Abstract;
 using GameStore.Data.Models;
+using GameStore.Core.Exceptions;
 
 namespace GameStore.Core.ConsoleSections
 {
@@ -28,15 +29,15 @@ namespace GameStore.Core.ConsoleSections
             string topLeftMessage;
             string topRightMessage;
 
+            if (currentUser != null && currentUser.IsDeleted)
+                throw new AccountIsDeleted(
+                    "Account doesn't exist.");
 
-            if (currentUser.IsDeleted)
-                throw new ArgumentException(
-                    "A deleted account cannot be logged in. So there cannot be a message for it.");
-
-            if (currentUser.IsGuest)
+            if (currentUser == null || currentUser.IsGuest)
             {
                 topLeftMessage = "Currenly signed in as Guest";
                 topRightMessage = "Please sign in!";
+                return;
             }
             else
             {

@@ -40,6 +40,11 @@ namespace GameStore.Core
             //Message logger uses the width of this section as constraint
             var testLogger = new LoggerFramedSection(messageLog, 1, 0, 28, 35, "Message Log");
 
+            nameSection.ImprintOnConsoleMatrix(CurrentUser);
+            testFrameBig.DrawSection(consoleManager);
+            testLogger.DrawSection(consoleManager);
+            consoleManager.Print();
+
             while ((line = consoleManager.ListenForCommand()) != "end")
             {
                 //messageLog.AddToLog(line);

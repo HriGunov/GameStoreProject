@@ -6,6 +6,7 @@ namespace GameStore.Services.Abstract
     {
         Account AddAccount(string firstName, string lastName, string userName, string password, bool isAdmin = false,
             bool isGuest = false);
+        Account AddAccount(Account account);
 
         bool IsAdmin(string accountName);
         string RemoveAccount(string commandExecutor, string accountName);
