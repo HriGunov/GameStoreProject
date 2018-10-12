@@ -1,4 +1,5 @@
-﻿using GameStore.Core.ConsoleSections;
+﻿using GameStore.Core.Abstract;
+using GameStore.Core.ConsoleSections;
 using GameStore.Core.ConsoleSections.Abstract;
 using System;
 using System.Text;
@@ -99,9 +100,9 @@ namespace GameStore.Core
             }
         }
 
-        public void LogMessage(string message)
+        public void LogMessage(string message,bool centered = false)
         {
-            messageLog.AddToLog(message);
+            messageLog.AddToLog(message, centered);
             LoggerSection.DrawSection(this);
             Print();
         }

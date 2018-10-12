@@ -11,14 +11,14 @@ namespace GameStore.Core.Abstract
         {
             Log = new List<string>();
         }
-        public List<string> Log { get; set ; }
+        public List<string> Log { get; set; }
 
         public int WidthConstraint { get; set; }
 
-        public void AddToLog(string message)
+        public void AddToLog(string message, bool centered)
         {
 
-            if (message.Length > WidthConstraint)
+            if (message.Length+1 > WidthConstraint)
             {
                 var wordsQueue = new Queue<string>(message.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
                 if (wordsQueue.Max(word => word.Length) > WidthConstraint)
@@ -49,7 +49,19 @@ namespace GameStore.Core.Abstract
             }
             else
             {
-                Log.Add(">" + message);
+                if (centered)
+                {
+                    var sb = new StringBuilder();
+                    sb.Append(">");
+                    var leftEdgeLength = (WidthConstraint - 1) / 2 - message.Length / 2;
+                    sb.Append(new string(' ', leftEdgeLength));
+                    sb.Append(message);
+                    Log.Add(sb.ToString());
+                }
+                else
+                {
+                    Log.Add("> " + message);
+                }
             }
             Log.Add("");
         }

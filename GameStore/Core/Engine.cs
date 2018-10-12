@@ -1,6 +1,7 @@
 ﻿using System;
 using GameStore.Commands;
 using GameStore.Commands.Abstract;
+using GameStore.Core;
 using GameStore.Core.Abstract;
 using GameStore.Core.ConsoleSections;
 using GameStore.Data.Context.Abstract;
@@ -44,13 +45,14 @@ namespace GameStore.Core
             var testFrameBig = new FramedSection(1, 36, 28, 119,"Main View");
             //Message logger uses the width of this section as constraint
             var testLogger = new LoggerFramedSection(messageLog,1, 0, 28, 35,"Message Log");
-            messageLog.WidthConstraint = 35;
-
+            messageLog.WidthConstraint = 34;
+            //messageLog.AddToLog(line);
+            consoleManager.LogMessage("Welcome to GameStore!",true);
+            consoleManager.LogMessage("For more information use the Help commmand.");
             while ((line = consoleManager.ListenForCommand()) != "end")
             {
-                //messageLog.AddToLog(line);
 
-
+              
                 nameSection.ImprintOnConsoleMatrix(mockAcc);
                 //testFrameSmall.DrawSection(consoleManager);
                 testFrameBig.DrawSection(consoleManager);                
@@ -60,7 +62,7 @@ namespace GameStore.Core
                 // Change that to custom exceptions
                 try
                 {
-                    consoleManager.LogMessage(commandManager.Execute(line));
+                   consoleManager.LogMessage(commandManager.Execute(line));
                 }
                 catch (Exception ex)
                 {

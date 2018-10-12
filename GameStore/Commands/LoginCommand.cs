@@ -33,7 +33,7 @@ namespace GameStore.Commands
             if (engine.CurrentUser != null)
                 return "You're already logged in.";
 
-            consoleManager.LogMessage("Logging in ...");            
+            consoleManager.LogMessage("Logging in");            
             string username;
             string password;
             if (parameters.Count == 2)
@@ -44,10 +44,10 @@ namespace GameStore.Commands
             else
             {
                 
-                consoleManager.LogMessage("Please Enter Your Username.");
+                consoleManager.LogMessage("Please Enter Your Username.",true);
                 username = consoleManager.ListenForCommand();
-                consoleManager.LogMessage("Please Enter Password.");
-                password = consoleManager.ListenForCommand();
+                consoleManager.LogMessage("Please Enter Password.",true);
+                password = cryptographicService.ComputeHash(consoleManager.ListenForCommand());
             }
 
             var result = authenticationService.Authenticate(username, password);

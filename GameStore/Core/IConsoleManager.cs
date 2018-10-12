@@ -7,7 +7,6 @@
         void Print();
         void SetChar(char charToSet, int y, int x);
         void SetText(string text, int y, int x);
-
-        void LogMessage(string message);
+        void LogMessage(string message, bool centered = false);
     }
 }
