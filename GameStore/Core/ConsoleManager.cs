@@ -17,9 +17,16 @@ namespace GameStore.Core
 
         public ConsoleManager(IMessageLog messageLog)
         {
-            Console.SetWindowSize(120, 30);
-            Console.SetBufferSize(Console.WindowWidth, Console.WindowHeight);
-            Console.CursorVisible = false;
+            try
+            {
+                Console.SetWindowSize(120, 30);
+                Console.SetBufferSize(Console.WindowWidth, Console.WindowHeight);
+            }
+            catch (PlatformNotSupportedException)
+            {
+                // Fix for Mac
+            }
+
             InitializeConsoleMatrix();
             this.messageLog = messageLog;
             LoggerSection = new LoggerFramedSection(messageLog, 1, 0, 28, 35, "Message Log");

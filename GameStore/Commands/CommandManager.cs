@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Autofac;
 using Autofac.Core.Registration;
+using GameStore.Commands.Exceptions;
 using GameStore.Commands.Abstract;
 
 namespace GameStore.Commands
@@ -22,7 +23,7 @@ namespace GameStore.Commands
         public string Execute(string commandLine)
         {
             if (string.IsNullOrEmpty(commandLine))
-                throw new ArgumentException("Null commandline passed.", nameof(commandLine));
+                throw new CommandNull("Null Command");
 
             
             var args = commandLine.Split();
@@ -45,7 +46,7 @@ namespace GameStore.Commands
             }
             catch (ComponentNotRegisteredException)
             {
-                throw new ArgumentException($"Command ({commandName}) doesn't exist.");
+                throw new CommandDoesNotExist($"Command ({commandName}) doesn't exist.");
             }
         }
 
