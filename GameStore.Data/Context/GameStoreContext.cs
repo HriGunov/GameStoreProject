@@ -42,11 +42,11 @@ namespace GameStore.Data.Context
 
             modelBuilder.Entity<Account>().Property(x => x.FirstName)
                         .HasMaxLength(20)
-                        .IsRequired(true);
+                        .IsRequired(false);
 
             modelBuilder.Entity<Account>().Property(x => x.LastName)
                         .HasMaxLength(20)
-                        .IsRequired(true);
+                        .IsRequired(false);
 
             modelBuilder.Entity<Account>().Property(x => x.Username)
                         .HasMaxLength(20)

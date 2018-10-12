@@ -6,11 +6,15 @@ using GameStore.Data.Models;
 using GameStore.Services.Abstract;
 using GameStore.Services.Exceptions;
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 
 namespace GameStore.Services
 {
     public class AccountsService : IAccountsService
     {
+        private const string Pattern = @"^(?=[a-zA-Z])[-\w.]{0,23}([a-zA-Z\d]|(?<![-.])_)$";
+        private static readonly Regex usernameFormat = new Regex(Pattern);
+
         private readonly IGameStoreContext storeContext;
 
         public AccountsService(IGameStoreContext storeContext)
@@ -24,6 +28,9 @@ namespace GameStore.Services
         public Account AddAccount(string firstName, string lastName, string userName, string password,
             bool isAdmin = false, bool isGuest = false)
         {
+            if (!IsUserNameAllowed(userName))
+                throw new UsernameInvalidFormat($"Account username ({userName}) is not in valid format.");
+
             if (FindAccount(userName) != null)
                 throw new AccountAlreadyExists($"Account ({userName}) already exists.");
 
@@ -135,6 +142,21 @@ namespace GameStore.Services
                 .Include(c => c.Comments)
                 .ThenInclude(comment => comment.Product)
                 .ToList();
+        }
+
+        /// <summary>
+        /// Determines whether the username meets conditions.
+        /// Username conditions:
+        /// Must be 1 to 24 character in length
+        /// Must start with letter a-zA-Z
+        /// May contain letters, numbers or '.','-' or '_'
+        /// Must not end in '.','-','._' or '-_' 
+        /// </summary>
+        /// <param name="userName">Given userName</param>
+        /// <returns>True if the username is valid</returns>
+        private bool IsUserNameAllowed(string userName)
+        {
+            return !string.IsNullOrEmpty(userName) && usernameFormat.IsMatch(userName);
         }
     }
 }

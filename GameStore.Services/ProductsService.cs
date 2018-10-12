@@ -4,6 +4,7 @@ using System.Linq;
 using GameStore.Data.Context.Abstract;
 using GameStore.Data.Models;
 using GameStore.Services.Abstract;
+using GameStore.Services.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace GameStore.Services
@@ -28,6 +29,9 @@ namespace GameStore.Services
         public Product AddProduct(string productName, string productDescription, decimal productPrice,
             ICollection<Genre> productGenres = null, ICollection<Comment> productComments = null)
         {
+            if (FindProduct(productName) != null)
+                throw new ProductAlreadyExists($"Product ({productName}) already exists.");
+
             Product product;
 
             product = new Product
@@ -48,6 +52,11 @@ namespace GameStore.Services
             storeContext.SaveChanges();
 
             return product;
+        }
+
+        public Product AddProduct(Product product)
+        {
+            return AddProduct(product.Name, product.Description, product.Price, product.Genre, product.Comments);
         }
 
         /// <summary>
