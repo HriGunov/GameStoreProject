@@ -8,14 +8,14 @@ namespace GameStore.Data.Models
     {
         public int Id { get; set; }
 
-        [Required] public string FirstName { get; set; }
+        public string FirstName { get; set; }
 
-        [Required] public string LastName { get; set; }
+        public string LastName { get; set; }
 
-        [Required] [MaxLength(20)] public string Username { get; set; }
+        public string Username { get; set; }
 
         // SHA-512
-        [Required] public string Password { get; set; }
+        public string Password { get; set; }
         public string CreditCard { get; set; }
         public string DeletedBy { get; set; }
 

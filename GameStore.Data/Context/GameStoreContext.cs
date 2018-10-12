@@ -24,16 +24,76 @@ namespace GameStore.Data.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            #region ShoppingCartProducts Setup
             modelBuilder.Entity<ShoppingCartProducts>()
-                .HasKey(p => new {p.ProductId, p.ShoppingCartId});
+                .HasKey(p => new { p.ProductId, p.ShoppingCartId });
 
+            modelBuilder.Entity<ShoppingCartProducts>().Property(s => s.ShoppingCartId)
+                        .IsRequired(true);
+
+            modelBuilder.Entity<ShoppingCartProducts>().Property(s => s.ProductId)
+                        .IsRequired(true);
+            #endregion
+
+            #region Account Setup
             modelBuilder.Entity<Account>()
                 .HasIndex(a => a.Username)
                 .IsUnique(true);
 
+            modelBuilder.Entity<Account>().Property(x => x.FirstName)
+                        .HasMaxLength(20)
+                        .IsRequired(true);
+
+            modelBuilder.Entity<Account>().Property(x => x.LastName)
+                        .HasMaxLength(20)
+                        .IsRequired(true);
+
+            modelBuilder.Entity<Account>().Property(x => x.Username)
+                        .HasMaxLength(20)
+                        .IsRequired(true);
+
+            modelBuilder.Entity<Account>().Property(x => x.Password)
+                        .IsRequired(true);
+            #endregion
+
+            #region Comment Setup
+            modelBuilder.Entity<Comment>().Property(c => c.AccountId)
+                        .IsRequired(true);
+
+            modelBuilder.Entity<Comment>().Property(c => c.ProductId)
+                        .IsRequired(true);
+
+            modelBuilder.Entity<Comment>().Property(c => c.Text)
+                        .HasMaxLength(100)
+                        .IsRequired(true);
+            #endregion
+
+            #region Genre Setup
+            modelBuilder.Entity<Genre>().Property(g => g.Name)
+                        .IsRequired(true);
+            #endregion
+
+            #region Order Setup
+            modelBuilder.Entity<Order>().Property(o => o.AccountId)
+                        .IsRequired(true);
+            #endregion
+
+            #region Product Setup
             modelBuilder.Entity<Product>()
                 .HasIndex(p => p.Name)
                 .IsUnique(true);
+
+            modelBuilder.Entity<Product>().Property(p => p.Name)
+                        .HasMaxLength(20)
+                        .IsRequired(true);
+
+            modelBuilder.Entity<Product>().Property(p => p.Description)
+                        .HasMaxLength(100)
+                        .IsRequired(true);
+
+            modelBuilder.Entity<Product>().Property(p => p.Price)
+                        .IsRequired(true);
+            #endregion
 
             base.OnModelCreating(modelBuilder);
         }
