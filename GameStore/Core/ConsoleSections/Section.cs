@@ -1,6 +1,6 @@
-﻿using GameStore.Core.Abstract;
+﻿using System;
+using GameStore.Core.Abstract;
 using GameStore.Core.ConsoleSections.Abstract;
-using System;
 
 namespace GameStore.Core.ConsoleSections
 {
@@ -16,6 +16,21 @@ namespace GameStore.Core.ConsoleSections
 
         public Position TopLeftCorner { get; set; }
         public Position BottomRight { get; set; }
+
+        public virtual void DrawSection(IConsoleManager consoleManager)
+        {
+            CheckSectionState();
+        }
+
+        public void SetChar(char charToSet, int y, int x)
+        {
+            SectionMatrix[y][x] = charToSet;
+        }
+
+        public void SetText(string text, int y, int x)
+        {
+            for (var i = 0; i < text.Length; i++) SetChar(text[i], y, x + i);
+        }
 
         private void CheckSectionState()
         {
@@ -33,21 +48,6 @@ namespace GameStore.Core.ConsoleSections
                     for (var x = 0; x < width; x++) SectionMatrix[y][x] = ' ';
                 }
             }
-        }
-
-        public virtual void DrawSection(IConsoleManager consoleManager)
-        {
-            CheckSectionState();
-        }
-
-        public void SetChar(char charToSet, int y, int x)
-        {
-            SectionMatrix[y][x] = charToSet;
-        }
-
-        public void SetText(string text, int y, int x)
-        {
-            for (var i = 0; i < text.Length; i++) SetChar(text[i], y, x + i);
         }
     }
 }

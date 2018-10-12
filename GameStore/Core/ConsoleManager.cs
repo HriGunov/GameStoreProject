@@ -1,17 +1,17 @@
-﻿using GameStore.Core.Abstract;
+﻿using System;
+using System.Text;
+using GameStore.Core.Abstract;
 using GameStore.Core.ConsoleSections;
 using GameStore.Core.ConsoleSections.Abstract;
-using System;
-using System.Text;
 
 namespace GameStore.Core
 {
     public class ConsoleManager : IConsoleManager
     {
+        private readonly IMessageLog messageLog;
         private char[][] ConsoleMatrix;
         private int Heigth;
         private int Width;
-        private readonly IMessageLog messageLog;
 
         public ConsoleManager(IMessageLog messageLog)
         {
@@ -54,8 +54,8 @@ namespace GameStore.Core
         public void Clear()
         {
             for (var y = 0; y < ConsoleMatrix.Length; y++)
-                for (var x = 0; x < ConsoleMatrix[0].Length; x++)
-                    ConsoleMatrix[y][x] = ' ';
+            for (var x = 0; x < ConsoleMatrix[0].Length; x++)
+                ConsoleMatrix[y][x] = ' ';
         }
 
         /// <summary>
@@ -74,6 +74,13 @@ namespace GameStore.Core
             Console.Write(str);
         }
 
+        public void LogMessage(string message, bool centered = false)
+        {
+            messageLog.AddToLog(message, centered);
+            LoggerSection.DrawSection(this);
+            Print();
+        }
+
         /// <summary>
         ///     Used on class construction and when the console is resized
         /// </summary>
@@ -89,13 +96,6 @@ namespace GameStore.Core
                 ConsoleMatrix[y] = new char[Width];
                 for (var x = 0; x < Width; x++) ConsoleMatrix[y][x] = ' ';
             }
-        }
-
-        public void LogMessage(string message, bool centered = false)
-        {
-            messageLog.AddToLog(message, centered);
-            LoggerSection.DrawSection(this);
-            Print();
         }
     }
 }

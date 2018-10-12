@@ -9,17 +9,19 @@ namespace GameStore.Data.Context.Configurations
         public void Configure(EntityTypeBuilder<Comment> builder)
         {
             #region Comment Setup
+
             builder.ToTable("Comments");
 
             builder.Property(c => c.AccountId)
-                        .IsRequired(true);
+                .IsRequired(true);
 
             builder.Property(c => c.ProductId)
-                        .IsRequired(true);
+                .IsRequired(true);
 
             builder.Property(c => c.Text)
-                        .HasMaxLength(100)
-                        .IsRequired(true);
+                .HasMaxLength(100)
+                .IsRequired(true);
+
             #endregion
         }
     }

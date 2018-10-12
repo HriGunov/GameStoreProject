@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using GameStore.Commands.Abstract;
-using GameStore.Core;
 using GameStore.Core.Abstract;
 using GameStore.Services.Abstract;
 
@@ -11,9 +9,9 @@ namespace GameStore.Commands
     {
         private readonly IAccountsService accountsService;
         private readonly IAuthenticationService authenticationService;
+        private readonly IConsoleManager consoleManager;
         private readonly ICryptographicService cryptographicService;
         private readonly IEngine engine;
-        private readonly IConsoleManager consoleManager;
 
         public LoginCommand(IEngine engine, IConsoleManager consoleManager,
             IAccountsService accountsService,
@@ -33,7 +31,7 @@ namespace GameStore.Commands
             if (engine.CurrentUser != null)
                 return "You're already logged in.";
 
-            consoleManager.LogMessage("=== Logging In ===", true);            
+            consoleManager.LogMessage("=== Logging In ===", true);
             string username;
             string password;
             if (parameters.Count == 2)
@@ -43,10 +41,9 @@ namespace GameStore.Commands
             }
             else
             {
-                
-                consoleManager.LogMessage("Please Enter Your Username.",true);
+                consoleManager.LogMessage("Please Enter Your Username.", true);
                 username = consoleManager.ListenForCommand();
-                consoleManager.LogMessage("Please Enter Password.",true);
+                consoleManager.LogMessage("Please Enter Password.", true);
                 password = cryptographicService.ComputeHash(consoleManager.ListenForCommand());
             }
 
@@ -55,7 +52,7 @@ namespace GameStore.Commands
             if (result != null)
             {
                 engine.CurrentUser = result;
-                consoleManager.LogMessage("Successful Login.",true);
+                consoleManager.LogMessage("Successful Login.", true);
                 return $"Welcome {engine.CurrentUser.Username}!";
             }
 

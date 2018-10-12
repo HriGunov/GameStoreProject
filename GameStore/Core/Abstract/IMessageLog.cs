@@ -6,6 +6,6 @@ namespace GameStore.Core.Abstract
     {
         List<string> Log { get; set; }
         int WidthConstraint { get; set; }
-        void AddToLog(string message,bool centered);
+        void AddToLog(string message, bool centered);
     }
 }

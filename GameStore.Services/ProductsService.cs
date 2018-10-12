@@ -54,11 +54,6 @@ namespace GameStore.Services
             return product;
         }
 
-        public Product AddProduct(Product product)
-        {
-            return AddProduct(product.Name, product.Description, product.Price, product.Genre, product.Comments);
-        }
-
         /// <summary>
         ///     Removes the first product that matches the given name parameter in the database.
         /// </summary>
@@ -98,6 +93,11 @@ namespace GameStore.Services
             });
 
             return !products.Any() ? null : products;
+        }
+
+        public Product AddProduct(Product product)
+        {
+            return AddProduct(product.Name, product.Description, product.Price, product.Genre, product.Comments);
         }
 
         public IEnumerable<Product> FindProductsByGenre(Genre productGenre)

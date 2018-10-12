@@ -1,8 +1,8 @@
-﻿using GameStore.Core.Abstract;
+﻿using System;
+using System.Linq;
+using GameStore.Core.Abstract;
 using GameStore.Core.Exceptions;
 using GameStore.Data.Models;
-using System;
-using System.Linq;
 
 namespace GameStore.Core.ConsoleSections
 {
@@ -14,8 +14,8 @@ namespace GameStore.Core.ConsoleSections
         public HeaderSection(IEngine engine) : this(new Position(0, 0), new Position(0, Console.WindowWidth))
         {
             this.engine = engine;
-
         }
+
         public HeaderSection(Position topLeftCorner, Position bottomRight) : base(topLeftCorner, bottomRight)
         {
         }
@@ -33,10 +33,7 @@ namespace GameStore.Core.ConsoleSections
         /// <param name="currentUser"></param>
         private void DrawHeader(Account currentUser, IConsoleManager consoleManager)
         {
-            for (int x = 0; x < Console.WindowWidth; x++)
-            {
-                consoleManager.SetChar(' ', 0, x);
-            }
+            for (var x = 0; x < Console.WindowWidth; x++) consoleManager.SetChar(' ', 0, x);
             string topLeftMessage;
             string topRightMessage;
 
@@ -48,7 +45,6 @@ namespace GameStore.Core.ConsoleSections
             {
                 topLeftMessage = "Currenly signed in as Guest";
                 topRightMessage = "Please sign in!";
-
             }
             else
             {
@@ -58,7 +54,6 @@ namespace GameStore.Core.ConsoleSections
 
                 topRightMessage =
                     $"Shopping Cart({currentUser.ShoppingCart.ShoppingCartProducts.Count}) {currentUser.ShoppingCart.ShoppingCartProducts.Sum(x => x.Product.Price).ToString("0.00")} BGN";
-
             }
 
 
@@ -67,6 +62,5 @@ namespace GameStore.Core.ConsoleSections
             consoleManager.SetText(storeTitle, 0, Console.WindowWidth / 2 - storeTitle.Length / 2);
             consoleManager.SetText(topRightMessage, TopLeftCorner.Y, Console.WindowWidth - 1 - topRightMessage.Length);
         }
-
     }
 }
