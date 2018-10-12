@@ -4,6 +4,7 @@ using System.Linq;
 using GameStore.Data.Context.Abstract;
 using GameStore.Data.Models;
 using GameStore.Services.Abstract;
+using GameStore.Services.Exceptions;
 
 namespace GameStore.Services
 {
@@ -26,13 +27,13 @@ namespace GameStore.Services
         {
             // Move this check to Commands
             if (account.IsGuest)
-                throw new NotSupportedException("Guests cannot add to their carts.");
+                throw new GuestCannotAddToCart("Guests cannot add to their carts.");
 
             if (product == null)
-                throw new NotSupportedException($"Product {product.Name} doesn't exist.");
+                throw new ProductDoesntExists($"Product {product.Name} doesn't exist.");
 
             if (ProductExistsInCart(product, account))
-                throw new ArgumentException($"Product {product.Name} already exists in the user's cart.");
+                throw new ProductAlreadyExistsInCart($"Product {product.Name} already exists in the user's cart.");
 
             var tempCart = storeContext.Accounts.ToList().FirstOrDefault(c => c.Username == account.Username)
                 ?.ShoppingCart;
@@ -59,10 +60,10 @@ namespace GameStore.Services
         {
             // Move this check to Commands
             if (account.IsGuest)
-                throw new NotSupportedException("Guests cannot add to their carts.");
+                throw new GuestCannotAddToCart("Guests cannot add to their carts.");
 
             if (!product.Any())
-                throw new NotSupportedException("No products given to add.");
+                throw new NoProductsArgument("No products given to add.");
 
             var tempCart = storeContext.Accounts.ToList().FirstOrDefault(c => c.Username == account.Username)
                 ?.ShoppingCart;
@@ -70,7 +71,7 @@ namespace GameStore.Services
             foreach (var p in product)
             {
                 if (ProductExistsInCart(p, account))
-                    throw new ArgumentException($"Product {p.Name} already exists in the user's cart.");
+                    throw new ProductAlreadyExistsInCart($"Product {p.Name} already exists in the user's cart.");
 
                 var shoppingCart = new ShoppingCartProducts
                 {
