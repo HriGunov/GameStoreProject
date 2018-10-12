@@ -16,5 +16,6 @@
   <ItemGroup>
     <Folder Include="Core\Logo\" />
     <Folder Include="Commands\Exceptions\" />
+    <Folder Include="Core\Exceptions\" />
   </ItemGroup>
 </Project>

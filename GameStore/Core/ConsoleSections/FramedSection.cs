@@ -1,4 +1,5 @@
 ﻿using System;
+using GameStore.Core.Abstract;
 
 namespace GameStore.Core.ConsoleSections
 {
@@ -31,14 +32,14 @@ namespace GameStore.Core.ConsoleSections
             consoleManager.SetChar('╚', BottomRight.Y, TopLeftCorner.X);
             consoleManager.SetChar('╝', BottomRight.Y, BottomRight.X);
 
-          /*  if (title != "")
-            {
-                for (int x = 0; x < (width-2)/2 -title.Length/2; x++)
-                {
-                    consoleManager.SetChar('═', TopLeftCorner.Y, TopLeftCorner.X + x);
-                    consoleManager.SetChar('═', BottomRight.Y, TopLeftCorner.X + x);
-                }
-            }*/
+            /*  if (title != "")
+              {
+                  for (int x = 0; x < (width-2)/2 -title.Length/2; x++)
+                  {
+                      consoleManager.SetChar('═', TopLeftCorner.Y, TopLeftCorner.X + x);
+                      consoleManager.SetChar('═', BottomRight.Y, TopLeftCorner.X + x);
+                  }
+              }*/
             for (int x = 1; x < width; x++)
             {
                 consoleManager.SetChar('═', TopLeftCorner.Y, TopLeftCorner.X + x);
@@ -63,7 +64,7 @@ namespace GameStore.Core.ConsoleSections
                 consoleManager.SetChar('║', TopLeftCorner.Y + y, BottomRight.X);
             }
         }
-        
+
 
 
     }

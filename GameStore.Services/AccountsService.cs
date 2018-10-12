@@ -4,6 +4,7 @@ using System.Linq;
 using GameStore.Data.Context.Abstract;
 using GameStore.Data.Models;
 using GameStore.Services.Abstract;
+using GameStore.Services.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace GameStore.Services
@@ -24,7 +25,7 @@ namespace GameStore.Services
             bool isAdmin = false, bool isGuest = false)
         {
             if (FindAccount(userName) != null)
-                throw new ArgumentException($"Account ({userName}) already exists.");
+                throw new AccountAlreadyExists($"Account ({userName}) already exists.");
 
             var account = new Account
             {
@@ -44,6 +45,11 @@ namespace GameStore.Services
             return account;
         }
 
+        public Account AddAccount(Account account)
+        {
+            return AddAccount(account.FirstName, account.LastName, account.Username, account.Password, account.IsAdmin, account.IsGuest);
+        }
+
         /// <summary>
         ///     Deletes an account by changing it's IsDeleted flag and sets the DeletedBy to the commandExecutor's name.
         /// </summary>
@@ -54,7 +60,7 @@ namespace GameStore.Services
         {
             // Move that to Command.
             if (!IsAdmin(commandExecutor))
-                throw new NotSupportedException("You don't have enough permissions.");
+                throw new NotEnoughPermissions("You don't have enough permissions.");
 
             var account = storeContext.Accounts.ToList().FirstOrDefault(acc => acc.Username == accountName);
             if (account == null || account.IsDeleted) return $"Account {accountName} was not found.";
@@ -98,7 +104,7 @@ namespace GameStore.Services
         {
             // Move that to Command.
             if (!IsAdmin(commandExecutor))
-                throw new NotSupportedException("You don't have enough permissions.");
+                throw new NotEnoughPermissions("You don't have enough permissions.");
 
             var account = storeContext.Accounts.ToList().FirstOrDefault(acc => acc.Username == accountName);
             if (account == null) return $"Account {accountName} was not found.";

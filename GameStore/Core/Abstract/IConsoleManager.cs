@@ -1,4 +1,4 @@
-﻿namespace GameStore.Core
+﻿namespace GameStore.Core.Abstract
 {
     public interface IConsoleManager
     {

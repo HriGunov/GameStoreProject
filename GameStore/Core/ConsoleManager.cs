@@ -8,9 +8,6 @@ namespace GameStore.Core
 {
     public class ConsoleManager : IConsoleManager
     {
-
-
-
         private char[][] ConsoleMatrix;
         private int Heigth;
         private int Width;
@@ -18,14 +15,10 @@ namespace GameStore.Core
 
         public ConsoleManager(IMessageLog messageLog)
         {
-            try
+            if (Environment.OSVersion.Platform != PlatformID.Unix)
             {
                 Console.SetWindowSize(120, 30);
                 Console.SetBufferSize(Console.WindowWidth, Console.WindowHeight);
-            }
-            catch (PlatformNotSupportedException)
-            {
-                // Fix for Mac
             }
 
             InitializeConsoleMatrix();
@@ -33,9 +26,8 @@ namespace GameStore.Core
             LoggerSection = new LoggerFramedSection(messageLog, 1, 0, 28, 35, "Message Log");
         }
 
-
-
         public ILoggerSection LoggerSection { get; set; }
+
         /// <summary>
         ///     Sets the cursor position to the bottom left of the console and adds a visual cue for waiting command.
         /// </summary>
@@ -45,7 +37,6 @@ namespace GameStore.Core
             Console.Write("Enter command -> ");
             return Console.ReadLine();
         }
-
 
         public void SetChar(char charToSet, int y, int x)
         {
@@ -100,7 +91,7 @@ namespace GameStore.Core
             }
         }
 
-        public void LogMessage(string message,bool centered = false)
+        public void LogMessage(string message, bool centered = false)
         {
             messageLog.AddToLog(message, centered);
             LoggerSection.DrawSection(this);

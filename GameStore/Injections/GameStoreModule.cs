@@ -21,7 +21,6 @@ namespace GameStore.Injections
             builder.RegisterType<ConsoleManager>().As<IConsoleManager>().SingleInstance();
             builder.RegisterType<MessageLog>().As<IMessageLog>().SingleInstance();
 
-
             RegisterCommands(builder);
 
             base.Load(builder);

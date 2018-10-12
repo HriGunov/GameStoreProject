@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using GameStore.Core.Abstract;
 
-namespace GameStore.Core.Abstract
+namespace GameStore.Core
 {
     public class MessageLog : IMessageLog
     {
@@ -13,7 +14,7 @@ namespace GameStore.Core.Abstract
         }
         public List<string> Log { get; set; }
 
-        public int WidthConstraint { get; set; }
+        public int WidthConstraint { get; set; } = 34;
 
         public void AddToLog(string message, bool centered)
         {
@@ -23,7 +24,7 @@ namespace GameStore.Core.Abstract
                 var wordsQueue = new Queue<string>(message.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
                 if (wordsQueue.Max(word => word.Length) > WidthConstraint)
                 {
-                    throw new ArgumentException("Message is too long and in incorect format.");
+                    throw new ArgumentException("Message is too long.");
                 }
                 else
                 {

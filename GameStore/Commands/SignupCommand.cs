@@ -25,7 +25,7 @@ namespace GameStore.Commands
 
         public string Execute(List<string> parameters)
         {
-            if (engine.CurrentUser != null)
+            if (engine.CurrentUser != null && engine.CurrentUser.IsGuest != true)
                 return "You're already logged in.";
 
             consoleManager.LogMessage("=== Signing Up ===", true);

@@ -10,8 +10,6 @@ namespace GameStore
     {
         private static void Main()
         {
-            Console.WriteLine(Logo.Text);
-
             // Autofac Configuration Run
             var builder = new ContainerBuilder();
             builder.RegisterAssemblyModules(Assembly.GetExecutingAssembly());

@@ -55,10 +55,11 @@ namespace GameStore.Commands
             if (result != null)
             {
                 engine.CurrentUser = result;
-                return $"Successful Login.{Environment.NewLine}Welcome {engine.CurrentUser.Username}!";
+                consoleManager.LogMessage("Successful Login.",true);
+                return $"Welcome {engine.CurrentUser.Username}!";
             }
 
-            return "Invalid Password or Username";
+            return "Invalid Username or Password";
         }
     }
 }
