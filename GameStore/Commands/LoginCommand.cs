@@ -33,7 +33,7 @@ namespace GameStore.Commands
             if (engine.CurrentUser != null)
                 return "You're already logged in.";
 
-            consoleManager.LogMessage("Logging in ...");            
+            consoleManager.LogMessage("Logging in...");
             string username;
             string password;
             if (parameters.Count == 2)
@@ -43,7 +43,7 @@ namespace GameStore.Commands
             }
             else
             {
-                
+
                 consoleManager.LogMessage("Please Enter Your Username.");
                 username = consoleManager.ListenForCommand();
                 consoleManager.LogMessage("Please Enter Password.");
@@ -55,10 +55,11 @@ namespace GameStore.Commands
             if (result != null)
             {
                 engine.CurrentUser = result;
-                return $"Successful Login.{Environment.NewLine}Welcome {engine.CurrentUser.Username}!";
+                consoleManager.LogMessage("Successful Login.");
+                return $"Welcome {engine.CurrentUser.Username}!";
             }
 
-            return "Invalid Password or Username";
+            return "Invalid Username or Password";
         }
     }
 }

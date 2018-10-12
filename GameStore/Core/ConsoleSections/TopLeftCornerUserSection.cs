@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using GameStore.Core.Abstract;
 using GameStore.Data.Models;
 
 namespace GameStore.Core.ConsoleSections

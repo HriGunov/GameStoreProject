@@ -1,4 +1,6 @@
-﻿namespace GameStore.Core.ConsoleSections.Abstract
+﻿using GameStore.Core.Abstract;
+
+namespace GameStore.Core.ConsoleSections.Abstract
 {
     public interface ISection
     {

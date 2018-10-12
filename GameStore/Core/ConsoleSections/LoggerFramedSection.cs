@@ -1,4 +1,5 @@
-﻿using GameStore.Core.ConsoleSections.Abstract;
+﻿using GameStore.Core.Abstract;
+using GameStore.Core.ConsoleSections.Abstract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,31 +11,27 @@ namespace GameStore.Core.ConsoleSections
     {
         private readonly IMessageLog messageLog;
 
-        public LoggerFramedSection(IMessageLog messageLog, Position topLeftCorner, Position bottomRight,string title ="") : base(topLeftCorner, bottomRight, title)
+        public LoggerFramedSection(IMessageLog messageLog, Position topLeftCorner, Position bottomRight, string title = "") : base(topLeftCorner, bottomRight, title)
         {
             this.messageLog = messageLog;
         }
 
-        public LoggerFramedSection(IMessageLog messageLog,int topLeftY, int topLeftX, int bottomRightY, int bottomRightX, string title = "") :
-            this(messageLog,new Position(topLeftY, topLeftX), new Position(bottomRightY, bottomRightX), title)
+        public LoggerFramedSection(IMessageLog messageLog, int topLeftY, int topLeftX, int bottomRightY, int bottomRightX, string title = "") :
+            this(messageLog, new Position(topLeftY, topLeftX), new Position(bottomRightY, bottomRightX), title)
         {
         }
 
-        
-
-         
-
         public void ShowLog(IConsoleManager consoleManager)
         {
-            var topMsgs = messageLog.Log.TakeLast(BottomRight.Y - TopLeftCorner.Y-1);
+            var topMsgs = messageLog.Log.TakeLast(BottomRight.Y - TopLeftCorner.Y - 1);
 
             int lineCounter = 0;
-            var sectionWidth = BottomRight.X - TopLeftCorner.X-2;
+            var sectionWidth = BottomRight.X - TopLeftCorner.X - 2;
             foreach (var msg in topMsgs)
             {
-                 
-                consoleManager.SetText(msg.PadRight(BottomRight.X- TopLeftCorner.X-1), TopLeftCorner.Y + 1 + lineCounter, TopLeftCorner.X + 1);
-                 
+
+                consoleManager.SetText(msg.PadRight(BottomRight.X - TopLeftCorner.X - 1), TopLeftCorner.Y + 1 + lineCounter, TopLeftCorner.X + 1);
+
                 lineCounter++;
             }
         }
