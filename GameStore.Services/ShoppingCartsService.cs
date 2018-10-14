@@ -10,18 +10,60 @@ namespace GameStore.Services
 {
     public class ShoppingCartsService : IShoppingCartsService
     {
+        private readonly IAccountsService accountService;
+        private readonly IProductsService productService;
         private readonly IGameStoreContext storeContext;
 
-        public ShoppingCartsService(IGameStoreContext storeContext)
+        public ShoppingCartsService(IGameStoreContext storeContext, IAccountsService accountService,
+            IProductsService productService)
         {
             this.storeContext = storeContext ?? throw new ArgumentNullException(nameof(storeContext));
+            this.accountService = accountService;
+            this.productService = productService;
         }
 
         /// <summary>
         ///     Adds the given product in the parameters to the account's cart.
         /// </summary>
-        /// <param name="product">Product type</param>
-        /// <param name="account">Account type</param>
+        /// <param name="product">Product Name</param>
+        /// <param name="account">Account Type</param>
+        /// <returns></returns>
+        public ShoppingCart AddToCart(string product, Account account)
+        {
+            // Move this check to Commands
+            if (account.IsGuest)
+                throw new UserException("Guests cannot add to their carts.");
+
+            var tempProduct = productService.FindProduct(product);
+
+            if (tempProduct == null)
+                throw new UserException($"Product {product} doesn't exist.");
+
+            if (ProductExistsInCart(tempProduct, account))
+                throw new UserException($"Product {tempProduct.Name} already exists in the user's cart.");
+
+            var tempCart = account.ShoppingCart;
+
+            if (tempCart == null)
+                throw new UserException($"User ({account.Username}) doesn't have Shopping Cart.");
+
+            var shoppingCart = new ShoppingCartProducts
+            {
+                ShoppingCartId = tempCart.Id,
+                ProductId = tempProduct.Id
+            };
+
+            storeContext.ShoppingCartProducts.Add(shoppingCart);
+            storeContext.SaveChanges();
+
+            return tempCart;
+        }
+
+        /// <summary>
+        ///     Adds the given product in the parameters to the account's cart.
+        /// </summary>
+        /// <param name="product">Product Type</param>
+        /// <param name="account">Account Type</param>
         /// <returns></returns>
         public ShoppingCart AddToCart(Product product, Account account)
         {
@@ -30,21 +72,23 @@ namespace GameStore.Services
                 throw new UserException("Guests cannot add to their carts.");
 
             if (product == null)
-                throw new UserException($"Product {product.Name} doesn't exist.");
+                throw new UserException("No product given to add.");
 
             if (ProductExistsInCart(product, account))
                 throw new UserException($"Product {product.Name} already exists in the user's cart.");
 
-            var tempCart = storeContext.Accounts.ToList().FirstOrDefault(c => c.Username == account.Username)
-                ?.ShoppingCart;
+            var tempCart = account.ShoppingCart;
+
+            if (tempCart == null)
+                throw new UserException($"User ({account.Username}) doesn't have Shopping Cart.");
 
             var shoppingCart = new ShoppingCartProducts
             {
-                ShoppingCart = tempCart,
-                Product = product
+                ShoppingCartId = tempCart.Id,
+                ProductId = product.Id
             };
 
-            tempCart?.ShoppingCartProducts.Add(shoppingCart);
+            storeContext.ShoppingCartProducts.Add(shoppingCart);
             storeContext.SaveChanges();
 
             return tempCart;
@@ -53,8 +97,8 @@ namespace GameStore.Services
         /// <summary>
         ///     Adds multiple products to the account's cart.
         /// </summary>
-        /// <param name="product">Product type</param>
-        /// <param name="account">Account type</param>
+        /// <param name="product">Product Type</param>
+        /// <param name="account">Account Type</param>
         /// <returns></returns>
         public ShoppingCart AddToCart(IEnumerable<Product> product, Account account)
         {
@@ -65,8 +109,10 @@ namespace GameStore.Services
             if (!product.Any())
                 throw new UserException("No products given to add.");
 
-            var tempCart = storeContext.Accounts.ToList().FirstOrDefault(c => c.Username == account.Username)
-                ?.ShoppingCart;
+            var tempCart = account.ShoppingCart;
+
+            if (tempCart == null)
+                throw new UserException($"User ({account.Username}) doesn't have Shopping Cart.");
 
             foreach (var p in product)
             {
@@ -75,11 +121,11 @@ namespace GameStore.Services
 
                 var shoppingCart = new ShoppingCartProducts
                 {
-                    ShoppingCart = tempCart,
-                    Product = p
+                    ShoppingCartId = tempCart.Id,
+                    ProductId = p.Id
                 };
 
-                tempCart?.ShoppingCartProducts.Add(shoppingCart);
+                storeContext.ShoppingCartProducts.Add(shoppingCart);
             }
 
             storeContext.SaveChanges();
@@ -87,6 +133,12 @@ namespace GameStore.Services
             return tempCart;
         }
 
+        /// <summary>
+        ///     Checks if the product already exists in the user's cart.
+        /// </summary>
+        /// <param name="product">Product Type</param>
+        /// <param name="account">Account Type</param>
+        /// <returns></returns>
         private bool ProductExistsInCart(Product product, Account account)
         {
             return storeContext.ShoppingCartProducts.Any(s =>

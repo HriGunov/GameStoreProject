@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using GameStore.Commands.Abstract;
 using GameStore.Core.Abstract;
+using GameStore.Exceptions;
 using GameStore.Services.Abstract;
 
 namespace GameStore.Commands
@@ -48,7 +49,7 @@ namespace GameStore.Commands
             {
                 accountsService.AddAccount(firstName, lastName, username, cryptographicService.ComputeHash(password));
             }
-            catch (AccountAlreadyExists e)
+            catch (UserException e)
             {
                 return e.Message;
             }
