@@ -7,112 +7,112 @@ namespace GameStore.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropIndex(
-                name: "IX_Products_Name",
-                table: "Products");
+                "IX_Products_Name",
+                "Products");
 
             migrationBuilder.AlterColumn<string>(
-                name: "Name",
-                table: "Products",
+                "Name",
+                "Products",
                 maxLength: 20,
                 nullable: false,
                 oldClrType: typeof(string),
                 oldNullable: true);
 
             migrationBuilder.AlterColumn<string>(
-                name: "Description",
-                table: "Products",
+                "Description",
+                "Products",
                 maxLength: 100,
                 nullable: false,
                 oldClrType: typeof(string),
                 oldNullable: true);
 
             migrationBuilder.AlterColumn<string>(
-                name: "Name",
-                table: "Genres",
+                "Name",
+                "Genres",
                 nullable: false,
                 oldClrType: typeof(string),
                 oldNullable: true);
 
             migrationBuilder.AlterColumn<string>(
-                name: "Text",
-                table: "Comments",
+                "Text",
+                "Comments",
                 maxLength: 100,
                 nullable: false,
                 oldClrType: typeof(string),
                 oldNullable: true);
 
             migrationBuilder.AlterColumn<string>(
-                name: "LastName",
-                table: "Accounts",
+                "LastName",
+                "Accounts",
                 maxLength: 20,
                 nullable: false,
                 oldClrType: typeof(string));
 
             migrationBuilder.AlterColumn<string>(
-                name: "FirstName",
-                table: "Accounts",
+                "FirstName",
+                "Accounts",
                 maxLength: 20,
                 nullable: false,
                 oldClrType: typeof(string));
 
             migrationBuilder.CreateIndex(
-                name: "IX_Products_Name",
-                table: "Products",
-                column: "Name",
+                "IX_Products_Name",
+                "Products",
+                "Name",
                 unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropIndex(
-                name: "IX_Products_Name",
-                table: "Products");
+                "IX_Products_Name",
+                "Products");
 
             migrationBuilder.AlterColumn<string>(
-                name: "Name",
-                table: "Products",
+                "Name",
+                "Products",
                 nullable: true,
                 oldClrType: typeof(string),
                 oldMaxLength: 20);
 
             migrationBuilder.AlterColumn<string>(
-                name: "Description",
-                table: "Products",
+                "Description",
+                "Products",
                 nullable: true,
                 oldClrType: typeof(string),
                 oldMaxLength: 100);
 
             migrationBuilder.AlterColumn<string>(
-                name: "Name",
-                table: "Genres",
+                "Name",
+                "Genres",
                 nullable: true,
                 oldClrType: typeof(string));
 
             migrationBuilder.AlterColumn<string>(
-                name: "Text",
-                table: "Comments",
+                "Text",
+                "Comments",
                 nullable: true,
                 oldClrType: typeof(string),
                 oldMaxLength: 100);
 
             migrationBuilder.AlterColumn<string>(
-                name: "LastName",
-                table: "Accounts",
+                "LastName",
+                "Accounts",
                 nullable: false,
                 oldClrType: typeof(string),
                 oldMaxLength: 20);
 
             migrationBuilder.AlterColumn<string>(
-                name: "FirstName",
-                table: "Accounts",
+                "FirstName",
+                "Accounts",
                 nullable: false,
                 oldClrType: typeof(string),
                 oldMaxLength: 20);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Products_Name",
-                table: "Products",
-                column: "Name",
+                "IX_Products_Name",
+                "Products",
+                "Name",
                 unique: true,
                 filter: "[Name] IS NOT NULL");
         }

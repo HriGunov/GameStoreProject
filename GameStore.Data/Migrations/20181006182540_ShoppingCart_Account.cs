@@ -7,33 +7,33 @@ namespace GameStore.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_ShoppingCarts_Accounts_AccountId",
-                table: "ShoppingCarts");
+                "FK_ShoppingCarts_Accounts_AccountId",
+                "ShoppingCarts");
 
             migrationBuilder.DropIndex(
-                name: "IX_ShoppingCarts_AccountId",
-                table: "ShoppingCarts");
+                "IX_ShoppingCarts_AccountId",
+                "ShoppingCarts");
 
             migrationBuilder.DropColumn(
-                name: "AccountId",
-                table: "ShoppingCarts");
+                "AccountId",
+                "ShoppingCarts");
 
             migrationBuilder.AddColumn<int>(
-                name: "ShoppingCartId",
-                table: "Accounts",
+                "ShoppingCartId",
+                "Accounts",
                 nullable: false,
                 defaultValue: 0);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Accounts_ShoppingCartId",
-                table: "Accounts",
-                column: "ShoppingCartId");
+                "IX_Accounts_ShoppingCartId",
+                "Accounts",
+                "ShoppingCartId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Accounts_ShoppingCarts_ShoppingCartId",
-                table: "Accounts",
-                column: "ShoppingCartId",
-                principalTable: "ShoppingCarts",
+                "FK_Accounts_ShoppingCarts_ShoppingCartId",
+                "Accounts",
+                "ShoppingCartId",
+                "ShoppingCarts",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
         }
@@ -41,33 +41,33 @@ namespace GameStore.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Accounts_ShoppingCarts_ShoppingCartId",
-                table: "Accounts");
+                "FK_Accounts_ShoppingCarts_ShoppingCartId",
+                "Accounts");
 
             migrationBuilder.DropIndex(
-                name: "IX_Accounts_ShoppingCartId",
-                table: "Accounts");
+                "IX_Accounts_ShoppingCartId",
+                "Accounts");
 
             migrationBuilder.DropColumn(
-                name: "ShoppingCartId",
-                table: "Accounts");
+                "ShoppingCartId",
+                "Accounts");
 
             migrationBuilder.AddColumn<int>(
-                name: "AccountId",
-                table: "ShoppingCarts",
+                "AccountId",
+                "ShoppingCarts",
                 nullable: false,
                 defaultValue: 0);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ShoppingCarts_AccountId",
-                table: "ShoppingCarts",
-                column: "AccountId");
+                "IX_ShoppingCarts_AccountId",
+                "ShoppingCarts",
+                "AccountId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_ShoppingCarts_Accounts_AccountId",
-                table: "ShoppingCarts",
-                column: "AccountId",
-                principalTable: "Accounts",
+                "FK_ShoppingCarts_Accounts_AccountId",
+                "ShoppingCarts",
+                "AccountId",
+                "Accounts",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
         }

@@ -4,7 +4,7 @@ using System.Linq;
 using Autofac;
 using Autofac.Core.Registration;
 using GameStore.Commands.Abstract;
-using GameStore.Commands.Exceptions;
+using GameStore.Exceptions;
 
 namespace GameStore.Commands
 {
@@ -39,7 +39,7 @@ namespace GameStore.Commands
             }
             catch (ComponentNotRegisteredException)
             {
-                throw new CommandDoesNotExist($"Command ({commandName}) doesn't exist.");
+                throw new UserException($"Command ({commandName}) doesn't exist.");
             }
         }
 

@@ -1,11 +1,11 @@
 ﻿using GameStore.Commands.Abstract;
-using GameStore.Commands.Exceptions;
 using GameStore.Core.Abstract;
 using GameStore.Core.ConsoleSections;
 using GameStore.Core.ConsoleSections.Abstract;
 using GameStore.Core.ConsoleSections.MainWindowSections;
 using GameStore.Data.Context.Abstract;
 using GameStore.Data.Models;
+using GameStore.Exceptions;
 using GameStore.Services.Abstract;
 
 namespace GameStore.Core
@@ -20,7 +20,7 @@ namespace GameStore.Core
 
         public Engine(IGameStoreContext gameStoreContext, ICommandManager commandManager,
             ICommentService commentService, IConsoleManager consoleManager, IMessageLog messageLog,
-            IAccountsService accountsService,HomeSection homeSection)
+            IAccountsService accountsService, HomeSection homeSection)
         {
             this.gameStoreContext = gameStoreContext;
             this.commandManager = commandManager;
@@ -49,8 +49,14 @@ namespace GameStore.Core
             consoleManager.LogMessage("For more information use the Help commmand.");
             var testLogger = new LoggerFramedSection(messageLog);
 
-            var testProdcuts = new ProductsSection();
-            testProdcuts.ProductsInView = new Product[] { new Product() { Name = "Test Product", Price = 1 }, new Product() { Name = "Test Product2", Genre = {new Genre() { Name = "Action" } }, Price = 2 } };
+            var testProducts = new ProductsSection
+            {
+                ProductsInView = new[]
+                {
+                    new Product {Name = "Test Product", Price = 1},
+                    new Product {Name = "Test Product2", Genre = {new Genre {Name = "Action"}}, Price = 2}
+                }
+            };
 
             headerSection.DrawSection(consoleManager);
             testFrameBig.DrawSection(consoleManager);
@@ -64,24 +70,24 @@ namespace GameStore.Core
                 try
                 {
                     var result = commandManager.Execute(line);
-                    if (!string.IsNullOrEmpty(result))
-                    {
-                        consoleManager.LogMessage(result);
-                    }
+                    if (!string.IsNullOrEmpty(result)) consoleManager.LogMessage(result);
                 }
-                catch (CommandDoesNotExist)
+                catch (UserException)
                 {
                     consoleManager.LogMessage("Invalid command.");
                 }
+                // catch (Exception) - Log
 
                 headerSection.DrawSection(consoleManager);
-                
+
                 testFrameBig.DrawSection(consoleManager);
 
                 testLogger.DrawSection(consoleManager);
 
                 MainSection.DrawSection(consoleManager);
-                //testProdcuts.DrawSection(consoleManager);
+
+                //testProducts.DrawSection(consoleManager);
+
                 consoleManager.Print();
             }
         }

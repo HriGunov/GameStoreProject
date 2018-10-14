@@ -7,15 +7,15 @@ namespace GameStore.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "Id",
-                table: "ShoppingCartProducts");
+                "Id",
+                "ShoppingCartProducts");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<int>(
-                name: "Id",
-                table: "ShoppingCartProducts",
+                "Id",
+                "ShoppingCartProducts",
                 nullable: false,
                 defaultValue: 0);
         }

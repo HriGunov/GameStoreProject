@@ -7,8 +7,6 @@ using GameStore.Core;
 using GameStore.Core.Abstract;
 using GameStore.Core.ConsoleSections.MainWindowSections;
 using GameStore.Data.Injections;
-using GameStore.Services;
-using GameStore.Services.Abstract;
 using GameStore.Services.Injections;
 
 namespace GameStore.Injections
@@ -19,19 +17,12 @@ namespace GameStore.Injections
         {
             builder.RegisterType<Engine>().As<IEngine>().SingleInstance();
             builder.RegisterType<CommandManager>().As<ICommandManager>().SingleInstance();
-            builder.RegisterModule<GameStoreDataModule>();
-            builder.RegisterModule<GameStoreServicesModule>();
             builder.RegisterType<ConsoleManager>().As<IConsoleManager>().SingleInstance();
             builder.RegisterType<MessageLog>().As<IMessageLog>().SingleInstance();
-            builder.RegisterType<ProductsSection>().As<IProductsSection>().SingleInstance();
-            builder.RegisterType<ProductsSection>().As<IProductsSection>().SingleInstance();
-            builder.RegisterType<SaveContextService>().As<ISaveContextService>().SingleInstance();
-
-            
             builder.RegisterType<HomeSection>().AsSelf().SingleInstance();
-
-
-            
+            builder.RegisterType<ProductsSection>().As<IProductsSection>().SingleInstance();
+            builder.RegisterModule<GameStoreDataModule>();
+            builder.RegisterModule<GameStoreServicesModule>();
 
             RegisterCommands(builder);
 

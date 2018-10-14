@@ -6,11 +6,12 @@ namespace GameStore.Data.Models
     public class Order
     {
         public int Id { get; set; }
+
         public int AccountId { get; set; }
         public Account Account { get; set; }
 
-        public ICollection<Product> PurchasedProducts { get; set; } = new List<Product>();
+        public ICollection<OrderProducts> OrderProducts { get; set; } = new List<OrderProducts>();
 
-        public DateTime OrderTimestamp { get; set; }
+        public DateTime OrderTimestamp { get; set; } = DateTime.Now;
     }
 }

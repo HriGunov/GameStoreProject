@@ -7,26 +7,26 @@ namespace GameStore.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Products_ShoppingCarts_ShoppingCartId",
-                table: "Products");
+                "FK_Products_ShoppingCarts_ShoppingCartId",
+                "Products");
 
             migrationBuilder.DropIndex(
-                name: "IX_Products_ShoppingCartId",
-                table: "Products");
+                "IX_Products_ShoppingCartId",
+                "Products");
 
             migrationBuilder.DropColumn(
-                name: "ShoppingCartId",
-                table: "Products");
+                "ShoppingCartId",
+                "Products");
 
             migrationBuilder.AddColumn<bool>(
-                name: "IsGuest",
-                table: "Accounts",
+                "IsGuest",
+                "Accounts",
                 nullable: false,
                 defaultValue: false);
 
             migrationBuilder.CreateTable(
-                name: "ShoppingCartProducts",
-                columns: table => new
+                "ShoppingCartProducts",
+                table => new
                 {
                     Id = table.Column<int>(nullable: false),
                     ShoppingCartId = table.Column<int>(nullable: false),
@@ -34,51 +34,51 @@ namespace GameStore.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ShoppingCartProducts", x => new { x.ProductId, x.ShoppingCartId });
+                    table.PrimaryKey("PK_ShoppingCartProducts", x => new {x.ProductId, x.ShoppingCartId});
                     table.ForeignKey(
-                        name: "FK_ShoppingCartProducts_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
-                        principalColumn: "Id",
+                        "FK_ShoppingCartProducts_Products_ProductId",
+                        x => x.ProductId,
+                        "Products",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ShoppingCartProducts_ShoppingCarts_ShoppingCartId",
-                        column: x => x.ShoppingCartId,
-                        principalTable: "ShoppingCarts",
-                        principalColumn: "Id",
+                        "FK_ShoppingCartProducts_ShoppingCarts_ShoppingCartId",
+                        x => x.ShoppingCartId,
+                        "ShoppingCarts",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ShoppingCartProducts_ShoppingCartId",
-                table: "ShoppingCartProducts",
-                column: "ShoppingCartId");
+                "IX_ShoppingCartProducts_ShoppingCartId",
+                "ShoppingCartProducts",
+                "ShoppingCartId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ShoppingCartProducts");
+                "ShoppingCartProducts");
 
             migrationBuilder.DropColumn(
-                name: "IsGuest",
-                table: "Accounts");
+                "IsGuest",
+                "Accounts");
 
             migrationBuilder.AddColumn<int>(
-                name: "ShoppingCartId",
-                table: "Products",
+                "ShoppingCartId",
+                "Products",
                 nullable: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Products_ShoppingCartId",
-                table: "Products",
-                column: "ShoppingCartId");
+                "IX_Products_ShoppingCartId",
+                "Products",
+                "ShoppingCartId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Products_ShoppingCarts_ShoppingCartId",
-                table: "Products",
-                column: "ShoppingCartId",
-                principalTable: "ShoppingCarts",
+                "FK_Products_ShoppingCarts_ShoppingCartId",
+                "Products",
+                "ShoppingCartId",
+                "ShoppingCarts",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
         }

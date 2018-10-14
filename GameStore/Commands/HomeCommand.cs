@@ -1,12 +1,10 @@
-﻿using GameStore.Commands.Abstract;
+﻿using System.Collections.Generic;
+using GameStore.Commands.Abstract;
 using GameStore.Core.Abstract;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace GameStore.Commands
 {
-    class HomeCommand : ICommand
+    internal class HomeCommand : ICommand
     {
         private readonly IEngine engine;
 
@@ -14,10 +12,11 @@ namespace GameStore.Commands
         {
             this.engine = engine;
         }
+
         public string Execute(List<string> parameters)
         {
             engine.MainSection = engine.DefaultMainSection;
-            return "";
+            return ".:You're now at the Home Section:.";
         }
     }
 }

@@ -10,9 +10,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GameStore.Data\GameStore.Data.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Exceptions\" />
+    <ProjectReference Include="..\GameStore.Exceptions\GameStore.Exceptions.csproj" />
   </ItemGroup>
 </Project>

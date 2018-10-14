@@ -12,6 +12,7 @@ namespace GameStore.Data.Context.Abstract
         DbSet<ShoppingCart> ShoppingCarts { get; set; }
         DbSet<ShoppingCartProducts> ShoppingCartProducts { get; set; }
         DbSet<Order> Orders { get; set; }
+        DbSet<OrderProducts> OrdersProducts { get; set; }
         int SaveChanges();
     }
 }

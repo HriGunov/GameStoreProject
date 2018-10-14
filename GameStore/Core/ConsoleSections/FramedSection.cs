@@ -1,5 +1,5 @@
-﻿using GameStore.Core.Abstract;
-using System;
+﻿using System;
+using GameStore.Core.Abstract;
 
 namespace GameStore.Core.ConsoleSections
 {
@@ -42,7 +42,7 @@ namespace GameStore.Core.ConsoleSections
                           consoleManager.SetChar('═', BottomRight.Y, TopLeftCorner.X + x);
                       }
                   }*/
-                for (int x = 1; x < width; x++)
+                for (var x = 1; x < width; x++)
                 {
                     consoleManager.SetChar('═', TopLeftCorner.Y, TopLeftCorner.X + x);
                     consoleManager.SetChar('═', BottomRightCorner.Y, TopLeftCorner.X + x);
@@ -51,7 +51,7 @@ namespace GameStore.Core.ConsoleSections
                 if (title != "")
                 {
                     //can be used to draw only the top bit
-                    var startTitlePosition = ((width) / 2) - title.Length / 2;
+                    var startTitlePosition = width / 2 - title.Length / 2;
                     /*
                     for (int x = 1; x <= startTitlePosition; x++)
                     {
@@ -60,12 +60,12 @@ namespace GameStore.Core.ConsoleSections
                     }*/
                     consoleManager.SetText(title, TopLeftCorner.Y, TopLeftCorner.X + startTitlePosition + 1);
                 }
-                for (int y = 1; y < heigth; y++)
+
+                for (var y = 1; y < heigth; y++)
                 {
                     consoleManager.SetChar('║', TopLeftCorner.Y + y, TopLeftCorner.X);
                     consoleManager.SetChar('║', TopLeftCorner.Y + y, BottomRightCorner.X);
                 }
-
             }
         }
 
@@ -73,13 +73,10 @@ namespace GameStore.Core.ConsoleSections
         {
             var width = BottomRightCorner.X - TopLeftCorner.X;
 
-             
-            var startTitlePosition = ((width) / 2) - title.Length / 2;
-             
+
+            var startTitlePosition = width / 2 - title.Length / 2;
+
             consoleManager.SetText(title, TopLeftCorner.Y, TopLeftCorner.X + startTitlePosition + 1);
         }
-
-
-
     }
 }

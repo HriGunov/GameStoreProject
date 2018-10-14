@@ -13,6 +13,7 @@ namespace GameStore.Data.Models
         public decimal Price { get; set; }
 
         public ICollection<ShoppingCartProducts> ShoppingCartProducts { get; set; } = new List<ShoppingCartProducts>();
+        public ICollection<OrderProducts> OrderProducts { get; set; } = new List<OrderProducts>();
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
         public ICollection<Genre> Genre { get; set; } = new List<Genre>();
 

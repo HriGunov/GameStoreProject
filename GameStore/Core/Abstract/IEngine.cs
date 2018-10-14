@@ -1,5 +1,4 @@
-﻿using GameStore.Core.ConsoleSections;
-using GameStore.Core.ConsoleSections.Abstract;
+﻿using GameStore.Core.ConsoleSections.Abstract;
 using GameStore.Data.Models;
 
 namespace GameStore.Core.Abstract

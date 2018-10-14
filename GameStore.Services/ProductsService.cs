@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using GameStore.Data.Context.Abstract;
 using GameStore.Data.Models;
+using GameStore.Exceptions;
 using GameStore.Services.Abstract;
-using GameStore.Services.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace GameStore.Services
@@ -30,11 +30,9 @@ namespace GameStore.Services
             ICollection<Genre> productGenres = null, ICollection<Comment> productComments = null)
         {
             if (FindProduct(productName) != null)
-                throw new ProductAlreadyExists($"Product ({productName}) already exists.");
+                throw new UserException($"Product ({productName}) already exists.");
 
-            Product product;
-
-            product = new Product
+            var product = new Product
             {
                 Name = productName,
                 Description = productDescription,
@@ -52,11 +50,6 @@ namespace GameStore.Services
             storeContext.SaveChanges();
 
             return product;
-        }
-
-        public Product AddProduct(Product product)
-        {
-            return AddProduct(product.Name, product.Description, product.Price, product.Genre, product.Comments);
         }
 
         /// <summary>
@@ -100,13 +93,6 @@ namespace GameStore.Services
             return !products.Any() ? null : products;
         }
 
-        public IEnumerable<Product> FindProductsByGenre(Genre productGenre)
-        {
-            var products = GetProducts().Where(p => p.Genre.Contains(productGenre));
-
-            return !products.Any() ? null : products;
-        }
-
         public IEnumerable<Product> GetProducts()
         {
             return storeContext.Products
@@ -120,6 +106,18 @@ namespace GameStore.Services
                 .ThenInclude(comment => comment.Product)
                 .Include(g => g.Genre)
                 .ToList();
+        }
+
+        public Product AddProduct(Product product)
+        {
+            return AddProduct(product.Name, product.Description, product.Price, product.Genre, product.Comments);
+        }
+
+        public IEnumerable<Product> FindProductsByGenre(Genre productGenre)
+        {
+            var products = GetProducts().Where(p => p.Genre.Contains(productGenre));
+
+            return !products.Any() ? null : products;
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
 using GameStore.Core.Abstract;
-using GameStore.Core.Exceptions;
 using GameStore.Data.Models;
+using GameStore.Exceptions;
 
 namespace GameStore.Core.ConsoleSections
 {
@@ -38,13 +38,13 @@ namespace GameStore.Core.ConsoleSections
             string topRightMessage;
 
             if (currentUser != null && currentUser.IsDeleted)
-                throw new AccountIsDeleted(
+                throw new UserException(
                     "Account doesn't exist.");
 
             if (currentUser == null || currentUser.IsGuest)
             {
-                topLeftMessage = "Currenly signed in as Guest";
-                topRightMessage = "Please sign in!";
+                topLeftMessage = "Currently signed in as Guest";
+                topRightMessage = "Please Sign In!";
             }
             else
             {

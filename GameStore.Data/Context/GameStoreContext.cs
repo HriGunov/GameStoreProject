@@ -14,6 +14,7 @@ namespace GameStore.Data.Context
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
         public DbSet<ShoppingCartProducts> ShoppingCartProducts { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderProducts> OrdersProducts { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -31,6 +32,7 @@ namespace GameStore.Data.Context
             modelBuilder.ApplyConfiguration(new OrderConfiguration());
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
             modelBuilder.ApplyConfiguration(new ShoppingCartProductsConfiguration());
+            modelBuilder.ApplyConfiguration(new OrderProductsConfiguration());
 
             base.OnModelCreating(modelBuilder);
         }

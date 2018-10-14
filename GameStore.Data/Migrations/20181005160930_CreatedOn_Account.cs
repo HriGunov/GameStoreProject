@@ -8,15 +8,15 @@ namespace GameStore.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<string>(
-                name: "Password",
-                table: "Accounts",
+                "Password",
+                "Accounts",
                 nullable: false,
                 oldClrType: typeof(string),
                 oldNullable: true);
 
             migrationBuilder.AddColumn<DateTime>(
-                name: "CreatedOn",
-                table: "Accounts",
+                "CreatedOn",
+                "Accounts",
                 nullable: false,
                 defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
         }
@@ -24,12 +24,12 @@ namespace GameStore.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "CreatedOn",
-                table: "Accounts");
+                "CreatedOn",
+                "Accounts");
 
             migrationBuilder.AlterColumn<string>(
-                name: "Password",
-                table: "Accounts",
+                "Password",
+                "Accounts",
                 nullable: true,
                 oldClrType: typeof(string));
         }

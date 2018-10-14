@@ -1,6 +1,6 @@
 ﻿namespace GameStore.Services.Abstract
 {
-   public interface ISaveContextService
+    public interface ISaveContextService
     {
         void SaveChanges();
     }

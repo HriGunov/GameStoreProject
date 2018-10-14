@@ -2,8 +2,8 @@
 using System.Linq;
 using GameStore.Data.Context.Abstract;
 using GameStore.Data.Models;
+using GameStore.Exceptions;
 using GameStore.Services.Abstract;
-using GameStore.Services.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace GameStore.Services
@@ -25,11 +25,11 @@ namespace GameStore.Services
         public Comment AddCommentToProduct(string productName, string username, string commentText)
         {
             var commentor = accountsService.FindAccount(username);
-            if (commentor == null) throw new AccountDoesntExists("Could not find commentor");
+            if (commentor == null) throw new UserException("Could not find the user who commented...");
             var productToBeCommentedTo = productsService.FindProduct(productName);
-            if (productToBeCommentedTo == null) throw new ProductDoesntExists("Could not find product");
+            if (productToBeCommentedTo == null) throw new UserException("Could not find product...");
             if (productToBeCommentedTo.Comments.Any(x => x.AccountId == commentor.Id && x.Text == commentText))
-                throw new DuplicateCommentException("Cannot add duplicate comments.");
+                throw new UserException("Cannot add duplicate comments...");
             var newComment = new Comment
             {
                 AccountId = commentor.Id,
@@ -46,7 +46,7 @@ namespace GameStore.Services
         public void RemoveCommentsFromProduct(string productName)
         {
             var product = productsService.FindProduct(productName);
-            if (product == null) throw new ProductDoesntExists("Could not find product.");
+            if (product == null) throw new UserException("Could not find product.");
             foreach (var comment in product.Comments) comment.IsDeleted = true;
             storeContext.SaveChanges();
         }
@@ -54,7 +54,7 @@ namespace GameStore.Services
         public void RemoveCommentsFromAccount(Account account)
         {
             var tempAccount = accountsService.FindAccount(account.Username);
-            if (tempAccount == null) throw new AccountDoesntExists("Could not find account.");
+            if (tempAccount == null) throw new UserException("Could not find account.");
             foreach (var comment in tempAccount.Comments)
                 // TODO: Will change it to Flag later...
                 storeContext.Accounts.Include(c => c.Comments).ToList().Single(a => a.Username == account.Username)

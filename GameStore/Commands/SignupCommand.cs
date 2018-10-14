@@ -2,7 +2,6 @@
 using GameStore.Commands.Abstract;
 using GameStore.Core.Abstract;
 using GameStore.Services.Abstract;
-using GameStore.Services.Exceptions;
 
 namespace GameStore.Commands
 {

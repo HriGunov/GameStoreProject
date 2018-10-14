@@ -7,16 +7,16 @@ namespace GameStore.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<string>(
-                name: "LastName",
-                table: "Accounts",
+                "LastName",
+                "Accounts",
                 maxLength: 20,
                 nullable: true,
                 oldClrType: typeof(string),
                 oldMaxLength: 20);
 
             migrationBuilder.AlterColumn<string>(
-                name: "FirstName",
-                table: "Accounts",
+                "FirstName",
+                "Accounts",
                 maxLength: 20,
                 nullable: true,
                 oldClrType: typeof(string),
@@ -26,8 +26,8 @@ namespace GameStore.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<string>(
-                name: "LastName",
-                table: "Accounts",
+                "LastName",
+                "Accounts",
                 maxLength: 20,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -35,8 +35,8 @@ namespace GameStore.Data.Migrations
                 oldNullable: true);
 
             migrationBuilder.AlterColumn<string>(
-                name: "FirstName",
-                table: "Accounts",
+                "FirstName",
+                "Accounts",
                 maxLength: 20,
                 nullable: false,
                 oldClrType: typeof(string),

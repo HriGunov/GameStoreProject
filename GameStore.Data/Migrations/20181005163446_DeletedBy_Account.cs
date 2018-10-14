@@ -7,16 +7,16 @@ namespace GameStore.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "DeletedBy",
-                table: "Accounts",
+                "DeletedBy",
+                "Accounts",
                 nullable: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "DeletedBy",
-                table: "Accounts");
+                "DeletedBy",
+                "Accounts");
         }
     }
 }

@@ -20,6 +20,7 @@ namespace GameStore.Data.Models
 
         public DateTime CreatedOn { get; set; }
 
+        public ICollection<Order> OrderProducts { get; set; } = new List<Order>();
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
         public int ShoppingCartId { get; set; }

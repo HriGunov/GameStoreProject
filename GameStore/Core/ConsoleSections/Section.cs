@@ -1,6 +1,6 @@
-﻿using GameStore.Core.Abstract;
+﻿using System;
+using GameStore.Core.Abstract;
 using GameStore.Core.ConsoleSections.Abstract;
-using System;
 
 namespace GameStore.Core.ConsoleSections
 {
@@ -18,6 +18,25 @@ namespace GameStore.Core.ConsoleSections
         public Position TopLeftCorner { get; set; }
         public Position BottomRightCorner { get; set; }
         public bool Render { get; set; }
+
+        public virtual void DrawSection(IConsoleManager consoleManager)
+        {
+            // CheckSectionState();
+            Clear(consoleManager);
+        }
+
+        public void SetChar(char charToSet, int y, int x)
+        {
+            throw new NotImplementedException();
+            SectionMatrix[y][x] = charToSet;
+        }
+
+        public void SetText(string text, int y, int x)
+        {
+            throw new NotImplementedException();
+
+            for (var i = 0; i < text.Length; i++) SetChar(text[i], y, x + i);
+        }
 
         private void CheckSectionState()
         {
@@ -43,28 +62,8 @@ namespace GameStore.Core.ConsoleSections
             var heigth = BottomRightCorner.Y - TopLeftCorner.Y;
 
             for (var y = 0; y < heigth; y++)
-            {
-               
-                for (var x = 0; x < width; x++) consoleManager.SetChar( ' ',TopLeftCorner.Y +y, TopLeftCorner.X + x);
-            }
-        }
-        public virtual void DrawSection(IConsoleManager consoleManager)
-        {
-           // CheckSectionState();
-            Clear(consoleManager);
-        }
-
-        public void SetChar(char charToSet, int y, int x)
-        {
-            throw new NotImplementedException();
-            SectionMatrix[y][x] = charToSet;
-        }
-
-        public void SetText(string text, int y, int x)
-        {
-            throw new NotImplementedException();
-
-            for (var i = 0; i < text.Length; i++) SetChar(text[i], y, x + i);
+            for (var x = 0; x < width; x++)
+                consoleManager.SetChar(' ', TopLeftCorner.Y + y, TopLeftCorner.X + x);
         }
     }
 }
