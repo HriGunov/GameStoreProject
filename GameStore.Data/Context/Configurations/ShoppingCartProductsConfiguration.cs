@@ -9,15 +9,17 @@ namespace GameStore.Data.Context.Configurations
         public void Configure(EntityTypeBuilder<ShoppingCartProducts> builder)
         {
             #region ShoppingCartProducts Setup
+
             builder.ToTable("ShoppingCartProducts");
 
-            builder.HasKey(p => new { p.ProductId, p.ShoppingCartId });
+            builder.HasKey(p => new {p.ProductId, p.ShoppingCartId});
 
             builder.Property(s => s.ShoppingCartId)
-                        .IsRequired(true);
+                .IsRequired(true);
 
             builder.Property(s => s.ProductId)
-                        .IsRequired(true);
+                .IsRequired(true);
+
             #endregion
         }
     }

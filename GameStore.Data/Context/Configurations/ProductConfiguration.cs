@@ -9,21 +9,23 @@ namespace GameStore.Data.Context.Configurations
         public void Configure(EntityTypeBuilder<Product> builder)
         {
             #region Product Setup
+
             builder.ToTable("Products");
 
             builder.HasIndex(p => p.Name)
                 .IsUnique(true);
 
             builder.Property(p => p.Name)
-                        .HasMaxLength(20)
-                        .IsRequired(true);
+                .HasMaxLength(20)
+                .IsRequired(true);
 
             builder.Property(p => p.Description)
-                        .HasMaxLength(100)
-                        .IsRequired(true);
+                .HasMaxLength(100)
+                .IsRequired(true);
 
             builder.Property(p => p.Price)
-                        .IsRequired(true);
+                .IsRequired(true);
+
             #endregion
         }
     }

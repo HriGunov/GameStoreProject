@@ -1,8 +1,6 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using Autofac;
 using GameStore.Core.Abstract;
-using GameStore.Core.Logo;
 
 namespace GameStore
 {

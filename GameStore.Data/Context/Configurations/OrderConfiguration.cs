@@ -9,10 +9,12 @@ namespace GameStore.Data.Context.Configurations
         public void Configure(EntityTypeBuilder<Order> builder)
         {
             #region Order Setup
+
             builder.ToTable("Orders");
 
             builder.Property(o => o.AccountId)
-                        .IsRequired(true);
+                .IsRequired(true);
+
             #endregion
         }
     }

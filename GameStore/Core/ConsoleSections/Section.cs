@@ -4,7 +4,7 @@ using System;
 
 namespace GameStore.Core.ConsoleSections
 {
-    internal class Section : ISection
+    public class Section : ISection
     {
         public char[][] SectionMatrix;
 

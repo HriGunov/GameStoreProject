@@ -3,11 +3,12 @@ using System;
 
 namespace GameStore.Core.ConsoleSections
 {
-    internal class FramedSection : Section
+    public class FramedSection : Section
     {
         protected string title;
 
-        public FramedSection(Position topLeftCorner, Position bottomright, string title = "") : base(topLeftCorner, bottomright)
+        public FramedSection(Position topLeftCorner, Position bottomright, string title = "") : base(topLeftCorner,
+            bottomright)
         {
             this.title = title;
         }
@@ -15,7 +16,6 @@ namespace GameStore.Core.ConsoleSections
         public FramedSection(int topLeftY, int topLeftX, int bottomrightY, int bottomrightX, string title = "") :
             this(new Position(topLeftY, topLeftX), new Position(bottomrightY, bottomrightX), title)
         {
-
         }
 
         public override void DrawSection(IConsoleManager consoleManager)

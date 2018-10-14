@@ -1,17 +1,17 @@
-﻿using GameStore.Commands.Abstract;
+﻿using System.Collections.Generic;
+using GameStore.Commands.Abstract;
 using GameStore.Core.Abstract;
 using GameStore.Services.Abstract;
 using GameStore.Services.Exceptions;
-using System.Collections.Generic;
 
 namespace GameStore.Commands
 {
     public class SignupCommand : ICommand
     {
         private readonly IAccountsService accountsService;
+        private readonly IConsoleManager consoleManager;
         private readonly ICryptographicService cryptographicService;
         private readonly IEngine engine;
-        private readonly IConsoleManager consoleManager;
 
         public SignupCommand(IEngine engine, IConsoleManager consoleManager, IAccountsService accountsService,
             ICryptographicService cryptographicService)
@@ -44,7 +44,7 @@ namespace GameStore.Commands
             consoleManager.LogMessage("Enter Last Name", true);
             var lastName = consoleManager.ListenForCommand();
             consoleManager.LogMessage(lastName);
-            
+
             try
             {
                 accountsService.AddAccount(firstName, lastName, username, cryptographicService.ComputeHash(password));
@@ -53,6 +53,7 @@ namespace GameStore.Commands
             {
                 return e.Message;
             }
+
             return $"Account {username} has been created.";
         }
     }

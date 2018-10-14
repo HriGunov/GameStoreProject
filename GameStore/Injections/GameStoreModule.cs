@@ -5,7 +5,10 @@ using GameStore.Commands;
 using GameStore.Commands.Abstract;
 using GameStore.Core;
 using GameStore.Core.Abstract;
+using GameStore.Core.ConsoleSections.MainWindowSections;
 using GameStore.Data.Injections;
+using GameStore.Services;
+using GameStore.Services.Abstract;
 using GameStore.Services.Injections;
 
 namespace GameStore.Injections
@@ -20,6 +23,15 @@ namespace GameStore.Injections
             builder.RegisterModule<GameStoreServicesModule>();
             builder.RegisterType<ConsoleManager>().As<IConsoleManager>().SingleInstance();
             builder.RegisterType<MessageLog>().As<IMessageLog>().SingleInstance();
+            builder.RegisterType<ProductsSection>().As<IProductsSection>().SingleInstance();
+            builder.RegisterType<ProductsSection>().As<IProductsSection>().SingleInstance();
+            builder.RegisterType<SaveContextService>().As<ISaveContextService>().SingleInstance();
+
+            
+            builder.RegisterType<HomeSection>().AsSelf().SingleInstance();
+
+
+            
 
             RegisterCommands(builder);
 

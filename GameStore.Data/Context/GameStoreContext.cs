@@ -1,10 +1,7 @@
 ﻿using GameStore.Data.Context.Abstract;
+using GameStore.Data.Context.Configurations;
 using GameStore.Data.Models;
 using Microsoft.EntityFrameworkCore;
-using GameStore.Data.Context.Configurations;
-using System;
-using System.Linq;
-using System.Reflection;
 
 namespace GameStore.Data.Context
 {

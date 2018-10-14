@@ -12,41 +12,33 @@ namespace GameStore.Core
         {
             Log = new List<string>();
         }
+
         public List<string> Log { get; set; }
 
         public int WidthConstraint { get; set; } = 34;
 
         public void AddToLog(string message, bool centered)
         {
-
-            if (message.Length+1 > WidthConstraint)
+            if (message.Length + 1 > WidthConstraint)
             {
-                var wordsQueue = new Queue<string>(message.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
+                var wordsQueue = new Queue<string>(message.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries));
                 if (wordsQueue.Max(word => word.Length) > WidthConstraint)
-                {
                     throw new ArgumentException("Message is too long.");
-                }
-                else
-                {
-                    var sb = new StringBuilder();
-                    sb.Append(">");
-                    while (wordsQueue.Any())
+
+                var sb = new StringBuilder();
+                sb.Append(">");
+                while (wordsQueue.Any())
+                    if (sb.Length + wordsQueue.Peek().Length + 1 <= WidthConstraint)
                     {
-                        if ((sb.Length + wordsQueue.Peek().Length + 1) <= WidthConstraint)
-                        {
-                            sb.Append(" " + wordsQueue.Dequeue());
-                        }
-                        else
-                        {
-                            Log.Add(sb.ToString());
-                            sb.Clear();
-                        }
+                        sb.Append(" " + wordsQueue.Dequeue());
                     }
-                    if (sb.Length > 0)
+                    else
                     {
                         Log.Add(sb.ToString());
+                        sb.Clear();
                     }
-                }
+
+                if (sb.Length > 0) Log.Add(sb.ToString());
             }
             else
             {
@@ -64,6 +56,7 @@ namespace GameStore.Core
                     Log.Add("> " + message);
                 }
             }
+
             Log.Add("");
         }
     }

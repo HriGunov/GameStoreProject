@@ -9,10 +9,12 @@ namespace GameStore.Data.Context.Configurations
         public void Configure(EntityTypeBuilder<Genre> builder)
         {
             #region Genre Setup
+
             builder.ToTable("Genres");
 
             builder.Property(g => g.Name)
-                        .IsRequired(true);
+                .IsRequired(true);
+
             #endregion
         }
     }

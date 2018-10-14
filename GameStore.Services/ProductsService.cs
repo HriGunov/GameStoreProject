@@ -107,7 +107,7 @@ namespace GameStore.Services
             return !products.Any() ? null : products;
         }
 
-        private IEnumerable<Product> GetProducts()
+        public IEnumerable<Product> GetProducts()
         {
             return storeContext.Products
                 .Include(s => s.ShoppingCartProducts)

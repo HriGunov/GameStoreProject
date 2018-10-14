@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using GameStore.Data.Context.Abstract;
 using GameStore.Data.Models;
 using GameStore.Services.Abstract;
 using GameStore.Services.Exceptions;
 using Microsoft.EntityFrameworkCore;
-using System.Text.RegularExpressions;
 
 namespace GameStore.Services
 {
@@ -54,7 +54,8 @@ namespace GameStore.Services
 
         public Account AddAccount(Account account)
         {
-            return AddAccount(account.FirstName, account.LastName, account.Username, account.Password, account.IsAdmin, account.IsGuest);
+            return AddAccount(account.FirstName, account.LastName, account.Username, account.Password, account.IsAdmin,
+                account.IsGuest);
         }
 
         /// <summary>
@@ -145,12 +146,12 @@ namespace GameStore.Services
         }
 
         /// <summary>
-        /// Determines whether the username meets conditions.
-        /// Username conditions:
-        /// Must be 1 to 24 character in length
-        /// Must start with letter a-zA-Z
-        /// May contain letters, numbers or '.','-' or '_'
-        /// Must not end in '.','-','._' or '-_' 
+        ///     Determines whether the username meets conditions.
+        ///     Username conditions:
+        ///     Must be 1 to 24 character in length
+        ///     Must start with letter a-zA-Z
+        ///     May contain letters, numbers or '.','-' or '_'
+        ///     Must not end in '.','-','._' or '-_'
         /// </summary>
         /// <param name="userName">Given userName</param>
         /// <returns>True if the username is valid</returns>

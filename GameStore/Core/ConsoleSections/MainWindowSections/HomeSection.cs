@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using GameStore.Core.Abstract;
-using GameStore.Core.Logo;
 
 namespace GameStore.Core.ConsoleSections.MainWindowSections
 {
-    class HomeSection : FramedSection
+    public class HomeSection : FramedSection
     {
         public HomeSection() : this(1, 36, 28, 119, "Main View")
         {
@@ -33,11 +29,11 @@ namespace GameStore.Core.ConsoleSections.MainWindowSections
             var sectionHeigth = BottomRightCorner.Y - TopLeftCorner.Y;
 
             var foo = Logo.Logo.Text.Replace("\r", "");
-            var logoLines = foo.Split(new char[] { '\n' });
+            var logoLines = foo.Split(new[] {'\n'});
             var logoWidth = logoLines.Max(line => line.Length);
             var logoHeigth = logoLines.Length;
 
-            var messagePivotPoint = new Position((sectionHeigth / 2) - (logoHeigth / 2), (sectionWidth / 2) - (logoWidth / 2));
+            var messagePivotPoint = new Position(sectionHeigth / 2 - logoHeigth / 2, sectionWidth / 2 - logoWidth / 2);
 
             for (int y = 0; y < logoHeigth; y++)
             {

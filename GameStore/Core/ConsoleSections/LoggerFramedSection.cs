@@ -1,9 +1,6 @@
-﻿using GameStore.Core.Abstract;
+﻿using System.Linq;
+using GameStore.Core.Abstract;
 using GameStore.Core.ConsoleSections.Abstract;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace GameStore.Core.ConsoleSections
 {
@@ -20,14 +17,12 @@ namespace GameStore.Core.ConsoleSections
             this.messageLog = messageLog;
         }
 
-        public LoggerFramedSection(IMessageLog messageLog,int topLeftY, int topLeftX, int bottomRightY, int bottomRightX, string title = "") :
-            this(messageLog,new Position(topLeftY, topLeftX), new Position(bottomRightY, bottomRightX), title)
+        public LoggerFramedSection(IMessageLog messageLog, int topLeftY, int topLeftX, int bottomRightY,
+            int bottomRightX, string title = "") :
+            this(messageLog, new Position(topLeftY, topLeftX), new Position(bottomRightY, bottomRightX), title)
         {
         }
 
-        
-
-         
 
         public void ShowLog(IConsoleManager consoleManager)
         {

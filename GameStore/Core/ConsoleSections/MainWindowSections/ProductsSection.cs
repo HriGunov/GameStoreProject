@@ -5,21 +5,21 @@ using System.Linq;
 
 namespace GameStore.Core.ConsoleSections.MainWindowSections
 {
-    class ProductsSection : FramedSection
+    class ProductsSection : FramedSection, IProductsSection
     {
-        private readonly IEngine engine;
+        
         private int currentPageNumber = 1;
         private int totalPages = 1;
 
         private Product[] productsInView;
 
-        public ProductsSection(IEngine engine) : this(engine,new Position(1, 36), new Position(28, 119))
+        public ProductsSection() : this(new Position(1, 36), new Position(28, 119))
         {
 
         }
-        public ProductsSection(IEngine engine, Position topLeftCorner, Position bottomright, string title = "") : base(topLeftCorner, bottomright, title)
+        public ProductsSection(Position topLeftCorner, Position bottomright, string title = "") : base(topLeftCorner, bottomright, title)
         {
-            this.engine = engine;
+            
             productsInView = new Product[10];
         }
 
