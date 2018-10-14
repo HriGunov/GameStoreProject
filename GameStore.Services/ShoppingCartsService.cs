@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using GameStore.Data.Context.Abstract;
+﻿using GameStore.Data.Context.Abstract;
 using GameStore.Data.Models;
 using GameStore.Exceptions;
 using GameStore.Services.Abstract;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace GameStore.Services
 {
@@ -116,16 +116,19 @@ namespace GameStore.Services
 
             foreach (var p in product)
             {
-                if (ProductExistsInCart(p, account))
-                    throw new UserException($"Product {p.Name} already exists in the user's cart.");
-
-                var shoppingCart = new ShoppingCartProducts
+                if (p != null)
                 {
-                    ShoppingCartId = tempCart.Id,
-                    ProductId = p.Id
-                };
+                    if (ProductExistsInCart(p, account))
+                        throw new UserException($"Product {p.Name} already exists in the user's cart.");
 
-                storeContext.ShoppingCartProducts.Add(shoppingCart);
+                    var shoppingCart = new ShoppingCartProducts
+                    {
+                        ShoppingCartId = tempCart.Id,
+                        ProductId = p.Id
+                    };
+
+                    storeContext.ShoppingCartProducts.Add(shoppingCart);
+                }
             }
 
             storeContext.SaveChanges();

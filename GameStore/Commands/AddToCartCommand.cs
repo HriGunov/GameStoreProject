@@ -8,7 +8,7 @@ using GameStore.Services.Abstract;
 
 namespace GameStore.Commands
 {
-    internal class BuyProductCommand : ICommand
+    internal class AddToCartCommand : ICommand
     {
         private readonly IConsoleManager consoleManager;
         private readonly IEngine engine;
@@ -16,7 +16,7 @@ namespace GameStore.Commands
         private readonly ISaveContextService saveContextService;
         private readonly IShoppingCartsService shoppingCartsService;
 
-        public BuyProductCommand(IEngine engine, IProductsService productsService,
+        public AddToCartCommand(IEngine engine, IProductsService productsService,
             IShoppingCartsService shoppingCartsService, IConsoleManager consoleManager,
             ISaveContextService saveContextService)
         {
@@ -27,29 +27,32 @@ namespace GameStore.Commands
             this.saveContextService = saveContextService;
         }
 
+
         public string Execute(List<string> parameters)
         {
             if (engine.CurrentUser == null || engine.CurrentUser.IsGuest)
                 return "You need to be logged in to add products to shopping cart.";
 
-            var tempProductsList = new List<Product>();
+
+            var nameOfProduct = "";
 
             if (parameters.Count >= 1)
             {
-                foreach (var param in parameters) tempProductsList.Add(productsService.FindProduct(param));
+                nameOfProduct = string.Join(' ', parameters);
             }
             else
             {
                 consoleManager.LogMessage("Enter the name of the product you want to buy.");
-                tempProductsList.Add(productsService.FindProduct(consoleManager.ListenForCommand()));
+                nameOfProduct = consoleManager.ListenForCommand();               
             }
 
-            if (!tempProductsList.Any())
-                return "No products found to add...";
+            var productFound = productsService.FindProduct(nameOfProduct);
+            if (productFound == null)
+                return "No product found to add...";
 
             try
             {
-                shoppingCartsService.AddToCart(tempProductsList, engine.CurrentUser);
+                shoppingCartsService.AddToCart(productFound, engine.CurrentUser);
             }
             catch (UserException e )
             {
@@ -57,7 +60,7 @@ namespace GameStore.Commands
                 return e.Message;
             }
             
-            return $"({string.Join(", ", tempProductsList.Select(p => p.Name))}) has been added to your shopping cart.";
+            return $"({productFound}) has been added to your shopping cart.";
         }
     }
 }
