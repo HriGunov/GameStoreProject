@@ -45,13 +45,14 @@ namespace GameStore.Commands
 
             if (productFound == null) return "No product with that name found.";
 
-            var cartProducts = new ShoppingCartProducts
-            {
-                ShoppingCartId = engine.CurrentUser.ShoppingCart.Id, ShoppingCart = engine.CurrentUser.ShoppingCart,
-                Product = productFound, ProductId = productFound.Id
-            };
-            engine.CurrentUser.ShoppingCart.ShoppingCartProducts.Add(cartProducts);
-            saveContextService.SaveChanges();
+             var cartProducts = new ShoppingCartProducts
+             {
+                 ShoppingCartId = engine.CurrentUser.ShoppingCart.Id, ShoppingCart = engine.CurrentUser.ShoppingCart,
+                 Product = productFound, ProductId = productFound.Id
+             };
+
+             shoppingCartsService.AddToCart(productFound,engine.CurrentUser);
+             
 
             return $"{productFound.Name} has been added to shoping cart.";
         }

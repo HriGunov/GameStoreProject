@@ -19,6 +19,7 @@ namespace GameStore.Core.ConsoleSections.MainWindowSections
             bottomright, title)
         {
             ProductsInView = new Product[10];
+            title = "Products";
         }
 
         public Product[] ProductsInView { get; set; }
@@ -34,7 +35,7 @@ namespace GameStore.Core.ConsoleSections.MainWindowSections
         {
             if (Render)
             {
-                title = "Products";
+                
                 base.DrawSection(consoleManager);
                 DrawBorders(consoleManager);
                 DrawProducts(consoleManager);
@@ -171,6 +172,11 @@ namespace GameStore.Core.ConsoleSections.MainWindowSections
             var startPagesIndicatorPosition = width / 2 - pagesIndicatorString.Length / 2;
             consoleManager.SetText(pagesIndicatorString, BottomRightCorner.Y,
                 TopLeftCorner.X + startPagesIndicatorPosition + 1);
+        }
+
+        public void ChnageTitle(string newTitle)
+        {
+            title = newTitle;
         }
     }
 }

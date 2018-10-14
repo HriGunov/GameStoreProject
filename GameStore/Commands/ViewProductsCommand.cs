@@ -28,7 +28,7 @@ namespace GameStore.Commands
 
             productsSection.UpdateProducts(products);
             engine.MainSection = productsSection;
-
+            productsSection.ChnageTitle("Products");
             return $"{products.Count()} Products found.";
         }
     }

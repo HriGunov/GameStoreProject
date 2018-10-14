@@ -35,9 +35,9 @@ namespace GameStore.Services
             if (ProductExistsInCart(product, account))
                 throw new UserException($"Product {product.Name} already exists in the user's cart.");
 
-            var tempCart = storeContext.Accounts.ToList().FirstOrDefault(c => c.Username == account.Username)
-                ?.ShoppingCart;
-
+            var tempAcc = storeContext.Accounts.ToList().FirstOrDefault(c => c.Username == account.Username);
+            var tempCart = tempAcc?.ShoppingCart;
+     
             var shoppingCart = new ShoppingCartProducts
             {
                 ShoppingCart = tempCart,
