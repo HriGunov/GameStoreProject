@@ -11,16 +11,18 @@ namespace GameStore.Core.ConsoleSections
         public Section(Position topLeftCorner, Position bottomRight)
         {
             TopLeftCorner = topLeftCorner;
-            BottomRight = bottomRight;
+            BottomRightCorner = bottomRight;
+            Render = true;
         }
 
         public Position TopLeftCorner { get; set; }
-        public Position BottomRight { get; set; }
+        public Position BottomRightCorner { get; set; }
+        public bool Render { get; set; }
 
         private void CheckSectionState()
         {
-            var width = BottomRight.X - TopLeftCorner.X;
-            var heigth = BottomRight.X - TopLeftCorner.Y;
+            var width = BottomRightCorner.X - TopLeftCorner.X;
+            var heigth = BottomRightCorner.Y - TopLeftCorner.Y;
 
             if (width <= 0 || heigth <= 0) throw new Exception("Wrong corners of frame section.");
 
@@ -35,18 +37,33 @@ namespace GameStore.Core.ConsoleSections
             }
         }
 
+        private void Clear(IConsoleManager consoleManager)
+        {
+            var width = BottomRightCorner.X - TopLeftCorner.X;
+            var heigth = BottomRightCorner.Y - TopLeftCorner.Y;
+
+            for (var y = 0; y < heigth; y++)
+            {
+               
+                for (var x = 0; x < width; x++) consoleManager.SetChar( ' ',TopLeftCorner.Y +y, TopLeftCorner.X + x);
+            }
+        }
         public virtual void DrawSection(IConsoleManager consoleManager)
         {
-            CheckSectionState();
+           // CheckSectionState();
+            Clear(consoleManager);
         }
 
         public void SetChar(char charToSet, int y, int x)
         {
+            throw new NotImplementedException();
             SectionMatrix[y][x] = charToSet;
         }
 
         public void SetText(string text, int y, int x)
         {
+            throw new NotImplementedException();
+
             for (var i = 0; i < text.Length; i++) SetChar(text[i], y, x + i);
         }
     }

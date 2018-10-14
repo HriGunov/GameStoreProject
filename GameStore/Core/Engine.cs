@@ -27,8 +27,8 @@ namespace GameStore.Core
             this.commandManager = commandManager;
             this.commentService = commentService;
             this.consoleManager = consoleManager;
-            this.messageLog = messageLog; 
-
+            this.messageLog = messageLog;
+            CurrentUser = accountsService.GetGuestAccount();
         }
 
         public Account CurrentUser { get; set; }
@@ -39,16 +39,20 @@ namespace GameStore.Core
 
             var headerSection = new HeaderSection(this);
 
-            var testFrameBig = new HomeSection(1, 36, 28, 119, "Main View");
+            var testFrameBig = new HomeSection();
             //Message logger uses the width of this section as constraint
             consoleManager.LogMessage("Welcome to GameStore!",true);
             consoleManager.LogMessage("For more information use the Help commmand.");
-            var testLogger = new LoggerFramedSection(messageLog, 1, 0, 28, 35, "Message Log");
+            var testLogger = new LoggerFramedSection(messageLog);
+
+            var testProdcuts = new ProductsSection(this);
+            testProdcuts.ProductsInView = new Product[] { new Product() { Name = "Test Product", Price = 1 }, new Product() { Name = "Test Product2", Genre = {new Genre() { Name = "Action" } }, Price = 2 } };
 
             headerSection.DrawSection(consoleManager);
-            testFrameBig.DrawSection(consoleManager);
+           // testFrameBig.DrawSection(consoleManager);
             testLogger.DrawSection(consoleManager);
             consoleManager.Print();
+
 
             while ((line = consoleManager.ListenForCommand()) != "end")
             {
@@ -62,9 +66,12 @@ namespace GameStore.Core
                     consoleManager.LogMessage("Invalid command.");
                 }
 
-                headerSection.DrawSection(consoleManager);                
+                headerSection.DrawSection(consoleManager);
+                
                 testFrameBig.DrawSection(consoleManager);
                 testLogger.DrawSection(consoleManager);
+
+                testProdcuts.DrawSection(consoleManager);
                 consoleManager.Print();
 
                

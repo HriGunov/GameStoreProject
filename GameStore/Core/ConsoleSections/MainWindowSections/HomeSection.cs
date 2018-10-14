@@ -9,17 +9,28 @@ namespace GameStore.Core.ConsoleSections.MainWindowSections
 {
     class HomeSection : FramedSection
     {
+        public HomeSection() : this(1, 36, 28, 119, "Main View")
+        {
+
+        }
         public HomeSection(int topLeftY, int topLeftX, int bottomrightY, int bottomrightX,string title = "") : base(topLeftY, topLeftX, bottomrightY, bottomrightX, title)
         {
         }
 
         public override void DrawSection(IConsoleManager consoleManager)
         {
-            base.DrawSection(consoleManager);
+            if (Render)
+            {
+                base.DrawSection(consoleManager);
+                DrawLogo(consoleManager);
+            }
+        }
 
-          
-            var sectionWidth = BottomRight.X - TopLeftCorner.X;
-            var sectionHeigth = BottomRight.Y - TopLeftCorner.Y;
+        private void DrawLogo(IConsoleManager consoleManager)
+        {
+
+            var sectionWidth = BottomRightCorner.X - TopLeftCorner.X;
+            var sectionHeigth = BottomRightCorner.Y - TopLeftCorner.Y;
 
             var foo = Logo.Logo.Text.Replace("\r", "");
             var logoLines = foo.Split(new char[] { '\n' });
@@ -32,10 +43,9 @@ namespace GameStore.Core.ConsoleSections.MainWindowSections
             {
                 for (int x = 0; x < logoLines[y].Length; x++)
                 {
-                    consoleManager.SetChar(logoLines[y][x], TopLeftCorner.Y+ messagePivotPoint.Y + y, TopLeftCorner.X+ messagePivotPoint.X + x);
+                    consoleManager.SetChar(logoLines[y][x], TopLeftCorner.Y + messagePivotPoint.Y + y, TopLeftCorner.X + messagePivotPoint.X + x);
                 }
             }
-
         }
     }
 }

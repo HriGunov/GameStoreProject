@@ -11,6 +11,10 @@ namespace GameStore.Core.ConsoleSections
     {
         private readonly IMessageLog messageLog;
 
+        public LoggerFramedSection(IMessageLog messageLog) : this(messageLog, 1, 0, 28, 35, "Message Log")
+        {
+
+        }
         public LoggerFramedSection(IMessageLog messageLog, Position topLeftCorner, Position bottomRight,string title ="") : base(topLeftCorner, bottomRight, title)
         {
             this.messageLog = messageLog;
@@ -27,14 +31,14 @@ namespace GameStore.Core.ConsoleSections
 
         public void ShowLog(IConsoleManager consoleManager)
         {
-            var topMsgs = messageLog.Log.TakeLast(BottomRight.Y - TopLeftCorner.Y-1);
+            var topMsgs = messageLog.Log.TakeLast(BottomRightCorner.Y - TopLeftCorner.Y-1);
 
             int lineCounter = 0;
-            var sectionWidth = BottomRight.X - TopLeftCorner.X-2;
+            var sectionWidth = BottomRightCorner.X - TopLeftCorner.X-2;
             foreach (var msg in topMsgs)
             {
                  
-                consoleManager.SetText(msg.PadRight(BottomRight.X- TopLeftCorner.X-1), TopLeftCorner.Y + 1 + lineCounter, TopLeftCorner.X + 1);
+                consoleManager.SetText(msg.PadRight(BottomRightCorner.X- TopLeftCorner.X-1), TopLeftCorner.Y + 1 + lineCounter, TopLeftCorner.X + 1);
                  
                 lineCounter++;
             }
