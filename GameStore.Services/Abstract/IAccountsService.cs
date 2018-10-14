@@ -1,4 +1,5 @@
-﻿using GameStore.Data.Models;
+﻿using System.Collections.Generic;
+using GameStore.Data.Models;
 
 namespace GameStore.Services.Abstract
 {
@@ -10,6 +11,7 @@ namespace GameStore.Services.Abstract
         Account AddAccount(Account account);
         Account FindAccount(string accountName);
         Account GetGuestAccount();
+        IEnumerable<Account> GetAccounts();
         bool IsAdmin(string accountName);
         string RemoveAccount(string commandExecutor, string accountName);
         string RestoreAccount(string commandExecutor, string accountName);

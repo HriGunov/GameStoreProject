@@ -7,14 +7,14 @@ namespace GameStore.Services.Injections
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<AccountsService>().As<IAccountsService>().SingleInstance();
-            builder.RegisterType<ProductsService>().As<IProductsService>().SingleInstance();
-            builder.RegisterType<CryptographicService>().As<ICryptographicService>().SingleInstance();
-            builder.RegisterType<AuthenticationService>().As<IAuthenticationService>().SingleInstance();
-            builder.RegisterType<CommentService>().As<ICommentService>().SingleInstance();
-            builder.RegisterType<ShoppingCartsService>().As<IShoppingCartsService>().SingleInstance();
-            builder.RegisterType<OrderService>().As<IOrderService>().SingleInstance();
-            builder.RegisterType<SaveContextService>().As<ISaveContextService>().SingleInstance();
+            builder.RegisterType<AccountsService>().As<IAccountsService>();
+            builder.RegisterType<ProductsService>().As<IProductsService>();
+            builder.RegisterType<CryptographicService>().As<ICryptographicService>();
+            builder.RegisterType<AuthenticationService>().As<IAuthenticationService>();
+            builder.RegisterType<CommentService>().As<ICommentService>();
+            builder.RegisterType<ShoppingCartsService>().As<IShoppingCartsService>();
+            builder.RegisterType<OrderService>().As<IOrderService>();
+            builder.RegisterType<SaveContextService>().As<ISaveContextService>();
         }
     }
 }

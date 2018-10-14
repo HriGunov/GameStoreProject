@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using GameStore.Commands.Abstract;
 using GameStore.Core.Abstract;
 using GameStore.Data.Models;
+using GameStore.Exceptions;
 using GameStore.Services.Abstract;
 
 namespace GameStore.Commands
@@ -30,31 +32,32 @@ namespace GameStore.Commands
             if (engine.CurrentUser == null || engine.CurrentUser.IsGuest)
                 return "You need to be logged in to add products to shopping cart.";
 
-            var productName = "";
-            if (parameters.Count == 1)
+            var tempProductsList = new List<Product>();
+
+            if (parameters.Count >= 1)
             {
-                productName = parameters[0];
+                foreach (var param in parameters) tempProductsList.Add(productsService.FindProduct(param));
             }
             else
             {
-                consoleManager.LogMessage("Enter name of product you want to buy.");
-                productName = consoleManager.ListenForCommand();
+                consoleManager.LogMessage("Enter the name of the product you want to buy.");
+                tempProductsList.Add(productsService.FindProduct(consoleManager.ListenForCommand()));
             }
 
-            var productFound = productsService.FindProduct(productName);
+            if (!tempProductsList.Any())
+                return "No products found to add...";
 
-            if (productFound == null) return "No product with that name found.";
+            try
+            {
+                shoppingCartsService.AddToCart(tempProductsList, engine.CurrentUser);
+            }
+            catch (UserException e )
+            {
 
-             var cartProducts = new ShoppingCartProducts
-             {
-                 ShoppingCartId = engine.CurrentUser.ShoppingCart.Id, ShoppingCart = engine.CurrentUser.ShoppingCart,
-                 Product = productFound, ProductId = productFound.Id
-             };
-
-             shoppingCartsService.AddToCart(productFound,engine.CurrentUser);
-             
-
-            return $"{productFound.Name} has been added to shoping cart.";
+                return e.Message;
+            }
+            
+            return $"({string.Join(", ", tempProductsList.Select(p => p.Name))}) has been added to your shopping cart.";
         }
     }
 }

@@ -53,6 +53,11 @@ namespace GameStore.Services
             return account;
         }
 
+        /// <summary>
+        ///     Adds an already setup Account Type.
+        /// </summary>
+        /// <param name="account">Account Type</param>
+        /// <returns></returns>
         public Account AddAccount(Account account)
         {
             return AddAccount(account.FirstName, account.LastName, account.Username, account.Password, account.IsAdmin,
@@ -71,7 +76,7 @@ namespace GameStore.Services
             if (!IsAdmin(commandExecutor))
                 throw new UserException("You don't have enough permissions.");
 
-            var account = storeContext.Accounts.ToList().FirstOrDefault(acc => acc.Username == accountName);
+            var account = GetAccounts().FirstOrDefault(acc => acc.Username == accountName);
             if (account == null || account.IsDeleted) return $"Account {accountName} was not found.";
 
             account.IsDeleted = true;
@@ -83,10 +88,10 @@ namespace GameStore.Services
         /// <summary>
         ///     Checks if an account has admin privileges
         /// </summary>
-        /// <param name="accountName"></param>
+        /// <param name="accountName">Account Name</param>
         public bool IsAdmin(string accountName)
         {
-            return storeContext.Accounts.ToList().SingleOrDefault(acc => acc.Username == accountName && acc.IsAdmin) !=
+            return GetAccounts().SingleOrDefault(acc => acc.Username == accountName && acc.IsAdmin) !=
                    null;
         }
 
@@ -115,7 +120,7 @@ namespace GameStore.Services
             if (!IsAdmin(commandExecutor))
                 throw new UserException("You don't have enough permissions.");
 
-            var account = storeContext.Accounts.ToList().FirstOrDefault(acc => acc.Username == accountName);
+            var account = GetAccounts().FirstOrDefault(acc => acc.Username == accountName);
             if (account == null) return $"Account {accountName} was not found.";
             if (!account.IsDeleted) return $"Account {accountName} is already restored.";
 
@@ -125,12 +130,21 @@ namespace GameStore.Services
             return $"Account {accountName} has been successfully restored.";
         }
 
+        /// <summary>
+        ///     Returns the Guest Account from the database.
+        /// </summary>
+        /// <returns></returns>
         public Account GetGuestAccount()
         {
-            return storeContext.Accounts.ToList().SingleOrDefault(acc => acc.IsGuest);
+            return GetAccounts().SingleOrDefault(acc => acc.IsGuest);
         }
 
-        private IEnumerable<Account> GetAccounts()
+        /// <summary>
+        ///     Returns all Accounts from the database. (Not good for big/major applications & security reasons -> Danail's point
+        ///     of view)
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<Account> GetAccounts()
         {
             return storeContext.Accounts
                 .Include(s => s.ShoppingCart)
