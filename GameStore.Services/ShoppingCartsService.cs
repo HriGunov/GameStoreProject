@@ -95,6 +95,7 @@ namespace GameStore.Services
                     };
 
                     storeContext.ShoppingCartProducts.Add(shoppingCart);
+                    account.ShoppingCart.ShoppingCartProducts.Add(shoppingCart);
                 }
             }
             storeContext.SaveChanges();

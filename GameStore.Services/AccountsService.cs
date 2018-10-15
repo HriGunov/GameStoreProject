@@ -70,17 +70,17 @@ namespace GameStore.Services
         /// <param name="commandExecutor">The username of the command giver.</param>
         /// <param name="accountName">The username of the account to be removed</param>
         /// <returns></returns>
-        public string RemoveAccount(string commandExecutor, string accountName)
+        public string RemoveAccount(Account commandExecutor, Account accountName)
         {
             // Move that to Command.
             if (!IsAdmin(commandExecutor))
                 throw new UserException("You don't have enough permissions.");
 
-            var account = GetAccounts().FirstOrDefault(acc => acc.Username == accountName);
-            if (account == null || account.IsDeleted) return $"Account {accountName} was not found.";
+            var account = GetAccounts().FirstOrDefault(acc => acc.Username == accountName.Username);
+            if (account == null || account.IsDeleted) return $"Account {accountName.Username} was not found.";
 
             account.IsDeleted = true;
-            account.DeletedBy = commandExecutor;
+            account.DeletedBy = commandExecutor.Username;
             storeContext.SaveChanges();
             return $"Account {accountName} has been successfully removed.";
         }
@@ -89,9 +89,9 @@ namespace GameStore.Services
         ///     Checks if an account has admin privileges
         /// </summary>
         /// <param name="accountName">Account Name</param>
-        public bool IsAdmin(string accountName)
+        public bool IsAdmin(Account account)
         {
-            return GetAccounts().SingleOrDefault(acc => acc.Username == accountName && acc.IsAdmin) !=
+            return GetAccounts().SingleOrDefault(acc => acc.Username == account.Username && acc.IsAdmin) !=
                    null;
         }
 
@@ -114,13 +114,13 @@ namespace GameStore.Services
         /// <param name="commandExecutor">The username of the command giver.</param>
         /// <param name="accountName">The username of the account to be restored</param>
         /// <returns></returns>
-        public string RestoreAccount(string commandExecutor, string accountName)
+        public string RestoreAccount(Account commandExecutor, Account accountName)
         {
             // Move that to Command.
             if (!IsAdmin(commandExecutor))
                 throw new UserException("You don't have enough permissions.");
 
-            var account = GetAccounts().FirstOrDefault(acc => acc.Username == accountName);
+            var account = GetAccounts().FirstOrDefault(acc => acc.Username == accountName.Username);
             if (account == null) return $"Account {accountName} was not found.";
             if (!account.IsDeleted) return $"Account {accountName} is already restored.";
 
@@ -144,7 +144,7 @@ namespace GameStore.Services
         ///     of view)
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<Account> GetAccounts()
+        public IQueryable<Account> GetAccounts()
         {
             return storeContext.Accounts
                 .Include(s => s.ShoppingCart)
@@ -156,8 +156,7 @@ namespace GameStore.Services
                 .Include(c => c.Comments)
                 .ThenInclude(comment => comment.Account)
                 .Include(c => c.Comments)
-                .ThenInclude(comment => comment.Product)
-                .ToList();
+                .ThenInclude(comment => comment.Product);
         }
 
         /// <summary>

@@ -1,19 +1,18 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using GameStore.Data.Models;
 
 namespace GameStore.Services.Abstract
 {
     public interface IAccountsService
     {
-        Account AddAccount(string firstName, string lastName, string userName, string password, bool isAdmin = false,
-            bool isGuest = false);
-
+        Account AddAccount(string firstName, string lastName, string userName, string password, bool isAdmin = false, bool isGuest = false);
         Account AddAccount(Account account);
         Account FindAccount(string accountName);
         Account GetGuestAccount();
-        IEnumerable<Account> GetAccounts();
-        bool IsAdmin(string accountName);
-        string RemoveAccount(string commandExecutor, string accountName);
-        string RestoreAccount(string commandExecutor, string accountName);
+        IQueryable<Account> GetAccounts();
+        bool IsAdmin(Account account);
+        string RemoveAccount(Account commandExecutor, Account accountName);
+        string RestoreAccount(Account commandExecutor, Account accountName);
     }
 }
