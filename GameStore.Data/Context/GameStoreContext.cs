@@ -7,6 +7,15 @@ namespace GameStore.Data.Context
 {
     public class GameStoreContext : DbContext, IGameStoreContext
     {
+        public GameStoreContext()
+        {
+
+        }
+
+        public GameStoreContext(DbContextOptions options) : base(options)
+        {
+
+        }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Account> Accounts { get; set; }
