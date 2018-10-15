@@ -104,13 +104,27 @@ namespace GameStore.Services
             return tempCart;
         }
 
+        /// <summary>
+        /// Gets the user cart.
+        /// </summary>
+        /// <returns>The user cart.</returns>
+        /// <param name="account">Account Type</param>
         public ShoppingCart GetUserCart(Account account)
         {
             return storeContext.ShoppingCarts
                                .Include(s => s.ShoppingCartProducts)
-                               .ThenInclude(sh => sh.Product)
+                                   .ThenInclude(sh => sh.Product)
+                                   .ThenInclude(c => c.Comments)
+                                   .ThenInclude(comment => comment.Account)
                                .Include(s => s.ShoppingCartProducts)
-                               .ThenInclude(sh => sh.ShoppingCart)
+                                   .ThenInclude(sh => sh.Product)
+                                   .ThenInclude(c => c.Comments)
+                                   .ThenInclude(comment => comment.Product)
+                               .Include(s => s.ShoppingCartProducts)
+                                   .ThenInclude(sh => sh.Product)
+                                   .ThenInclude(g => g.Genre)
+                               .Include(s => s.ShoppingCartProducts)
+                                   .ThenInclude(sh => sh.ShoppingCart)
                                .FirstOrDefault(s => s.ShoppingCartProducts.Any(sh => sh.ShoppingCartId == account.ShoppingCartId));
         }
 

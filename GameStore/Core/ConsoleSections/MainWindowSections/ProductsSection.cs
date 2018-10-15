@@ -174,7 +174,7 @@ namespace GameStore.Core.ConsoleSections.MainWindowSections
                 TopLeftCorner.X + startPagesIndicatorPosition + 1);
         }
 
-        public void ChnageTitle(string newTitle)
+        public void ChangeTitle(string newTitle)
         {
             title = newTitle;
         }

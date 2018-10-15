@@ -9,6 +9,6 @@ namespace GameStore.Core.ConsoleSections.MainWindowSections
         void PageDown();
         void PageUp();
         void UpdateProducts(IEnumerable<Product> newProducts);
-        void ChnageTitle(string newTitle);
+        void ChangeTitle(string newTitle);
     }
 }
