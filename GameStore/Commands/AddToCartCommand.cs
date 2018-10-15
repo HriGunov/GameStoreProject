@@ -52,7 +52,9 @@ namespace GameStore.Commands
 
             try
             {
-                shoppingCartsService.AddToCart(productFound, engine.CurrentUser);
+                var cart =  shoppingCartsService.AddToCart(productFound, engine.CurrentUser); 
+                
+
             }
             catch (UserException e )
             {
@@ -60,7 +62,7 @@ namespace GameStore.Commands
                 return e.Message;
             }
             
-            return $"({productFound}) has been added to your shopping cart.";
+            return $"({productFound.Name}) has been added to your shopping cart.";
         }
     }
 }

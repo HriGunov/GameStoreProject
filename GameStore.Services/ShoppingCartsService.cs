@@ -1,4 +1,4 @@
-﻿using GameStore.Data.Context.Abstract;
+using GameStore.Data.Context.Abstract;
 using GameStore.Data.Models;
 using GameStore.Exceptions;
 using GameStore.Services.Abstract;
@@ -22,42 +22,6 @@ namespace GameStore.Services
             this.productService = productService;
         }
 
-        /// <summary>
-        ///     Adds the given product in the parameters to the account's cart.
-        /// </summary>
-        /// <param name="product">Product Name</param>
-        /// <param name="account">Account Type</param>
-        /// <returns></returns>
-        public ShoppingCart AddToCart(string product, Account account)
-        {
-            // Move this check to Commands
-            if (account.IsGuest)
-                throw new UserException("Guests cannot add to their carts.");
-
-            var tempProduct = productService.FindProduct(product);
-
-            if (tempProduct == null)
-                throw new UserException($"Product {product} doesn't exist.");
-
-            if (ProductExistsInCart(tempProduct, account))
-                throw new UserException($"Product {tempProduct.Name} already exists in the user's cart.");
-
-            var tempCart = account.ShoppingCart;
-
-            if (tempCart == null)
-                throw new UserException($"User ({account.Username}) doesn't have Shopping Cart.");
-
-            var shoppingCart = new ShoppingCartProducts
-            {
-                ShoppingCartId = tempCart.Id,
-                ProductId = tempProduct.Id
-            };
-
-            storeContext.ShoppingCartProducts.Add(shoppingCart);
-            storeContext.SaveChanges();
-
-            return tempCart;
-        }
 
         /// <summary>
         ///     Adds the given product in the parameters to the account's cart.
@@ -84,13 +48,18 @@ namespace GameStore.Services
 
             var shoppingCart = new ShoppingCartProducts
             {
-                ShoppingCartId = tempCart.Id,
-                ProductId = product.Id
+                ShoppingCartId = tempCart.Id,                
+                ProductId = product.Id,             
+                
             };
+           
 
             storeContext.ShoppingCartProducts.Add(shoppingCart);
             storeContext.SaveChanges();
 
+            shoppingCart.Product = product;
+            shoppingCart.ShoppingCart = tempCart;
+            account.ShoppingCart.ShoppingCartProducts.Add(shoppingCart);
             return tempCart;
         }
 
@@ -127,10 +96,11 @@ namespace GameStore.Services
                         ProductId = p.Id
                     };
 
+                    account.ShoppingCart.ShoppingCartProducts.Add(shoppingCart);
+
                     storeContext.ShoppingCartProducts.Add(shoppingCart);
                 }
             }
-
             storeContext.SaveChanges();
 
             return tempCart;
