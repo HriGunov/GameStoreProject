@@ -33,7 +33,6 @@ namespace GameStore.Commands
             if (engine.CurrentUser == null || engine.CurrentUser.IsGuest)
                 return "You need to be logged in to add products to shopping cart.";
 
-
             var nameOfProduct = "";
 
             if (parameters.Count >= 1)
@@ -43,7 +42,7 @@ namespace GameStore.Commands
             else
             {
                 consoleManager.LogMessage("Enter the name of the product you want to buy.");
-                nameOfProduct = consoleManager.ListenForCommand();               
+                nameOfProduct = consoleManager.ListenForCommand();
             }
 
             var productFound = productsService.FindProduct(nameOfProduct);
@@ -52,16 +51,13 @@ namespace GameStore.Commands
 
             try
             {
-                var cart =  shoppingCartsService.AddToCart(productFound, engine.CurrentUser); 
-                
-
+                var cart = shoppingCartsService.AddToCart(productFound, engine.CurrentUser);
             }
-            catch (UserException e )
+            catch (UserException e)
             {
-
                 return e.Message;
             }
-            
+
             return $"({productFound.Name}) has been added to your shopping cart.";
         }
     }

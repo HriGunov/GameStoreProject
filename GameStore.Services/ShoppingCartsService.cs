@@ -5,6 +5,7 @@ using GameStore.Services.Abstract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace GameStore.Services
 {
@@ -48,18 +49,15 @@ namespace GameStore.Services
 
             var shoppingCart = new ShoppingCartProducts
             {
-                ShoppingCartId = tempCart.Id,                
-                ProductId = product.Id,             
-                
+                ShoppingCartId = tempCart.Id,
+                ProductId = product.Id
             };
-           
 
             storeContext.ShoppingCartProducts.Add(shoppingCart);
             storeContext.SaveChanges();
 
-            shoppingCart.Product = product;
-            shoppingCart.ShoppingCart = tempCart;
-            account.ShoppingCart.ShoppingCartProducts.Add(shoppingCart);
+            account.ShoppingCart = GetUserCart(account);
+
             return tempCart;
         }
 
@@ -96,14 +94,24 @@ namespace GameStore.Services
                         ProductId = p.Id
                     };
 
-                    account.ShoppingCart.ShoppingCartProducts.Add(shoppingCart);
-
                     storeContext.ShoppingCartProducts.Add(shoppingCart);
                 }
             }
             storeContext.SaveChanges();
 
+            account.ShoppingCart = GetUserCart(account);
+
             return tempCart;
+        }
+
+        public ShoppingCart GetUserCart(Account account)
+        {
+            return storeContext.ShoppingCarts
+                               .Include(s => s.ShoppingCartProducts)
+                               .ThenInclude(sh => sh.Product)
+                               .Include(s => s.ShoppingCartProducts)
+                               .ThenInclude(sh => sh.ShoppingCart)
+                               .FirstOrDefault(s => s.ShoppingCartProducts.Any(sh => sh.ShoppingCartId == account.ShoppingCartId));
         }
 
         /// <summary>
