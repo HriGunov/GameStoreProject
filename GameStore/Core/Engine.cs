@@ -42,7 +42,7 @@ namespace GameStore.Core
             var headerSection = new HeaderSection(this);
 
             var testFrameBig = new HomeSection();
-            //Message logger uses the width of this section as constraint
+            // Message logger uses the width of this section as constraint
             consoleManager.LogMessage("Welcome to GameStore!", true);
             consoleManager.LogMessage("For more information use the Help commmand.");
             var testLogger = new LoggerFramedSection(messageLog);
@@ -55,7 +55,6 @@ namespace GameStore.Core
 
             while ((line = consoleManager.ListenForCommand()) != "end")
             {
-                // Change that to custom exceptions
                 try
                 {
                     var result = commandManager.Execute(line);

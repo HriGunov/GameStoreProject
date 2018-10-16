@@ -2,7 +2,6 @@
 using GameStore.Commands.Abstract;
 using GameStore.Core.Abstract;
 using GameStore.Core.ConsoleSections.MainWindowSections.Abstract;
-using GameStore.Exceptions;
 using GameStore.Services.Abstract;
 
 namespace GameStore.Commands
@@ -23,21 +22,14 @@ namespace GameStore.Commands
 
         public string Execute(List<string> parameters)
         {
-            try
-            {
-                if (engine.CurrentUser == null || engine.CurrentUser.IsGuest)
-                    return "You need to be logged in to add view your orders.";
+            if (engine.CurrentUser == null || engine.CurrentUser.IsGuest)
+                return "You need to be logged in to add view your orders.";
 
-                engine.MainSection = ordersSection;
-                ordersSection.ChangeTitle("Your Orders");
+            engine.MainSection = ordersSection;
+            ordersSection.ChangeTitle("Your Orders");
 
-                ordersSection.UpdateOrders(orderService.FindOrders(engine.CurrentUser));
-                return "Viewing Orders";
-            }
-            catch (UserException e)
-            {
-                return e.Message;
-            }
+            ordersSection.UpdateOrders(orderService.FindOrders(engine.CurrentUser));
+            return "Viewing Orders";
         }
     }
 }

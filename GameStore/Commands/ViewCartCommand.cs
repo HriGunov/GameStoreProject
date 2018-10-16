@@ -3,7 +3,6 @@ using System.Linq;
 using GameStore.Commands.Abstract;
 using GameStore.Core.Abstract;
 using GameStore.Core.ConsoleSections.MainWindowSections.Abstract;
-using GameStore.Exceptions;
 using GameStore.Services.Abstract;
 
 namespace GameStore.Commands
@@ -24,26 +23,19 @@ namespace GameStore.Commands
 
         public string Execute(List<string> parameters)
         {
-            try
-            {
-                if (engine.CurrentUser == null || engine.CurrentUser.IsGuest)
-                    return "You need to be logged in to add view your shopping cart.";
+            if (engine.CurrentUser == null || engine.CurrentUser.IsGuest)
+                return "You need to be logged in to add view your shopping cart.";
 
-                var tempCart = shoppingCartService.GetUserCart(engine.CurrentUser);
+            var tempCart = shoppingCartService.GetUserCart(engine.CurrentUser);
 
-                if (tempCart.ShoppingCartProducts == null || !tempCart.ShoppingCartProducts.Any())
-                    return "You need to have products in your shopping cart.";
+            if (tempCart.ShoppingCartProducts == null || !tempCart.ShoppingCartProducts.Any())
+                return "You need to have products in your shopping cart.";
 
-                engine.MainSection = productsSection;
-                productsSection.ChangeTitle("Shopping Cart");
+            engine.MainSection = productsSection;
+            productsSection.ChangeTitle("Shopping Cart");
 
-                productsSection.UpdateProducts(tempCart.ShoppingCartProducts.Select(cart => cart.Product));
-                return "Viewing cart";
-            }
-            catch (UserException e)
-            {
-                return e.Message;
-            }
+            productsSection.UpdateProducts(tempCart.ShoppingCartProducts.Select(cart => cart.Product));
+            return "Viewing Cart";
         }
     }
 }

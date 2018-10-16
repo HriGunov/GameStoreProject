@@ -64,7 +64,7 @@ namespace GameStore.Commands
             }
 
             consoleManager.LogMessage(
-                $"Your credit card was charged {tempCollection.Sum(p => p.Price).ToString("0.00")} BGN");
+                $"Your credit card ({cardNumber}) was charged {tempCollection.Sum(p => p.Price):0.00} BGN");
             consoleManager.LogMessage($"Order {orderService.FindLastOrder(user).Id} has been completed.");
             shoppingCartService.ClearUserCart(user);
 
