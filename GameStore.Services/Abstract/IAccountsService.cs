@@ -14,5 +14,6 @@ namespace GameStore.Services.Abstract
         bool IsAdmin(Account account);
         string RemoveAccount(Account commandExecutor, Account accountName);
         string RestoreAccount(Account commandExecutor, Account accountName);
+        void AddCreditCard(string cardNumber, Account account);
     }
 }

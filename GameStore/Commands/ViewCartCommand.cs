@@ -30,10 +30,15 @@ namespace GameStore.Commands
                 if (engine.CurrentUser == null || engine.CurrentUser.IsGuest)
                     return "You need to be logged in to add view your shopping cart.";
 
+                var tempCart = shoppingCartService.GetUserCart(engine.CurrentUser);
+
+                if (tempCart.ShoppingCartProducts == null || !tempCart.ShoppingCartProducts.Any())
+                    return "You need to have products in your shopping cart.";
+
                 engine.MainSection = productsSection;
                 productsSection.ChangeTitle("Shopping Cart");
 
-                productsSection.UpdateProducts(shoppingCartService.GetUserCart(engine.CurrentUser).ShoppingCartProducts.Select(cart => cart.Product));
+                productsSection.UpdateProducts(tempCart.ShoppingCartProducts.Select(cart => cart.Product));
                 return "Viewing cart";
             }
             catch (UserException e)

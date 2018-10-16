@@ -8,5 +8,6 @@ namespace GameStore.Services.Abstract
         ShoppingCart AddToCart(Product product, Account account);
         ShoppingCart AddToCart(IEnumerable<Product> product, Account account);
         ShoppingCart GetUserCart(Account account);
+        void ClearUserCart(Account account);
     }
 }

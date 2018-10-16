@@ -76,7 +76,7 @@ namespace GameStore.Services
             return FindLastOrder(account);
         }
 
-        private Order FindLastOrder(Account account)
+        public Order FindLastOrder(Account account)
         {
             return GetOrders().LastOrDefault(o => o.AccountId == account.Id);
         }

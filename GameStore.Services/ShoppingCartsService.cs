@@ -1,4 +1,4 @@
-using GameStore.Data.Context.Abstract;
+﻿using GameStore.Data.Context.Abstract;
 using GameStore.Data.Models;
 using GameStore.Exceptions;
 using GameStore.Services.Abstract;
@@ -106,27 +106,28 @@ namespace GameStore.Services
         }
 
         /// <summary>
+        /// Clears the user's cart.
+        /// </summary>
+        /// <param name="account">Account Type</param>
+        public void ClearUserCart(Account account)
+        {
+            var userCartProducts = storeContext.ShoppingCartProducts.Where(s => s.ShoppingCartId == account.ShoppingCartId).ToList();
+            foreach (var product in userCartProducts)
+            {
+                storeContext.ShoppingCartProducts.Remove(product);
+                storeContext.SaveChanges();
+            }
+            account.ShoppingCart.ShoppingCartProducts = new List<ShoppingCartProducts>();
+        }
+
+        /// <summary>
         /// Gets the user cart.
         /// </summary>
         /// <returns>The user cart.</returns>
         /// <param name="account">Account Type</param>
         public ShoppingCart GetUserCart(Account account)
         {
-            return storeContext.ShoppingCarts
-                               .Include(s => s.ShoppingCartProducts)
-                                   .ThenInclude(sh => sh.Product)
-                                   .ThenInclude(c => c.Comments)
-                                   .ThenInclude(comment => comment.Account)
-                               .Include(s => s.ShoppingCartProducts)
-                                   .ThenInclude(sh => sh.Product)
-                                   .ThenInclude(c => c.Comments)
-                                   .ThenInclude(comment => comment.Product)
-                               .Include(s => s.ShoppingCartProducts)
-                                   .ThenInclude(sh => sh.Product)
-                                   .ThenInclude(g => g.Genre)
-                               .Include(s => s.ShoppingCartProducts)
-                                   .ThenInclude(sh => sh.ShoppingCart)
-                               .FirstOrDefault(s => s.ShoppingCartProducts.Any(sh => sh.ShoppingCartId == account.ShoppingCartId));
+            return accountService.GetAccounts().FirstOrDefault(a => a.Id == account.Id).ShoppingCart;
         }
 
         /// <summary>

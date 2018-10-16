@@ -12,7 +12,7 @@ namespace GameStore.Tests.ProductServiceTests
 {
     [TestClass]
     public class AddProduct_Should
-    { 
+    {
         [TestMethod]
         public void AddProduct_WhenInput_IsValid()
         {
@@ -39,15 +39,15 @@ namespace GameStore.Tests.ProductServiceTests
             using (var curContext = new GameStoreContext(options))
             {
                 curContext.Products.Count();
-            }          
+            }
         }
 
         [TestMethod]
         [ExpectedException(typeof(UserException))]
-        public void ThrorwException_WhenInput_AlreadyExists()
+        public void ThrowException_WhenInput_AlreadyExists()
         {
             //Arrange
-            var options = new DbContextOptionsBuilder<GameStoreContext>().UseInMemoryDatabase(databaseName: $"FindAccoun_WhenInput_IsValid").Options;
+            var options = new DbContextOptionsBuilder<GameStoreContext>().UseInMemoryDatabase(databaseName: $"ThrowException_WhenInput_AlreadyExists").Options;
 
             //Trqbva da se opravi ProductsService -a
 
@@ -64,7 +64,7 @@ namespace GameStore.Tests.ProductServiceTests
                 IsDeleted = false,
                 IsOnSale = false
 
-                 
+
             };
             //Act
             using (var curContext = new GameStoreContext(options))
