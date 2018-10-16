@@ -38,6 +38,11 @@ namespace GameStore.Services
                 TimeStamp = DateTime.Now,
                 IsDeleted = false
             };
+            commentor.Comments.Add(newComment);
+            storeContext.Accounts.Update(commentor);
+
+            productToBeCommentedTo.Comments.Add(newComment);
+            storeContext.Products.Update(productToBeCommentedTo);
             storeContext.Comments.Add(newComment);
             storeContext.SaveChanges();
             return newComment;
