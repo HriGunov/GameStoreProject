@@ -17,7 +17,7 @@ namespace GameStore.Tests.ProductServiceTests
         public void AddProduct_WhenInput_IsValid()
         {
             //Arrange
-            var options = new DbContextOptionsBuilder<GameStoreContext>().UseInMemoryDatabase(databaseName: $"FindAccoun_WhenInput_IsValid").Options;
+            var options = new DbContextOptionsBuilder<GameStoreContext>().UseInMemoryDatabase(databaseName: $"AddProduct_WhenInput_IsValid").Options;
 
             var productToAdd = new Product()
             {
@@ -38,8 +38,8 @@ namespace GameStore.Tests.ProductServiceTests
             //Assert
             using (var curContext = new GameStoreContext(options))
             {
-                curContext.Products.Count();
-            }
+                Assert.IsTrue(curContext.Products.Count() == 1);
+            }          
         }
 
         [TestMethod]
@@ -47,41 +47,32 @@ namespace GameStore.Tests.ProductServiceTests
         public void ThrowException_WhenInput_AlreadyExists()
         {
             //Arrange
-            var options = new DbContextOptionsBuilder<GameStoreContext>().UseInMemoryDatabase(databaseName: $"ThrowException_WhenInput_AlreadyExists").Options;
-
-            //Trqbva da se opravi ProductsService -a
+            var options = new DbContextOptionsBuilder<GameStoreContext>().UseInMemoryDatabase(databaseName: $"ThrorwException_WhenInput_AlreadyExists").Options;
 
             var productToAdd = new Product()
             {
                 Name = "Test",
-                Price = 13.37m,
                 Description = "test description",
                 ShoppingCartProducts = new List<ShoppingCartProducts>(),
-                Genre = new List<Genre>(),
-                Comments = new List<Comment>(),
-                OrderProducts = new List<OrderProducts>(),
-                CreatedOn = DateTime.Now,
-                IsDeleted = false,
-                IsOnSale = false
-
-
+                Comments = new List<Comment>()
             };
             //Act
             using (var curContext = new GameStoreContext(options))
             {
                 var sut = new ProductsService(curContext);
                 curContext.Products.Add(productToAdd);
+
                 curContext.SaveChanges();
             }
-
             //Act
             using (var curContext = new GameStoreContext(options))
             {
                 var sut = new ProductsService(curContext);
-                curContext.Products.Add(productToAdd);
-                curContext.SaveChanges();
+                sut.AddProduct(productToAdd);
+               
             }
-        }
+ 
+        } 
     }
 
 }
