@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using GameStore.Core.Abstract;
+using GameStore.Core.ConsoleSections.MainWindowSections.Abstract;
 using GameStore.Data.Models;
 
 namespace GameStore.Core.ConsoleSections.MainWindowSections

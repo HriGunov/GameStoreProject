@@ -2,7 +2,7 @@
 using System.Linq;
 using GameStore.Commands.Abstract;
 using GameStore.Core.Abstract;
-using GameStore.Core.ConsoleSections.MainWindowSections;
+using GameStore.Core.ConsoleSections.MainWindowSections.Abstract;
 using GameStore.Services.Abstract;
 
 namespace GameStore.Commands

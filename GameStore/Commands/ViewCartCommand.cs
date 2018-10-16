@@ -2,7 +2,7 @@
 using System.Linq;
 using GameStore.Commands.Abstract;
 using GameStore.Core.Abstract;
-using GameStore.Core.ConsoleSections.MainWindowSections;
+using GameStore.Core.ConsoleSections.MainWindowSections.Abstract;
 using GameStore.Exceptions;
 using GameStore.Services.Abstract;
 
@@ -10,17 +10,15 @@ namespace GameStore.Commands
 {
     internal class ViewCartCommand : ICommand
     {
-        private readonly IConsoleManager consoleManager;
         private readonly IEngine engine;
         private readonly IProductsSection productsSection;
         private readonly IShoppingCartsService shoppingCartService;
 
-        public ViewCartCommand(IEngine engine, IProductsSection productsSection, IConsoleManager consoleManager,
+        public ViewCartCommand(IEngine engine, IProductsSection productsSection,
             IShoppingCartsService shoppingCartService)
         {
             this.engine = engine;
             this.productsSection = productsSection;
-            this.consoleManager = consoleManager;
             this.shoppingCartService = shoppingCartService;
         }
 

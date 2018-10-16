@@ -6,6 +6,7 @@ using GameStore.Commands.Abstract;
 using GameStore.Core;
 using GameStore.Core.Abstract;
 using GameStore.Core.ConsoleSections.MainWindowSections;
+using GameStore.Core.ConsoleSections.MainWindowSections.Abstract;
 using GameStore.Data.Injections;
 using GameStore.Services.Injections;
 

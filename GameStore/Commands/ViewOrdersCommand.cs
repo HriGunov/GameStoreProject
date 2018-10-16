@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using GameStore.Commands.Abstract;
 using GameStore.Core.Abstract;
-using GameStore.Core.ConsoleSections.MainWindowSections;
+using GameStore.Core.ConsoleSections.MainWindowSections.Abstract;
 using GameStore.Exceptions;
 using GameStore.Services.Abstract;
 

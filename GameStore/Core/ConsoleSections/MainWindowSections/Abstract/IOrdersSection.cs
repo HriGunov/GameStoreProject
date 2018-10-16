@@ -2,7 +2,7 @@
 using GameStore.Core.ConsoleSections.Abstract;
 using GameStore.Data.Models;
 
-namespace GameStore.Core.ConsoleSections.MainWindowSections
+namespace GameStore.Core.ConsoleSections.MainWindowSections.Abstract
 {
     internal interface IOrdersSection : ISection
     {
