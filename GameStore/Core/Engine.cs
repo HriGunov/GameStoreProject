@@ -61,9 +61,9 @@ namespace GameStore.Core
                     var result = commandManager.Execute(line);
                     if (!string.IsNullOrEmpty(result)) consoleManager.LogMessage(result);
                 }
-                catch (UserException)
+                catch (UserException ex)
                 {
-                    consoleManager.LogMessage("Invalid command.");
+                    consoleManager.LogMessage(ex.Message);
                 }
                 catch (Exception ex)
                 {

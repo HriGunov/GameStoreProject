@@ -11,18 +11,15 @@ namespace GameStore.Commands
         private readonly IConsoleManager consoleManager;
         private readonly IEngine engine;
         private readonly IProductsService productsService;
-        private readonly ISaveContextService saveContextService;
         private readonly IShoppingCartsService shoppingCartsService;
 
         public AddToCartCommand(IEngine engine, IProductsService productsService,
-            IShoppingCartsService shoppingCartsService, IConsoleManager consoleManager,
-            ISaveContextService saveContextService)
+            IShoppingCartsService shoppingCartsService, IConsoleManager consoleManager)
         {
             this.engine = engine;
             this.productsService = productsService;
             this.shoppingCartsService = shoppingCartsService;
             this.consoleManager = consoleManager;
-            this.saveContextService = saveContextService;
         }
 
 

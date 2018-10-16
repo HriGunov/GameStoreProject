@@ -101,7 +101,7 @@ namespace GameStore.Data.Migrations
                 b.Property<string>("Name")
                     .IsRequired();
 
-                b.Property<int?>("ProductId");
+                b.Property<int>("ProductId");
 
                 b.HasKey("Id");
 
@@ -220,9 +220,10 @@ namespace GameStore.Data.Migrations
 
             modelBuilder.Entity("GameStore.Data.Models.Genre", b =>
             {
-                b.HasOne("GameStore.Data.Models.Product")
+                b.HasOne("GameStore.Data.Models.Product", "Product")
                     .WithMany("Genre")
-                    .HasForeignKey("ProductId");
+                    .HasForeignKey("ProductId")
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity("GameStore.Data.Models.Order", b =>

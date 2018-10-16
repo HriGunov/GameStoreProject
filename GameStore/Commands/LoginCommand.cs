@@ -7,19 +7,16 @@ namespace GameStore.Commands
 {
     public class LoginCommand : ICommand
     {
-        private readonly IAccountsService accountsService;
         private readonly IAuthenticationService authenticationService;
         private readonly IConsoleManager consoleManager;
         private readonly ICryptographicService cryptographicService;
         private readonly IEngine engine;
 
         public LoginCommand(IEngine engine, IConsoleManager consoleManager,
-            IAccountsService accountsService,
             IAuthenticationService authenticationService, ICryptographicService cryptographicService)
         {
             this.engine = engine;
             this.consoleManager = consoleManager;
-            this.accountsService = accountsService;
             this.authenticationService = authenticationService;
             this.cryptographicService = cryptographicService;
         }
@@ -49,14 +46,11 @@ namespace GameStore.Commands
 
             var result = authenticationService.Authenticate(username, password);
 
-            if (result != null)
-            {
-                engine.CurrentUser = result;
-                consoleManager.LogMessage("Successful Login.", true);
-                return $"Welcome {engine.CurrentUser.Username}!";
-            }
+            if (result == null) return "Invalid Username or Password";
 
-            return "Invalid Username or Password";
+            engine.CurrentUser = result;
+            consoleManager.LogMessage("Successful Login.", true);
+            return $"Welcome {engine.CurrentUser.Username}!";
         }
     }
 }

@@ -9,17 +9,15 @@ namespace GameStore.Commands
 {
     internal class ViewOrdersCommand : ICommand
     {
-        private readonly IConsoleManager consoleManager;
         private readonly IEngine engine;
         private readonly IOrderService orderService;
         private readonly IOrdersSection ordersSection;
 
-        public ViewOrdersCommand(IEngine engine, IOrdersSection ordersSection, IConsoleManager consoleManager,
+        public ViewOrdersCommand(IEngine engine, IOrdersSection ordersSection,
             IOrderService orderService)
         {
             this.engine = engine;
             this.ordersSection = ordersSection;
-            this.consoleManager = consoleManager;
             this.orderService = orderService;
         }
 

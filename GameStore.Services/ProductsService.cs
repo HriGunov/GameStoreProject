@@ -25,10 +25,9 @@ namespace GameStore.Services
         /// <param name="productDescription">Product Description</param>
         /// <param name="productPrice">Product Price</param>
         /// <param name="productGenres">Product Genres (ICollection)</param>
-        /// <param name="productComments">Product Comments (ICollection)</param>
         /// <returns></returns>
         public Product AddProduct(string productName, string productDescription, decimal productPrice,
-            ICollection<Genre> productGenres = null, ICollection<Comment> productComments = null)
+            ICollection<Genre> productGenres = null)
         {
             if (FindProduct(productName) != null)
                 throw new UserException($"Product ({productName}) already exists.");
@@ -43,9 +42,6 @@ namespace GameStore.Services
 
             if (productGenres != null)
                 product.Genre = productGenres;
-
-            if (productComments != null)
-                product.Comments = productComments;
 
             storeContext.Products.Add(product);
             storeContext.SaveChanges();
@@ -100,12 +96,31 @@ namespace GameStore.Services
                 .Include(c => c.Comments)
                 .ThenInclude(comment => comment.Product)
                 .Include(g => g.Genre)
+                .ThenInclude(p => p.Product)
                 .ToList();
         }
 
-        public Product AddProduct(Product product)
+        public string AddGenreToProduct(string name, Product product)
         {
-            return AddProduct(product.Name, product.Description, product.Price, product.Genre, product.Comments);
+            if (FindProduct(product.Name).Genre.Any(g => g.Name == name))
+                throw new UserException($"The {product.Name} already has this genre ({name}).");
+
+            storeContext.Genres.Add(new Genre {Name = name, ProductId = product.Id});
+            storeContext.SaveChanges();
+
+            return $"Added {name} to {product.Name}.";
+        }
+
+        public string RemoveGenreFromProduct(string name, Product product)
+        {
+            var tempGenre = storeContext.Genres.FirstOrDefault(g => g.Name == name && g.ProductId == product.Id);
+            if (tempGenre == null)
+                return $"Product {product.Name} doesn't have {name} genre.";
+
+            storeContext.Genres.Remove(tempGenre);
+            storeContext.SaveChanges();
+
+            return $"Removed {name} from {product.Name}.";
         }
 
         public IEnumerable<Product> FindProductsByGenre(Genre productGenre)
@@ -113,6 +128,11 @@ namespace GameStore.Services
             var products = GetProducts().Where(p => p.Genre.Contains(productGenre));
 
             return !products.Any() ? null : products;
+        }
+
+        public Product AddProduct(Product product)
+        {
+            return AddProduct(product.Name, product.Description, product.Price, product.Genre);
         }
     }
 }

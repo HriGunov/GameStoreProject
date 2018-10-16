@@ -13,7 +13,6 @@ namespace GameStore.Commands
         private readonly IConsoleManager consoleManager;
         private readonly IEngine engine;
         private readonly IOrderService orderService;
-        private readonly IProductsService productService;
         private readonly IShoppingCartsService shoppingCartService;
 
         public CheckoutCommand(IEngine engine, IConsoleManager consoleManager, IOrderService orderService,
@@ -23,7 +22,6 @@ namespace GameStore.Commands
             this.engine = engine;
             this.consoleManager = consoleManager;
             this.orderService = orderService;
-            this.productService = productService;
             this.accountsService = accountsService;
             this.shoppingCartService = shoppingCartService;
         }
