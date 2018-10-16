@@ -10,14 +10,15 @@ namespace GameStore.Commands
     public class CheckoutCommand : ICommand
     {
         private readonly IAccountsService accountsService;
-        private readonly IShoppingCartsService shoppingCartService;
         private readonly IConsoleManager consoleManager;
         private readonly IEngine engine;
         private readonly IOrderService orderService;
         private readonly IProductsService productService;
+        private readonly IShoppingCartsService shoppingCartService;
 
         public CheckoutCommand(IEngine engine, IConsoleManager consoleManager, IOrderService orderService,
-            IProductsService productService, IAccountsService accountsService, IShoppingCartsService shoppingCartService)
+            IProductsService productService, IAccountsService accountsService,
+            IShoppingCartsService shoppingCartService)
         {
             this.engine = engine;
             this.consoleManager = consoleManager;
@@ -40,10 +41,8 @@ namespace GameStore.Commands
             var tempCollection = new List<Product>();
 
             foreach (var product in user.ShoppingCart.ShoppingCartProducts)
-            {
                 if (product != null)
                     tempCollection.Add(product.Product);
-            }
 
             if (!tempCollection.Any())
                 return "No products found in your shopping cart.";
@@ -62,9 +61,12 @@ namespace GameStore.Commands
                 accountsService.AddCreditCard(cardNumber, user);
             }
             else
+            {
                 cardNumber = user.CreditCard;
+            }
 
-            consoleManager.LogMessage($"Your credit card was charged {tempCollection.Sum(p => p.Price).ToString("0.00")} BGN");
+            consoleManager.LogMessage(
+                $"Your credit card was charged {tempCollection.Sum(p => p.Price).ToString("0.00")} BGN");
             consoleManager.LogMessage($"Order {orderService.FindLastOrder(user).Id} has been completed.");
             shoppingCartService.ClearUserCart(user);
 

@@ -52,6 +52,11 @@ namespace GameStore.Core.ConsoleSections.MainWindowSections
             currentPageNumber++;
         }
 
+        public void ChangeTitle(string newTitle)
+        {
+            title = newTitle;
+        }
+
         private void DrawBorders(IConsoleManager consoleManager)
         {
             var height = BottomRightCorner.Y - TopLeftCorner.Y;
@@ -151,14 +156,16 @@ namespace GameStore.Core.ConsoleSections.MainWindowSections
                 consoleManager.SetText(currentOrders[i].Id.ToString(), startingPosition.Y + 2 * i, startingPosition.X);
 
                 // Few Products from the Order
-                consoleManager.SetText(string.Join(", ", currentOrders[i].OrderProducts.Select(o => o.Product.Name)), startingPosition.Y + 2 * i, startingPosition.X + 11);
+                consoleManager.SetText(string.Join(", ", currentOrders[i].OrderProducts.Select(o => o.Product.Name)),
+                    startingPosition.Y + 2 * i, startingPosition.X + 11);
 
                 // Order Status
                 consoleManager.SetText("Completed", startingPosition.Y + 2 * i,
                     startingPosition.X + 52);
 
                 // Order total cost
-                consoleManager.SetText(currentOrders[i].OrderProducts.Sum(o => o.Product.Price).ToString("0.00").PadLeft(19),
+                consoleManager.SetText(
+                    currentOrders[i].OrderProducts.Sum(o => o.Product.Price).ToString("0.00").PadLeft(19),
                     startingPosition.Y + 2 * i, startingPosition.X + 63);
             }
 
@@ -168,11 +175,6 @@ namespace GameStore.Core.ConsoleSections.MainWindowSections
             var startPagesIndicatorPosition = width / 2 - pagesIndicatorString.Length / 2;
             consoleManager.SetText(pagesIndicatorString, BottomRightCorner.Y,
                 TopLeftCorner.X + startPagesIndicatorPosition + 1);
-        }
-
-        public void ChangeTitle(string newTitle)
-        {
-            title = newTitle;
         }
     }
 }

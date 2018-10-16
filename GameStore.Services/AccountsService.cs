@@ -96,7 +96,7 @@ namespace GameStore.Services
         }
 
         /// <summary>
-        /// Adds credit card to the given user.
+        ///     Adds credit card to the given user.
         /// </summary>
         /// <param name="cardNumber">Card number.</param>
         /// <param name="account">Account Type</param>

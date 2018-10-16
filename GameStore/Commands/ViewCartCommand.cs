@@ -1,21 +1,22 @@
-﻿using GameStore.Commands.Abstract;
+﻿using System.Collections.Generic;
+using System.Linq;
+using GameStore.Commands.Abstract;
 using GameStore.Core.Abstract;
 using GameStore.Core.ConsoleSections.MainWindowSections;
 using GameStore.Exceptions;
-using System.Collections.Generic;
-using System.Linq;
 using GameStore.Services.Abstract;
 
 namespace GameStore.Commands
 {
-    class ViewCartCommand : ICommand
+    internal class ViewCartCommand : ICommand
     {
+        private readonly IConsoleManager consoleManager;
         private readonly IEngine engine;
         private readonly IProductsSection productsSection;
-        private readonly IConsoleManager consoleManager;
         private readonly IShoppingCartsService shoppingCartService;
 
-        public ViewCartCommand(IEngine engine, IProductsSection productsSection, IConsoleManager consoleManager, IShoppingCartsService shoppingCartService)
+        public ViewCartCommand(IEngine engine, IProductsSection productsSection, IConsoleManager consoleManager,
+            IShoppingCartsService shoppingCartService)
         {
             this.engine = engine;
             this.productsSection = productsSection;

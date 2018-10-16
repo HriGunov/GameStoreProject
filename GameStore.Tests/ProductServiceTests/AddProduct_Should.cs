@@ -1,12 +1,11 @@
-﻿using GameStore.Data.Context;
+﻿using System.Collections.Generic;
+using System.Linq;
+using GameStore.Data.Context;
 using GameStore.Data.Models;
 using GameStore.Exceptions;
 using GameStore.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace GameStore.Tests.ProductServiceTests
 {
@@ -17,9 +16,10 @@ namespace GameStore.Tests.ProductServiceTests
         public void AddProduct_WhenInput_IsValid()
         {
             //Arrange
-            var options = new DbContextOptionsBuilder<GameStoreContext>().UseInMemoryDatabase(databaseName: $"AddProduct_WhenInput_IsValid").Options;
+            var options = new DbContextOptionsBuilder<GameStoreContext>()
+                .UseInMemoryDatabase("AddProduct_WhenInput_IsValid").Options;
 
-            var productToAdd = new Product()
+            var productToAdd = new Product
             {
                 Name = "Test",
                 Description = "test description",
@@ -39,7 +39,7 @@ namespace GameStore.Tests.ProductServiceTests
             using (var curContext = new GameStoreContext(options))
             {
                 Assert.IsTrue(curContext.Products.Count() == 1);
-            }          
+            }
         }
 
         [TestMethod]
@@ -47,9 +47,10 @@ namespace GameStore.Tests.ProductServiceTests
         public void ThrowException_WhenInput_AlreadyExists()
         {
             //Arrange
-            var options = new DbContextOptionsBuilder<GameStoreContext>().UseInMemoryDatabase(databaseName: $"ThrorwException_WhenInput_AlreadyExists").Options;
+            var options = new DbContextOptionsBuilder<GameStoreContext>()
+                .UseInMemoryDatabase("ThrowException_WhenInput_AlreadyExists").Options;
 
-            var productToAdd = new Product()
+            var productToAdd = new Product
             {
                 Name = "Test",
                 Description = "test description",
@@ -64,15 +65,13 @@ namespace GameStore.Tests.ProductServiceTests
 
                 curContext.SaveChanges();
             }
+
             //Act
             using (var curContext = new GameStoreContext(options))
             {
                 var sut = new ProductsService(curContext);
                 sut.AddProduct(productToAdd);
-               
             }
- 
-        } 
+        }
     }
-
 }

@@ -35,7 +35,6 @@ namespace GameStore.Core.ConsoleSections.MainWindowSections
         {
             if (Render)
             {
-                
                 base.DrawSection(consoleManager);
                 DrawBorders(consoleManager);
                 DrawProducts(consoleManager);
@@ -51,6 +50,11 @@ namespace GameStore.Core.ConsoleSections.MainWindowSections
         public void PageDown()
         {
             currentPageNumber++;
+        }
+
+        public void ChangeTitle(string newTitle)
+        {
+            title = newTitle;
         }
 
         private void DrawBorders(IConsoleManager consoleManager)
@@ -172,11 +176,6 @@ namespace GameStore.Core.ConsoleSections.MainWindowSections
             var startPagesIndicatorPosition = width / 2 - pagesIndicatorString.Length / 2;
             consoleManager.SetText(pagesIndicatorString, BottomRightCorner.Y,
                 TopLeftCorner.X + startPagesIndicatorPosition + 1);
-        }
-
-        public void ChangeTitle(string newTitle)
-        {
-            title = newTitle;
         }
     }
 }

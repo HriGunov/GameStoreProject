@@ -1,5 +1,5 @@
-﻿using GameStore.Data.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using GameStore.Data.Models;
 
 namespace GameStore.Services.Abstract
 {

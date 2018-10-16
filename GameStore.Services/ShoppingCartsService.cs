@@ -1,11 +1,10 @@
-﻿using GameStore.Data.Context.Abstract;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using GameStore.Data.Context.Abstract;
 using GameStore.Data.Models;
 using GameStore.Exceptions;
 using GameStore.Services.Abstract;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
 
 namespace GameStore.Services
 {
@@ -82,7 +81,6 @@ namespace GameStore.Services
                 throw new UserException($"User ({account.Username}) doesn't have Shopping Cart.");
 
             foreach (var p in product)
-            {
                 if (p != null)
                 {
                     if (ProductExistsInCart(p, account))
@@ -97,7 +95,7 @@ namespace GameStore.Services
                     storeContext.ShoppingCartProducts.Add(shoppingCart);
                     account.ShoppingCart.ShoppingCartProducts.Add(shoppingCart);
                 }
-            }
+
             storeContext.SaveChanges();
 
             account.ShoppingCart = GetUserCart(account);
@@ -106,22 +104,24 @@ namespace GameStore.Services
         }
 
         /// <summary>
-        /// Clears the user's cart.
+        ///     Clears the user's cart.
         /// </summary>
         /// <param name="account">Account Type</param>
         public void ClearUserCart(Account account)
         {
-            var userCartProducts = storeContext.ShoppingCartProducts.Where(s => s.ShoppingCartId == account.ShoppingCartId).ToList();
+            var userCartProducts = storeContext.ShoppingCartProducts
+                .Where(s => s.ShoppingCartId == account.ShoppingCartId).ToList();
             foreach (var product in userCartProducts)
             {
                 storeContext.ShoppingCartProducts.Remove(product);
                 storeContext.SaveChanges();
             }
+
             account.ShoppingCart.ShoppingCartProducts = new List<ShoppingCartProducts>();
         }
 
         /// <summary>
-        /// Gets the user cart.
+        ///     Gets the user cart.
         /// </summary>
         /// <returns>The user cart.</returns>
         /// <param name="account">Account Type</param>

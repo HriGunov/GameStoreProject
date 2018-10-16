@@ -1,21 +1,21 @@
-﻿using GameStore.Commands.Abstract;
+﻿using System.Collections.Generic;
+using GameStore.Commands.Abstract;
 using GameStore.Core.Abstract;
 using GameStore.Core.ConsoleSections.MainWindowSections;
 using GameStore.Exceptions;
-using System.Collections.Generic;
-using System.Linq;
 using GameStore.Services.Abstract;
 
 namespace GameStore.Commands
 {
-    class ViewOrdersCommand : ICommand
+    internal class ViewOrdersCommand : ICommand
     {
-        private readonly IEngine engine;
-        private readonly IOrdersSection ordersSection;
         private readonly IConsoleManager consoleManager;
+        private readonly IEngine engine;
         private readonly IOrderService orderService;
+        private readonly IOrdersSection ordersSection;
 
-        public ViewOrdersCommand(IEngine engine, IOrdersSection ordersSection, IConsoleManager consoleManager, IOrderService orderService)
+        public ViewOrdersCommand(IEngine engine, IOrdersSection ordersSection, IConsoleManager consoleManager,
+            IOrderService orderService)
         {
             this.engine = engine;
             this.ordersSection = ordersSection;

@@ -1,11 +1,10 @@
-﻿using GameStore.Commands.Abstract;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using GameStore.Commands.Abstract;
 
 namespace GameStore.Commands
 {
-    class HelpCommand : ICommand
+    internal class HelpCommand : ICommand
     {
         private readonly ICommandManager commandManager;
 
@@ -13,6 +12,7 @@ namespace GameStore.Commands
         {
             this.commandManager = commandManager;
         }
+
         public string Execute(List<string> parameters)
         {
             throw new NotImplementedException();
