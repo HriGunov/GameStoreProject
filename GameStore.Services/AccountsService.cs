@@ -96,6 +96,17 @@ namespace GameStore.Services
         }
 
         /// <summary>
+        ///     Adds credit card to the given user.
+        /// </summary>
+        /// <param name="cardNumber">Card number.</param>
+        /// <param name="account">Account Type</param>
+        public void AddCreditCard(string cardNumber, Account account)
+        {
+            GetAccounts().SingleOrDefault(a => a.Username == account.Username).CreditCard = cardNumber;
+            storeContext.SaveChanges();
+        }
+
+        /// <summary>
         ///     Finds the account in the database that matches the given accountName in the parameters and returns it as Account
         ///     type.
         /// </summary>
@@ -120,7 +131,7 @@ namespace GameStore.Services
             if (!IsAdmin(commandExecutor))
                 throw new UserException("You don't have enough permissions.");
 
-            var account = GetAccounts().FirstOrDefault(acc => acc.Username == accountName.Username);
+            var account = GetAccounts().SingleOrDefault(acc => acc.Username == accountName.Username);
             if (account == null) return $"Account {accountName} was not found.";
             if (!account.IsDeleted) return $"Account {accountName} is already restored.";
 
@@ -150,6 +161,17 @@ namespace GameStore.Services
                 .Include(s => s.ShoppingCart)
                 .ThenInclude(s => s.ShoppingCartProducts)
                 .ThenInclude(cart => cart.Product)
+                .ThenInclude(g => g.Genre)
+                .Include(s => s.ShoppingCart)
+                .ThenInclude(s => s.ShoppingCartProducts)
+                .ThenInclude(sh => sh.Product)
+                .ThenInclude(c => c.Comments)
+                .ThenInclude(comment => comment.Account)
+                .Include(s => s.ShoppingCart)
+                .ThenInclude(s => s.ShoppingCartProducts)
+                .ThenInclude(sh => sh.Product)
+                .ThenInclude(c => c.Comments)
+                .ThenInclude(comment => comment.Product)
                 .Include(s => s.ShoppingCart)
                 .ThenInclude(s => s.ShoppingCartProducts)
                 .ThenInclude(cart => cart.ShoppingCart)

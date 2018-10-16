@@ -8,5 +8,6 @@ namespace GameStore.Services.Abstract
         Order AddToOrder(Account account, Product product);
         Order AddToOrder(Account account, IEnumerable<Product> product);
         IEnumerable<Order> FindOrders(Account account);
+        Order FindLastOrder(Account account);
     }
 }

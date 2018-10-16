@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using GameStore.Commands.Abstract;
 using GameStore.Core.Abstract;
-using GameStore.Data.Models;
 using GameStore.Exceptions;
 using GameStore.Services.Abstract;
 

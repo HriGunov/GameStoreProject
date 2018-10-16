@@ -1,30 +1,28 @@
-﻿using GameStore.Commands.Abstract;
+﻿using System;
+using System.Reflection;
+using GameStore.Commands.Abstract;
 using GameStore.Core.Abstract;
 using GameStore.Core.ConsoleSections;
 using GameStore.Core.ConsoleSections.Abstract;
 using GameStore.Core.ConsoleSections.MainWindowSections;
-using GameStore.Data.Context.Abstract;
 using GameStore.Data.Models;
 using GameStore.Exceptions;
 using GameStore.Services.Abstract;
+using log4net;
 
 namespace GameStore.Core
 {
     public class Engine : IEngine
     {
+        private static readonly ILog logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private readonly ICommandManager commandManager;
-        private readonly ICommentService commentService;
         private readonly IConsoleManager consoleManager;
-        private readonly IGameStoreContext gameStoreContext;
         private readonly IMessageLog messageLog;
 
-        public Engine(IGameStoreContext gameStoreContext, ICommandManager commandManager,
-            ICommentService commentService, IConsoleManager consoleManager, IMessageLog messageLog,
+        public Engine(ICommandManager commandManager, IConsoleManager consoleManager, IMessageLog messageLog,
             IAccountsService accountsService, HomeSection homeSection)
         {
-            this.gameStoreContext = gameStoreContext;
             this.commandManager = commandManager;
-            this.commentService = commentService;
             this.consoleManager = consoleManager;
             this.messageLog = messageLog;
             CurrentUser = accountsService.GetGuestAccount();
@@ -49,15 +47,6 @@ namespace GameStore.Core
             consoleManager.LogMessage("For more information use the Help commmand.");
             var testLogger = new LoggerFramedSection(messageLog);
 
-            var testProducts = new ProductsSection
-            {
-                ProductsInView = new[]
-                {
-                    new Product {Name = "Test Product", Price = 1},
-                    new Product {Name = "Test Product2", Genre = {new Genre {Name = "Action"}}, Price = 2}
-                }
-            };
-
             headerSection.DrawSection(consoleManager);
             testFrameBig.DrawSection(consoleManager);
             testLogger.DrawSection(consoleManager);
@@ -76,7 +65,12 @@ namespace GameStore.Core
                 {
                     consoleManager.LogMessage("Invalid command.");
                 }
-                // catch (Exception) - Log
+                catch (Exception ex)
+                {
+                    // Log Exception
+                    consoleManager.LogMessage("An error has occured. (Invalid Action)");
+                    logger.Fatal($"Last User Input -> '{line}': {ex}");
+                }
 
                 headerSection.DrawSection(consoleManager);
 

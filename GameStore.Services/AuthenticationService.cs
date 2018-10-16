@@ -7,10 +7,10 @@ namespace GameStore.Services
     public class AuthenticationService : IAuthenticationService
     {
         private readonly IAccountsService accountsService;
-       
+
         public AuthenticationService(IAccountsService accountsService)
         {
-            this.accountsService = accountsService ?? throw new ArgumentNullException(nameof(accountsService));           
+            this.accountsService = accountsService ?? throw new ArgumentNullException(nameof(accountsService));
         }
 
         /// <summary>

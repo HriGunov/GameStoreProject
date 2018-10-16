@@ -57,6 +57,11 @@ namespace GameStore.Services
             return GetOrders().Where(o => o.AccountId == account.Id);
         }
 
+        public Order FindLastOrder(Account account)
+        {
+            return GetOrders().LastOrDefault(o => o.AccountId == account.Id);
+        }
+
         /// <summary>
         ///     Create a new blank order for the given account.
         ///     For 'private' usage.
@@ -74,11 +79,6 @@ namespace GameStore.Services
             storeContext.SaveChanges();
 
             return FindLastOrder(account);
-        }
-
-        private Order FindLastOrder(Account account)
-        {
-            return GetOrders().LastOrDefault(o => o.AccountId == account.Id);
         }
 
         private IEnumerable<Order> GetOrders()

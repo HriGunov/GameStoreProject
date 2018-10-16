@@ -20,7 +20,6 @@ namespace GameStore.Core.ConsoleSections
         {
         }
 
-
         public override void DrawSection(IConsoleManager consoleManager)
         {
             base.DrawSection(consoleManager);

@@ -1,10 +1,10 @@
-﻿using GameStore.Data.Context;
+﻿using System.Linq;
+using GameStore.Data.Context;
 using GameStore.Data.Models;
 using GameStore.Exceptions;
 using GameStore.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Linq;
 
 namespace GameStore.Tests.AccountsServiceTests
 {
@@ -21,22 +21,24 @@ namespace GameStore.Tests.AccountsServiceTests
         public void AddAccount_WhenInput_IsValid(int numberOfAccountsToAdd)
         {
             //Arrange
-            var options = new DbContextOptionsBuilder<GameStoreContext>().UseInMemoryDatabase(databaseName: $"AddAccount_WhenInput_IsValid{numberOfAccountsToAdd}").Options;
+            var options = new DbContextOptionsBuilder<GameStoreContext>()
+                .UseInMemoryDatabase($"AddAccount_WhenInput_IsValid{numberOfAccountsToAdd}").Options;
 
 
             //Act
             using (var curContext = new GameStoreContext(options))
             {
                 var sut = new AccountsService(curContext);
-                for (int i = 1; i <= numberOfAccountsToAdd; i++)
+                for (var i = 1; i <= numberOfAccountsToAdd; i++)
                 {
-                    var validUser = new Account() { Username = $"TestUsername{i}", Password = "foo", FirstName = "FirstName", LastName = "LastName" };
+                    var validUser = new Account
+                    {
+                        Username = $"TestUsername{i}", Password = "foo", FirstName = "FirstName", LastName = "LastName"
+                    };
 
-                    
 
                     sut.AddAccount(validUser);
                 }
-
             }
 
             using (var curContext = new GameStoreContext(options))
@@ -44,31 +46,32 @@ namespace GameStore.Tests.AccountsServiceTests
                 Assert.IsTrue(curContext.Accounts.Count() == numberOfAccountsToAdd);
             }
         }
+
         [TestMethod]
         [DataRow("!@#$%&._")]
         [DataRow("Test 123")]
         [DataRow(" 1223423 ")]
         [DataRow("testing._")]
         [DataRow("testing.")]
-        [DataRow("13!@")] 
+        [DataRow("13!@")]
         [ExpectedException(typeof(UserException))]
         public void ThrowException_WhenUsername_IsInvalid(string name)
         {
             //Arrange
-            var options = new DbContextOptionsBuilder<GameStoreContext>().UseInMemoryDatabase(databaseName: $"ThrowException_WhenUsername_IsInvalid->{name}").Options;
+            var options = new DbContextOptionsBuilder<GameStoreContext>()
+                .UseInMemoryDatabase($"ThrowException_WhenUsername_IsInvalid->{name}").Options;
 
 
             //Act
             using (var curContext = new GameStoreContext(options))
             {
                 var sut = new AccountsService(curContext);
-                 
-                    var validUser = new Account() { Username = name, Password = "foo", FirstName = "FirstName", LastName = "LastName" };
-                 
-                    sut.AddAccount(validUser); 
-            }
 
-            
+                var validUser = new Account
+                    {Username = name, Password = "foo", FirstName = "FirstName", LastName = "LastName"};
+
+                sut.AddAccount(validUser);
+            }
         }
     }
 }

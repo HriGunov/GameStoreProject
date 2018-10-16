@@ -6,6 +6,7 @@ using GameStore.Commands.Abstract;
 using GameStore.Core;
 using GameStore.Core.Abstract;
 using GameStore.Core.ConsoleSections.MainWindowSections;
+using GameStore.Core.ConsoleSections.MainWindowSections.Abstract;
 using GameStore.Data.Injections;
 using GameStore.Services.Injections;
 
@@ -21,6 +22,7 @@ namespace GameStore.Injections
             builder.RegisterType<MessageLog>().As<IMessageLog>().SingleInstance();
             builder.RegisterType<HomeSection>().AsSelf().SingleInstance();
             builder.RegisterType<ProductsSection>().As<IProductsSection>().SingleInstance();
+            builder.RegisterType<OrdersSection>().As<IOrdersSection>().SingleInstance();
             builder.RegisterModule<GameStoreDataModule>();
             builder.RegisterModule<GameStoreServicesModule>();
 

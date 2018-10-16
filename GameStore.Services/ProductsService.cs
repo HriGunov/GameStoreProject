@@ -25,6 +25,7 @@ namespace GameStore.Services
         /// <param name="productDescription">Product Description</param>
         /// <param name="productPrice">Product Price</param>
         /// <param name="productGenres">Product Genres (ICollection)</param>
+        /// <param name="productComments">Product Comments (ICollection)</param>
         /// <returns></returns>
         public Product AddProduct(string productName, string productDescription, decimal productPrice,
             ICollection<Genre> productGenres = null, ICollection<Comment> productComments = null)
@@ -82,13 +83,7 @@ namespace GameStore.Services
 
         public IEnumerable<Product> FindProductsByGenre(IEnumerable<Genre> productGenre)
         {
-            var products = GetProducts().Where(p =>
-            {
-                foreach (var genre in productGenre)
-                    if (!p.Genre.Contains(genre))
-                        return false;
-                return true;
-            });
+            var products = GetProducts().Where(p => { return productGenre.All(genre => p.Genre.Contains(genre)); });
 
             return !products.Any() ? null : products;
         }

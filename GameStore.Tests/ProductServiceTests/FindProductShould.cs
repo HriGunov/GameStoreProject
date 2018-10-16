@@ -1,11 +1,9 @@
-﻿using GameStore.Data.Context;
+﻿using System.Collections.Generic;
+using GameStore.Data.Context;
 using GameStore.Data.Models;
 using GameStore.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace GameStore.Tests.ProductServiceTests
 {
@@ -16,9 +14,10 @@ namespace GameStore.Tests.ProductServiceTests
         public void FindProduct_WhenInput_IsValid()
         {
             //Arrange
-            var options = new DbContextOptionsBuilder<GameStoreContext>().UseInMemoryDatabase(databaseName: $"FindAccoun_WhenInput_IsValid").Options;
+            var options = new DbContextOptionsBuilder<GameStoreContext>()
+                .UseInMemoryDatabase("FindProduct_WhenInput_IsValid").Options;
 
-            var productToAdd = new Product()
+            var productToAdd = new Product
             {
                 Name = "Test",
                 Description = "test description",
@@ -39,6 +38,7 @@ namespace GameStore.Tests.ProductServiceTests
                 var sut = new ProductsService(curContext);
                 productFound = sut.FindProduct(productToAdd.Name);
             }
+
             //Assert
             Assert.IsTrue(productToAdd.Name == productFound.Name);
         }

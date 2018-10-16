@@ -1,13 +1,12 @@
-﻿using GameStore.Data.Context;
+﻿using System;
+using System.Collections.Generic;
+using GameStore.Data.Context;
 using GameStore.Data.Models;
 using GameStore.Services;
 using GameStore.Services.Abstract;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace GameStore.Tests.AuthenticationServiceTests
 {
@@ -17,11 +16,12 @@ namespace GameStore.Tests.AuthenticationServiceTests
         [TestMethod]
         public void ReturnAccount_When_InputIsValid()
         {
-            var options = new DbContextOptionsBuilder<GameStoreContext>().UseInMemoryDatabase(databaseName: $"ReturnAccount_When_InputIsValid").Options;
+            var options = new DbContextOptionsBuilder<GameStoreContext>()
+                .UseInMemoryDatabase("ReturnAccount_When_InputIsValid").Options;
 
-            var accountToBeFound = new Account()
+            var accountToBeFound = new Account
             {
-                Username = $"TestUsername",
+                Username = "TestUsername",
                 Password = "TestPassword",
                 FirstName = "FirstName",
                 LastName = "LastName",
@@ -47,17 +47,19 @@ namespace GameStore.Tests.AuthenticationServiceTests
                 var sut = new AuthenticationService(mockAccountsService.Object);
                 accFound = sut.Authenticate(accountToBeFound.Username, accountToBeFound.Password);
             }
+
             Assert.IsTrue(accFound.Username == accountToBeFound.Username);
-
         }
-        [TestMethod]
-        public void ReturnNull_When_PassowrdsDontMatch()
-        {
-            var options = new DbContextOptionsBuilder<GameStoreContext>().UseInMemoryDatabase(databaseName: $"ReturnNull_When_PassowrdsDontMatch").Options;
 
-            var accountToBeFound = new Account()
+        [TestMethod]
+        public void ReturnNull_When_PasswordsDontMatch()
+        {
+            var options = new DbContextOptionsBuilder<GameStoreContext>()
+                .UseInMemoryDatabase("ReturnNull_When_PasswordsDontMatch").Options;
+
+            var accountToBeFound = new Account
             {
-                Username = $"TestUsername",
+                Username = "TestUsername",
                 Password = "TestPassword",
                 FirstName = "FirstName",
                 LastName = "LastName",
@@ -81,7 +83,7 @@ namespace GameStore.Tests.AuthenticationServiceTests
             using (var curContext = new GameStoreContext(options))
             {
                 var sut = new AuthenticationService(mockAccountsService.Object);
-                accFound = sut.Authenticate(accountToBeFound.Username,"Some Password");
+                accFound = sut.Authenticate(accountToBeFound.Username, "Some Password");
             }
 
             Assert.IsTrue(accFound == null);
