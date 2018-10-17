@@ -9,8 +9,10 @@ namespace GameStore.Services.Abstract
             ICollection<Genre> productGenres = null, ICollection<Comment> productComments = null);
 
         string RemoveProduct(string productName);
-        Product FindProduct(string productName);
+        Product FindProduct(string productName,bool isDeleted = false);
         IEnumerable<Product> FindProductsByGenre(IEnumerable<Genre> productGenre);
         IEnumerable<Product> GetProducts();
+        void LoadProductsLoadedFromJSON(string jsonString);
+        void DeleteProductsLoadedFromJSON(string jsonString);
     }
 }

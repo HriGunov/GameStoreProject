@@ -37,7 +37,10 @@ namespace GameStore.Commands
                 engine.MainSection = productsSection;
                 productsSection.ChangeTitle("Shopping Cart");
 
-                productsSection.UpdateProducts(tempCart.ShoppingCartProducts.Select(cart => cart.Product));
+                productsSection.UpdateProducts(tempCart.ShoppingCartProducts.Select(cart => cart.Product));                 
+                if (parameters.Count >= 1)                {
+                    productsSection.SetPageTo(int.Parse(parameters[0]));
+                }
                 return "Viewing cart";
             }
             catch (UserException e)

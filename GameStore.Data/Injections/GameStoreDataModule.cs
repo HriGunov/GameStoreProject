@@ -8,7 +8,7 @@ namespace GameStore.Data.Injections
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<GameStoreContext>().As<IGameStoreContext>();
+            builder.RegisterType<GameStoreContext>().As<IGameStoreContext>().SingleInstance();
         }
     }
 }

@@ -8,6 +8,7 @@ namespace GameStore.Core.ConsoleSections.MainWindowSections.Abstract
     {
         void PageDown();
         void PageUp();
+        void SetPageTo(int pageNumber);
         void UpdateProducts(IEnumerable<Product> newProducts);
         void ChangeTitle(string newTitle);
     }

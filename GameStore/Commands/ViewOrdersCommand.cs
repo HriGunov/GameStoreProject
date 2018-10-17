@@ -34,6 +34,11 @@ namespace GameStore.Commands
                 ordersSection.ChangeTitle("Your Orders");
 
                 ordersSection.UpdateOrders(orderService.FindOrders(engine.CurrentUser));
+                
+                if (parameters.Count >= 1)
+                {
+                    ordersSection.SetPageTo(int.Parse(parameters[0]));
+                }
                 return "Viewing Orders";
             }
             catch (UserException e)

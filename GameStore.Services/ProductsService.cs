@@ -6,6 +6,7 @@ using GameStore.Data.Models;
 using GameStore.Exceptions;
 using GameStore.Services.Abstract;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace GameStore.Services
 {
@@ -35,11 +36,16 @@ namespace GameStore.Services
 
             var product = new Product
             {
+                   
                 Name = productName,
                 Description = productDescription,
                 Price = productPrice,
                 CreatedOn = DateTime.Now
             };
+            if (product.Name.Length > 20)
+            {
+                product.Name = product.Name.Substring(0, 20);
+            }
 
             if (productGenres != null)
                 product.Genre = productGenres;
@@ -74,15 +80,37 @@ namespace GameStore.Services
         /// </summary>
         /// <param name="productName">Product Name</param>
         /// <returns></returns>
-        public Product FindProduct(string productName)
+        public Product FindProduct(string productName,bool includeDeleted = false)
         {
             var product = GetProducts().SingleOrDefault(p => p.Name == productName);
 
-            return product == null || product.IsDeleted ? null : product;
+            if (product == null)
+            {
+                return null;
+            }
+            else
+            {
+                if (includeDeleted)
+                {
+                    return product;
+                }
+                else
+                {
+                    if (product.IsDeleted)
+                    {
+                        return null;
+                    }
+                    else
+                    {
+                        return product;
+                    }
+                }
+            }
         }
 
         public IEnumerable<Product> FindProductsByGenre(IEnumerable<Genre> productGenre)
         {
+
             var products = GetProducts().Where(p => { return productGenre.All(genre => p.Genre.Contains(genre)); });
 
             return !products.Any() ? null : products;
@@ -90,7 +118,8 @@ namespace GameStore.Services
 
         public IEnumerable<Product> GetProducts()
         {
-            return storeContext.Products
+             
+            return storeContext.Products               
                 .Include(s => s.ShoppingCartProducts)
                 .ThenInclude(cart => cart.Product)
                 .Include(s => s.ShoppingCartProducts)
@@ -99,7 +128,7 @@ namespace GameStore.Services
                 .ThenInclude(comment => comment.Account)
                 .Include(c => c.Comments)
                 .ThenInclude(comment => comment.Product)
-                .Include(g => g.Genre)
+                .Include(g => g.Genre)                
                 .ToList();
         }
 
@@ -114,5 +143,47 @@ namespace GameStore.Services
 
             return !products.Any() ? null : products;
         }
+
+        public void LoadProductsLoadedFromJSON(string jsonString)
+        {
+            List<Product> results = JsonConvert.DeserializeObject<List<Product>>(jsonString);
+
+            foreach (var product in results)
+            {
+                var colision = FindProduct(product.Name, true);
+                if (colision == null)
+                {
+                    AddProduct(product);
+                }
+                else
+                {
+                    if (colision.IsDeleted == true)
+                    {
+                        colision.IsDeleted = false;                        
+                    }
+                }
+            }
+            storeContext.SaveChanges();
+
+        }
+
+        public void DeleteProductsLoadedFromJSON(string jsonString)
+        {
+            List<Product> results = JsonConvert.DeserializeObject<List<Product>>(jsonString);
+            foreach (var product in results)
+            {
+                var colision = FindProduct(product.Name);
+                if (colision != null)
+                {
+                    if (colision.IsDeleted == false)
+                    {
+                        colision.IsDeleted = true;                        
+                    }
+                }
+            }
+            storeContext.SaveChanges();
+        }
+
+
     }
 }

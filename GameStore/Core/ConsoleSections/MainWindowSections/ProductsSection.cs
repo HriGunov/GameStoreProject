@@ -50,7 +50,11 @@ namespace GameStore.Core.ConsoleSections.MainWindowSections
 
         public void PageDown()
         {
-            currentPageNumber++;
+            currentPageNumber--;
+            if (currentPageNumber<=0)
+            {
+                currentPageNumber = 1;
+            }
         }
 
         public void ChangeTitle(string newTitle)
@@ -177,6 +181,20 @@ namespace GameStore.Core.ConsoleSections.MainWindowSections
             var startPagesIndicatorPosition = width / 2 - pagesIndicatorString.Length / 2;
             consoleManager.SetText(pagesIndicatorString, BottomRightCorner.Y,
                 TopLeftCorner.X + startPagesIndicatorPosition + 1);
+        }
+
+        public void SetPageTo(int pageNumber)
+        {
+            currentPageNumber = pageNumber;
+            if (currentPageNumber<=0)
+            {
+                currentPageNumber = 1;
+            }
+            else if (currentPageNumber >= totalPages)
+            {
+                currentPageNumber = totalPages;
+            }
+            
         }
     }
 }

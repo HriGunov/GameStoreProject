@@ -9,6 +9,8 @@ namespace GameStore.Core.ConsoleSections.MainWindowSections.Abstract
         Order[] OrdersInView { get; set; }
 
         void ChangeTitle(string newTitle);
+        void SetPageTo(int pageNumber);
+
         void PageDown();
         void PageUp();
         void UpdateOrders(IEnumerable<Order> newOrders);

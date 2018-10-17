@@ -1,0 +1,32 @@
+[
+   { "Name":"Banana Adventures",
+      "Description":"Test",
+      "Genre":[{"Name":"Adventure"}],
+      "Price":"39.99"
+   },
+   {"Name":"Banana Adventures II",
+      "Description":"Test",
+      "Genre":[{"Name":"Adventure"}],
+      "Price":"59.99"
+   },
+   { "Name":"Banana Adventures II GOTY",
+      "Description":"Banana Adventures II GOTY Description",
+      "Genre":[{"Name":"Adventure"}],
+      "Price":"79.99"
+   },
+   { "Name":"Generic Title",
+      "Description":"Test",
+      "Genre":[{"Name":"Puzzle"}],
+      "Price":"79.99"
+   },
+   { "Name":"Generic TitleCraft",
+      "Description":"Test",
+      "Genre":[{"Name":"RTS"}],
+      "Price":"66.99"
+   },
+   { "Name":"GenericTitleBattleRoyale",
+      "Description":"Test",
+      "Genre":[{"Name":"FPS"}],
+      "Price":"66.99"
+   }
+]
