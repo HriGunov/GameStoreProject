@@ -23,9 +23,8 @@ namespace GameStore.Commands
 
         public string Execute(List<string> parameters)
         {
-            
             // Get All Products
-            var products = productsService.GetProducts().Where(product => product.IsDeleted ==false);
+            var products = productsService.GetProducts().Where(product => product.IsDeleted == false);
 
 
             if (products == null || !products.Any())
@@ -33,14 +32,11 @@ namespace GameStore.Commands
                 productsSection.UpdateProducts(new List<Product>());
                 engine.MainSection = productsSection;
                 productsSection.ChangeTitle("Products");
-                return "No products are currently available."; 
+                return "No products are currently available.";
             }
 
             productsSection.UpdateProducts(products);
-            if (parameters.Count>= 1)
-            {
-                productsSection.SetPageTo(int.Parse(parameters[0]));
-            }
+            if (parameters.Count >= 1) productsSection.SetPageTo(int.Parse(parameters[0]));
             engine.MainSection = productsSection;
             productsSection.ChangeTitle("Products");
             return $"{products.Count()} Products found.";

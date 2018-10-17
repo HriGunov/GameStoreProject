@@ -9,7 +9,7 @@ namespace GameStore.Services.Abstract
             ICollection<Genre> productGenres = null);
 
         string RemoveProduct(string productName);
-        Product FindProduct(string productName,bool isDeleted = false);
+        Product FindProduct(string productName, bool isDeleted = false);
         IEnumerable<Product> FindProductsByGenre(IEnumerable<Genre> productGenre);
         IEnumerable<Product> FindProductsByGenre(Genre productGenre);
         IEnumerable<Product> GetProducts();

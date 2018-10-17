@@ -1,12 +1,10 @@
-﻿using System;
-using GameStore.Core.Abstract;
+﻿using GameStore.Core.Abstract;
 using GameStore.Core.ConsoleSections.Abstract;
 
 namespace GameStore.Core.ConsoleSections
 {
     public class Section : ISection
     {
-       
         public Section(Position topLeftCorner, Position bottomRight)
         {
             TopLeftCorner = topLeftCorner;
@@ -20,10 +18,9 @@ namespace GameStore.Core.ConsoleSections
 
         public virtual void DrawSection(IConsoleManager consoleManager)
         {
-             
             Clear(consoleManager);
         }
- 
+
         private void Clear(IConsoleManager consoleManager)
         {
             var width = BottomRightCorner.X - TopLeftCorner.X;

@@ -24,7 +24,7 @@ namespace GameStore.Services
 
         public Comment AddCommentToProduct(string productName, string username, string commentText)
         {
-            var commentor = accountsService.FindAccount(username);
+            var commentor = accountsService.FindAccount(username, true);
             if (commentor == null) throw new UserException("Could not find the user who commented...");
             var productToBeCommentedTo = productsService.FindProduct(productName);
             if (productToBeCommentedTo == null) throw new UserException("Could not find product...");
@@ -58,7 +58,7 @@ namespace GameStore.Services
 
         public void RemoveCommentsFromAccount(Account account)
         {
-            var tempAccount = accountsService.FindAccount(account.Username);
+            var tempAccount = accountsService.FindAccount(account.Username, true);
             if (tempAccount == null) throw new UserException("Could not find account.");
             foreach (var comment in tempAccount.Comments)
                 // TODO: Will change it to Flag later...

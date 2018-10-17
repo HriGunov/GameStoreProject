@@ -9,7 +9,7 @@ namespace GameStore.Services.Abstract
             bool isGuest = false);
 
         Account AddAccount(Account account);
-        Account FindAccount(string accountName);
+        Account FindAccount(string accountName, bool getAllData = false);
         Account GetGuestAccount();
         IQueryable<Account> GetAccounts();
         bool IsAdmin(Account account);

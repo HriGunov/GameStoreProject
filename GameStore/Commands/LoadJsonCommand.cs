@@ -1,13 +1,12 @@
-﻿using GameStore.Commands.Abstract;
-using GameStore.Services.Abstract;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
+using GameStore.Commands.Abstract;
+using GameStore.Services.Abstract;
 
 namespace GameStore.Commands
 {
-    class LoadJSONCommand : ICommand
+    internal class LoadJSONCommand : ICommand
     {
         private readonly IProductsService productsService;
 
@@ -25,7 +24,6 @@ namespace GameStore.Commands
             }
             catch (Exception)
             {
-
                 return "Loading of products has failed.";
             }
 

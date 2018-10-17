@@ -8,6 +8,5 @@ namespace GameStore.Core.ConsoleSections.Abstract
         Position TopLeftCorner { get; set; }
         bool Render { get; set; }
         void DrawSection(IConsoleManager consoleManager);
-             
     }
 }

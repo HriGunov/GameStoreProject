@@ -35,16 +35,12 @@ namespace GameStore.Services
 
             var product = new Product
             {
-                   
                 Name = productName,
                 Description = productDescription,
                 Price = productPrice,
                 CreatedOn = DateTime.Now
             };
-            if (product.Name.Length > 20)
-            {
-                product.Name = product.Name.Substring(0, 20);
-            }
+            if (product.Name.Length > 20) product.Name = product.Name.Substring(0, 20);
 
             if (productGenres != null)
                 product.Genre = productGenres;
@@ -76,37 +72,21 @@ namespace GameStore.Services
         /// </summary>
         /// <param name="productName">Product Name</param>
         /// <returns></returns>
-        public Product FindProduct(string productName,bool includeDeleted = false)
+        public Product FindProduct(string productName, bool includeDeleted = false)
         {
             var product = GetProducts().SingleOrDefault(p => p.Name == productName);
 
-            if (product == null)
-            {
+            if (product == null) return null;
+
+            if (includeDeleted) return product;
+
+            if (product.IsDeleted)
                 return null;
-            }
-            else
-            {
-                if (includeDeleted)
-                {
-                    return product;
-                }
-                else
-                {
-                    if (product.IsDeleted)
-                    {
-                        return null;
-                    }
-                    else
-                    {
-                        return product;
-                    }
-                }
-            }
+            return product;
         }
 
         public IEnumerable<Product> FindProductsByGenre(IEnumerable<Genre> productGenre)
         {
-
             var products = GetProducts().Where(p => { return productGenre.All(genre => p.Genre.Contains(genre)); });
 
             return !products.Any() ? null : products;
@@ -114,8 +94,7 @@ namespace GameStore.Services
 
         public IEnumerable<Product> GetProducts()
         {
-             
-            return storeContext.Products               
+            return storeContext.Products
                 .Include(s => s.ShoppingCartProducts)
                 .ThenInclude(cart => cart.Product)
                 .Include(s => s.ShoppingCartProducts)
@@ -165,21 +144,18 @@ namespace GameStore.Services
 
             foreach (var product in results)
             {
-                var colision = FindProduct(product.Name, true);
-                if (colision == null)
+                var collision = FindProduct(product.Name, true);
+                if (collision == null)
                 {
                     AddProduct(product);
                 }
                 else
                 {
-                    if (colision.IsDeleted == true)
-                    {
-                        colision.IsDeleted = false;                        
-                    }
+                    if (collision.IsDeleted) collision.IsDeleted = false;
                 }
             }
-            storeContext.SaveChanges();
 
+            storeContext.SaveChanges();
         }
 
         public void DeleteProductsLoadedFromJSON(string jsonString)
@@ -187,18 +163,14 @@ namespace GameStore.Services
             List<Product> results = JsonConvert.DeserializeObject<List<Product>>(jsonString);
             foreach (var product in results)
             {
-                var colision = FindProduct(product.Name);
-                if (colision != null)
-                {
-                    if (colision.IsDeleted == false)
-                    {
-                        colision.IsDeleted = true;                        
-                    }
-                }
+                var collision = FindProduct(product.Name);
+                if (collision != null)
+                    if (collision.IsDeleted == false)
+                        collision.IsDeleted = true;
             }
+
             storeContext.SaveChanges();
         }
-
 
 
         public Product AddProduct(Product product)

@@ -50,11 +50,11 @@ namespace GameStore.Tests.CommentServiceTests
                 IsAdmin = true
             };
             var mockAccountsService = new Mock<IAccountsService>();
-            mockAccountsService.Setup(service => service.FindAccount(It.IsAny<string>()))
+            mockAccountsService.Setup(service => service.FindAccount(It.IsAny<string>(), true))
                 .Returns(accountToBeReturnedByMock);
 
             var mockProductsService = new Mock<IProductsService>();
-            mockProductsService.Setup(service => service.FindProduct(It.IsAny<string>(),It.IsAny<bool>()))
+            mockProductsService.Setup(service => service.FindProduct(It.IsAny<string>(), It.IsAny<bool>()))
                 .Returns(productToBeReturnedByMock);
 
             //Act

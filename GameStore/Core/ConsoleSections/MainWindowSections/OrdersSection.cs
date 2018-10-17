@@ -42,19 +42,15 @@ namespace GameStore.Core.ConsoleSections.MainWindowSections
                 DrawTitle(consoleManager);
             }
         }
+
         public void SetPageTo(int pageNumber)
         {
             currentPageNumber = pageNumber;
             if (currentPageNumber <= 0)
-            {
                 currentPageNumber = 1;
-            }
-            else if (currentPageNumber >= totalPages)
-            {
-                currentPageNumber = totalPages;
-            }
-
+            else if (currentPageNumber >= totalPages) currentPageNumber = totalPages;
         }
+
         public void PageUp()
         {
             currentPageNumber++;

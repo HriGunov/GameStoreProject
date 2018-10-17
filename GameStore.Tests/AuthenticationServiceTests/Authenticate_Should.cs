@@ -39,7 +39,8 @@ namespace GameStore.Tests.AuthenticationServiceTests
             }
 
             var mockAccountsService = new Mock<IAccountsService>();
-            mockAccountsService.Setup(service => service.FindAccount(It.IsAny<string>())).Returns(accountToBeFound);
+            mockAccountsService.Setup(service => service.FindAccount(It.IsAny<string>(), true))
+                .Returns(accountToBeFound);
 
             Account accFound;
             using (var curContext = new GameStoreContext(options))
@@ -77,7 +78,8 @@ namespace GameStore.Tests.AuthenticationServiceTests
             }
 
             var mockAccountsService = new Mock<IAccountsService>();
-            mockAccountsService.Setup(service => service.FindAccount(It.IsAny<string>())).Returns(accountToBeFound);
+            mockAccountsService.Setup(service => service.FindAccount(It.IsAny<string>(), true))
+                .Returns(accountToBeFound);
 
             Account accFound;
             using (var curContext = new GameStoreContext(options))

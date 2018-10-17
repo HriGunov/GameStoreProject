@@ -25,8 +25,6 @@ namespace GameStore.Commands
         {
             try
             {
-
-
                 if (engine.CurrentUser == null || engine.CurrentUser.IsGuest)
                     return "You need to be logged in to add view your orders.";
 
@@ -35,10 +33,7 @@ namespace GameStore.Commands
 
                 ordersSection.UpdateOrders(orderService.FindOrders(engine.CurrentUser));
 
-                if (parameters.Count >= 1)
-                {
-                    ordersSection.SetPageTo(int.Parse(parameters[0]));
-                }
+                if (parameters.Count >= 1) ordersSection.SetPageTo(int.Parse(parameters[0]));
                 return "Viewing Orders";
             }
             catch (UserException e)

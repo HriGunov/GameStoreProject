@@ -31,7 +31,7 @@ namespace GameStore.Services
             if (!IsUserNameAllowed(userName))
                 throw new UserException($"Account username ({userName}) is not in valid format.");
 
-            if (FindAccount(userName) != null)
+            if (storeContext.Accounts.Where(a => a.Username == userName).SingleOrDefault() != null)
                 throw new UserException($"Account ({userName}) already exists.");
 
             var account = new Account
@@ -72,8 +72,8 @@ namespace GameStore.Services
         /// <returns></returns>
         public string RemoveAccount(Account commandExecutor, Account accountName)
         {
-            var account = GetAccounts().FirstOrDefault(acc => acc.Username == accountName.Username);
-            if (account == null || account.IsDeleted) return $"Account {accountName.Username} was not found.";
+            var account = storeContext.Accounts.Where(a => a.Username == accountName.Username).Single();
+            if (account.IsDeleted) return $"Account {accountName.Username} was not found.";
 
             account.IsDeleted = true;
             account.DeletedBy = commandExecutor.Username;
@@ -87,8 +87,7 @@ namespace GameStore.Services
         /// <param name="account">Account Type</param>
         public bool IsAdmin(Account account)
         {
-            return GetAccounts().SingleOrDefault(acc => acc.Username == account.Username && acc.IsAdmin) !=
-                   null;
+            return storeContext.Accounts.Where(a => a.Username == account.Username).Select(a => a.IsAdmin).Single();
         }
 
         /// <summary>
@@ -98,9 +97,7 @@ namespace GameStore.Services
         /// <param name="account">Account Type</param>
         public void AddCreditCard(string cardNumber, Account account)
         {
-            var tempAccount = GetAccounts().SingleOrDefault(a => a.Username == account.Username);
-            if (tempAccount == null)
-                throw new UserException($"Account {account.Username} was not found.");
+            var tempAccount = storeContext.Accounts.Where(a => a.Username == account.Username).Single();
 
             tempAccount.CreditCard = cardNumber;
             storeContext.SaveChanges();
@@ -112,10 +109,15 @@ namespace GameStore.Services
         /// </summary>
         /// <param name="accountName">Account Name</param>
         /// <returns></returns>
-        public Account FindAccount(string accountName)
+        public Account FindAccount(string accountName, bool getAllData = false)
         {
-            var account = GetAccounts().SingleOrDefault(p =>
-                string.Equals(p.Username, accountName, StringComparison.CurrentCultureIgnoreCase));
+            Account account;
+
+            if (getAllData)
+                account = GetAccounts().SingleOrDefault(p =>
+                    string.Equals(p.Username, accountName, StringComparison.CurrentCultureIgnoreCase));
+            else
+                account = storeContext.Accounts.Where(a => a.Username == accountName).SingleOrDefault();
 
             return account == null || account.IsDeleted ? null : account;
         }
@@ -128,8 +130,7 @@ namespace GameStore.Services
         /// <returns></returns>
         public string RestoreAccount(Account commandExecutor, Account accountName)
         {
-            var account = GetAccounts().SingleOrDefault(acc => acc.Username == accountName.Username);
-            if (account == null) return $"Account {accountName} was not found.";
+            var account = storeContext.Accounts.Where(a => a.Username == accountName.Username).Single();
             if (!account.IsDeleted) return $"Account {accountName} is already restored.";
 
             account.IsDeleted = false;
@@ -144,7 +145,7 @@ namespace GameStore.Services
         /// <returns></returns>
         public Account GetGuestAccount()
         {
-            return GetAccounts().SingleOrDefault(acc => acc.IsGuest);
+            return storeContext.Accounts.Where(a => a.IsGuest).Single();
         }
 
         /// <summary>

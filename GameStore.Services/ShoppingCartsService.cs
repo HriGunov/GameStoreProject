@@ -11,17 +11,13 @@ namespace GameStore.Services
     public class ShoppingCartsService : IShoppingCartsService
     {
         private readonly IAccountsService accountService;
-        private readonly IProductsService productService;
         private readonly IGameStoreContext storeContext;
 
-        public ShoppingCartsService(IGameStoreContext storeContext, IAccountsService accountService,
-            IProductsService productService)
+        public ShoppingCartsService(IGameStoreContext storeContext, IAccountsService accountService)
         {
             this.storeContext = storeContext ?? throw new ArgumentNullException(nameof(storeContext));
             this.accountService = accountService;
-            this.productService = productService;
         }
-
 
         /// <summary>
         ///     Adds the given product in the parameters to the account's cart.
@@ -127,7 +123,7 @@ namespace GameStore.Services
         /// <param name="account">Account Type</param>
         public ShoppingCart GetUserCart(Account account)
         {
-            return accountService.GetAccounts().FirstOrDefault(a => a.Id == account.Id).ShoppingCart;
+            return accountService.GetAccounts().Single(a => a.Id == account.Id).ShoppingCart;
         }
 
         /// <summary>

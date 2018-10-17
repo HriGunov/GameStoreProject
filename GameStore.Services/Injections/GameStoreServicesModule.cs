@@ -14,7 +14,6 @@ namespace GameStore.Services.Injections
             builder.RegisterType<CommentService>().As<ICommentService>();
             builder.RegisterType<ShoppingCartsService>().As<IShoppingCartsService>();
             builder.RegisterType<OrderService>().As<IOrderService>();
-            builder.RegisterType<SaveContextService>().As<ISaveContextService>();
         }
     }
 }

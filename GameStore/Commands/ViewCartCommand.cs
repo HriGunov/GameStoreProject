@@ -24,22 +24,21 @@ namespace GameStore.Commands
 
         public string Execute(List<string> parameters)
         {
-            try {  
-            if (engine.CurrentUser == null || engine.CurrentUser.IsGuest)
-                return "You need to be logged in to add view your shopping cart.";
+            try
+            {
+                if (engine.CurrentUser == null || engine.CurrentUser.IsGuest)
+                    return "You need to be logged in to add view your shopping cart.";
 
-            var tempCart = shoppingCartService.GetUserCart(engine.CurrentUser);
+                var tempCart = shoppingCartService.GetUserCart(engine.CurrentUser);
 
-            if (tempCart.ShoppingCartProducts == null || !tempCart.ShoppingCartProducts.Any())
-                return "You need to have products in your shopping cart.";
+                if (tempCart.ShoppingCartProducts == null || !tempCart.ShoppingCartProducts.Any())
+                    return "You need to have products in your shopping cart.";
 
-            engine.MainSection = productsSection;
-            productsSection.ChangeTitle("Shopping Cart");
+                engine.MainSection = productsSection;
+                productsSection.ChangeTitle("Shopping Cart");
 
-                productsSection.UpdateProducts(tempCart.ShoppingCartProducts.Select(cart => cart.Product));                 
-                if (parameters.Count >= 1)                {
-                    productsSection.SetPageTo(int.Parse(parameters[0]));
-                }
+                productsSection.UpdateProducts(tempCart.ShoppingCartProducts.Select(cart => cart.Product));
+                if (parameters.Count >= 1) productsSection.SetPageTo(int.Parse(parameters[0]));
                 return "Viewing cart";
             }
             catch (UserException e)
