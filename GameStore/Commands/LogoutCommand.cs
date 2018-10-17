@@ -18,7 +18,7 @@ namespace GameStore.Commands
 
         public string Execute(List<string> parameters)
         {
-            if (engine.CurrentUser.IsGuest) return "You have to be logged in first.";
+            if (engine.CurrentUser == null || engine.CurrentUser.IsGuest) return "You have to be logged in first.";
             engine.CurrentUser = accountsService.GetGuestAccount();
 
             engine.MainSection = engine.DefaultMainSection;

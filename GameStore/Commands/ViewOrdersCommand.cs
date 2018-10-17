@@ -9,17 +9,15 @@ namespace GameStore.Commands
 {
     internal class ViewOrdersCommand : ICommand
     {
-        private readonly IConsoleManager consoleManager;
         private readonly IEngine engine;
         private readonly IOrderService orderService;
         private readonly IOrdersSection ordersSection;
 
-        public ViewOrdersCommand(IEngine engine, IOrdersSection ordersSection, IConsoleManager consoleManager,
+        public ViewOrdersCommand(IEngine engine, IOrdersSection ordersSection,
             IOrderService orderService)
         {
             this.engine = engine;
             this.ordersSection = ordersSection;
-            this.consoleManager = consoleManager;
             this.orderService = orderService;
         }
 
@@ -27,6 +25,8 @@ namespace GameStore.Commands
         {
             try
             {
+
+
                 if (engine.CurrentUser == null || engine.CurrentUser.IsGuest)
                     return "You need to be logged in to add view your orders.";
 
@@ -34,7 +34,7 @@ namespace GameStore.Commands
                 ordersSection.ChangeTitle("Your Orders");
 
                 ordersSection.UpdateOrders(orderService.FindOrders(engine.CurrentUser));
-                
+
                 if (parameters.Count >= 1)
                 {
                     ordersSection.SetPageTo(int.Parse(parameters[0]));

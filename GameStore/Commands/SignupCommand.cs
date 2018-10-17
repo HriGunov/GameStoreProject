@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using GameStore.Commands.Abstract;
 using GameStore.Core.Abstract;
-using GameStore.Exceptions;
 using GameStore.Services.Abstract;
 
 namespace GameStore.Commands
@@ -45,14 +44,7 @@ namespace GameStore.Commands
             var lastName = consoleManager.ListenForCommand();
             consoleManager.LogMessage(lastName);
 
-            try
-            {
-                accountsService.AddAccount(firstName, lastName, username, cryptographicService.ComputeHash(password));
-            }
-            catch (UserException e)
-            {
-                return e.Message;
-            }
+            accountsService.AddAccount(firstName, lastName, username, cryptographicService.ComputeHash(password));
 
             return $"Account {username} has been created.";
         }
