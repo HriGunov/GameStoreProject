@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Principal;
+using Microsoft.AspNetCore.Identity;
 
 namespace GameStore.Data.Models
 {
-    public class Account
+    public class Account : IdentityUser
     {
         public int Id { get; set; }
 

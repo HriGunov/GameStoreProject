@@ -1,11 +1,12 @@
 ﻿using GameStore.Data.Context.Abstract;
 using GameStore.Data.Context.Configurations;
 using GameStore.Data.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace GameStore.Data.Context
 {
-    public class GameStoreContext : DbContext, IGameStoreContext
+    public class GameStoreContext : IdentityDbContext, IGameStoreContext
     {
         public GameStoreContext()
         {
