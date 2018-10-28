@@ -1,17 +1,17 @@
-﻿using GameStore.Data.Context.Abstract;
+﻿using System;
+using System.Linq;
+using GameStore.Data.Context.Abstract;
 using GameStore.Data.Context.Configurations;
 using GameStore.Data.Models;
+using GameStore.Data.Models.Abstract;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace GameStore.Data.Context
 {
-    public class GameStoreContext : IdentityDbContext, IGameStoreContext
+    public class GameStoreContext : IdentityDbContext<Account>, IGameStoreContext
     {
-        public GameStoreContext()
-        {
-        }
-
         public GameStoreContext(DbContextOptions options) : base(options)
         {
         }
@@ -25,14 +25,14 @@ namespace GameStore.Data.Context
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderProducts> OrdersProducts { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public override int SaveChanges()
         {
-            if (!optionsBuilder.IsConfigured)
-                optionsBuilder
-                    .UseSqlServer(
-                        "Server=tcp:gamestoretp.database.windows.net,1433;Initial Catalog=gamestore;Persist Security Info=False;User ID=gamestoreroot;Password=Root123#$;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
-        }
+            this.ApplyAuditInfoRules();
+            this.ApplyDeletionRules();
 
+            return base.SaveChanges();
+        }
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new AccountConfiguration());
@@ -45,5 +45,40 @@ namespace GameStore.Data.Context
 
             base.OnModelCreating(modelBuilder);
         }
+
+        private void ApplyDeletionRules()
+        {
+            var entitiesForDeletion = this.ChangeTracker.Entries()
+                .Where(e => e.State == EntityState.Deleted && e.Entity is IDeletable);
+
+            foreach (var entry in entitiesForDeletion)
+            {
+                var entity = (IDeletable)entry.Entity;
+                entity.DeletedOn = DateTime.Now;
+                entity.IsDeleted = true;
+                entry.State = EntityState.Modified;
+            }
+        }
+
+        private void ApplyAuditInfoRules()
+        {
+            var newlyCreatedEntities = this.ChangeTracker.Entries()
+                .Where(e => e.Entity is IAuditable && ((e.State == EntityState.Added) || (e.State == EntityState.Modified)));
+
+            foreach (var entry in newlyCreatedEntities)
+            {
+                var entity = (IAuditable) entry.Entity;
+
+                if (entry.State == EntityState.Added && entity.CreatedOn == null)
+                {
+                    entity.CreatedOn = DateTime.Now;
+                }
+                else
+                {
+                    entity.ModifiedOn = DateTime.Now;
+                }
+            }
+        }
+
     }
 }

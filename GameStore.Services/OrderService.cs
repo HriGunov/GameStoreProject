@@ -54,12 +54,12 @@ namespace GameStore.Services
 
         public IEnumerable<Order> FindOrders(Account account)
         {
-            return GetOrders().Where(o => o.AccountId == account.Id);
+            return GetOrders().Where(o => o.AccountId == int.Parse(account.Id));
         }
 
         public Order FindLastOrder(Account account)
         {
-            return GetOrders().LastOrDefault(o => o.AccountId == account.Id);
+            return GetOrders().LastOrDefault(o => o.AccountId == int.Parse(account.Id));
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace GameStore.Services
         {
             var newOrder = new Order
             {
-                AccountId = account.Id,
+                AccountId = int.Parse(account.Id),
                 OrderTimestamp = DateTime.Now
             };
             storeContext.Orders.Add(newOrder);

@@ -28,11 +28,12 @@ namespace GameStore.Services
             if (commentor == null) throw new UserException("Could not find the user who commented...");
             var productToBeCommentedTo = productsService.FindProduct(productName);
             if (productToBeCommentedTo == null) throw new UserException("Could not find product...");
-            if (productToBeCommentedTo.Comments.Any(x => x.AccountId == commentor.Id && x.Text == commentText))
+            if (productToBeCommentedTo.Comments.Any(x => x.AccountId == int.Parse(commentor.Id) && x.Text == commentText))
                 throw new UserException("Cannot add duplicate comments...");
+
             var newComment = new Comment
             {
-                AccountId = commentor.Id,
+                AccountId = int.Parse(commentor.Id),
                 Text = commentText,
                 ProductId = productToBeCommentedTo.Id,
                 TimeStamp = DateTime.Now,
