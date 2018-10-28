@@ -33,7 +33,7 @@ namespace GameStore.Web
             services.AddDbContext<GameStoreContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<Account, IdentityRole>()
+            services.AddIdentity<Account, IdentityRole>(config => config.SignIn.RequireConfirmedEmail = true)
                 .AddEntityFrameworkStores<GameStoreContext>()
                 .AddDefaultTokenProviders();
 
@@ -56,7 +56,7 @@ namespace GameStore.Web
             }
 
             // Add application services.
-            services.AddTransient<IEmailSender, EmailSender>();
+            services.AddSingleton<IEmailSender, EmailSender>();
 
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
