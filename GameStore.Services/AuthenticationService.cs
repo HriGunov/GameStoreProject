@@ -21,7 +21,7 @@ namespace GameStore.Services
         public Account Authenticate(string username, string password)
         {
             var foundAccount = accountsService.FindAccount(username, true);
-            return foundAccount == null ? null : foundAccount.Password == password ? foundAccount : null;
+            return foundAccount == null ? null : foundAccount.PasswordHash == password ? foundAccount : null;
         }
     }
 }

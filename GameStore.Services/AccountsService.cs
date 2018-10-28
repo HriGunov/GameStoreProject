@@ -31,15 +31,15 @@ namespace GameStore.Services
             if (!IsUserNameAllowed(userName))
                 throw new UserException($"Account username ({userName}) is not in valid format.");
 
-            if (storeContext.Accounts.Where(a => a.Username == userName).SingleOrDefault() != null)
+            if (storeContext.Accounts.Where(a => a.UserName == userName).SingleOrDefault() != null)
                 throw new UserException($"Account ({userName}) already exists.");
 
             var account = new Account
             {
                 FirstName = firstName,
                 LastName = lastName,
-                Username = userName,
-                Password = password,
+                UserName = userName,
+                PasswordHash = password,
                 CreatedOn = DateTime.Now,
                 ShoppingCart = new ShoppingCart(),
                 OrderProducts = new List<Order>(),
@@ -60,7 +60,7 @@ namespace GameStore.Services
         /// <returns></returns>
         public Account AddAccount(Account account)
         {
-            return AddAccount(account.FirstName, account.LastName, account.Username, account.Password, account.IsAdmin,
+            return AddAccount(account.FirstName, account.LastName, account.UserName, account.PasswordHash, account.IsAdmin,
                 account.IsGuest);
         }
 
@@ -72,11 +72,11 @@ namespace GameStore.Services
         /// <returns></returns>
         public string RemoveAccount(Account commandExecutor, Account accountName)
         {
-            var account = storeContext.Accounts.Where(a => a.Username == accountName.Username).Single();
-            if (account.IsDeleted) return $"Account {accountName.Username} was not found.";
+            var account = storeContext.Accounts.Where(a => a.UserName == accountName.UserName).Single();
+            if (account.IsDeleted) return $"Account {accountName.UserName} was not found.";
 
             account.IsDeleted = true;
-            account.DeletedBy = commandExecutor.Username;
+            account.DeletedBy = commandExecutor.UserName;
             storeContext.SaveChanges();
             return $"Account {accountName} has been successfully removed.";
         }
@@ -87,7 +87,7 @@ namespace GameStore.Services
         /// <param name="account">Account Type</param>
         public bool IsAdmin(Account account)
         {
-            return storeContext.Accounts.Where(a => a.Username == account.Username).Select(a => a.IsAdmin).Single();
+            return storeContext.Accounts.Where(a => a.UserName == account.UserName).Select(a => a.IsAdmin).Single();
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace GameStore.Services
         /// <param name="account">Account Type</param>
         public void AddCreditCard(string cardNumber, Account account)
         {
-            var tempAccount = storeContext.Accounts.Where(a => a.Username == account.Username).Single();
+            var tempAccount = storeContext.Accounts.Where(a => a.UserName == account.UserName).Single();
 
             tempAccount.CreditCard = cardNumber;
             storeContext.SaveChanges();
@@ -115,9 +115,9 @@ namespace GameStore.Services
 
             if (getAllData)
                 account = GetAccounts().SingleOrDefault(p =>
-                    string.Equals(p.Username, accountName, StringComparison.CurrentCultureIgnoreCase));
+                    string.Equals(p.UserName, accountName, StringComparison.CurrentCultureIgnoreCase));
             else
-                account = storeContext.Accounts.Where(a => a.Username == accountName).SingleOrDefault();
+                account = storeContext.Accounts.Where(a => a.UserName == accountName).SingleOrDefault();
 
             return account == null || account.IsDeleted ? null : account;
         }
@@ -130,7 +130,7 @@ namespace GameStore.Services
         /// <returns></returns>
         public string RestoreAccount(Account commandExecutor, Account accountName)
         {
-            var account = storeContext.Accounts.Where(a => a.Username == accountName.Username).Single();
+            var account = storeContext.Accounts.Where(a => a.UserName == accountName.UserName).Single();
             if (!account.IsDeleted) return $"Account {accountName} is already restored.";
 
             account.IsDeleted = false;

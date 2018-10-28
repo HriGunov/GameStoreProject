@@ -50,7 +50,7 @@ namespace GameStore.Commands
 
             engine.CurrentUser = result;
             consoleManager.LogMessage("Successful Login.", true);
-            return $"Welcome {engine.CurrentUser.Username}!";
+            return $"Welcome {engine.CurrentUser.UserName}!";
         }
     }
 }

@@ -20,8 +20,8 @@ namespace GameStore.Tests.AccountsServiceTests
 
             var accountToBeFound = new Account
             {
-                Username = "TestUsername",
-                Password = "foo",
+                UserName = "TestUsername",
+                PasswordHash = "foo",
                 FirstName = "FirstName",
                 LastName = "LastName",
                 CreatedOn = DateTime.Now,
@@ -42,12 +42,12 @@ namespace GameStore.Tests.AccountsServiceTests
             using (var curContext = new GameStoreContext(options))
             {
                 var sut = new AccountsService(curContext);
-                accountFound = sut.FindAccount(accountToBeFound.Username);
+                accountFound = sut.FindAccount(accountToBeFound.UserName);
             }
 
             //Assert
             Assert.IsTrue(accountFound != null);
-            Assert.IsTrue(accountFound.Username == accountToBeFound.Username);
+            Assert.IsTrue(accountFound.UserName == accountToBeFound.UserName);
         }
     }
 }

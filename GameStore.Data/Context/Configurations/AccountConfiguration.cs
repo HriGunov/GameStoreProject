@@ -12,9 +12,6 @@ namespace GameStore.Data.Context.Configurations
 
             builder.ToTable("Accounts");
 
-            builder.HasIndex(a => a.Username)
-                .IsUnique(true);
-
             builder.Property(x => x.FirstName)
                 .HasMaxLength(20)
                 .IsRequired(false);
@@ -22,13 +19,6 @@ namespace GameStore.Data.Context.Configurations
             builder.Property(x => x.LastName)
                 .HasMaxLength(20)
                 .IsRequired(false);
-
-            builder.Property(x => x.Username)
-                .HasMaxLength(20)
-                .IsRequired(true);
-
-            builder.Property(x => x.Password)
-                .IsRequired(true);
 
             #endregion
         }

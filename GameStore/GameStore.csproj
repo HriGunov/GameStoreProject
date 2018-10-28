@@ -8,6 +8,7 @@
   <ItemGroup>
     <ProjectReference Include="..\GameStore.Data\GameStore.Data.csproj" />
     <ProjectReference Include="..\GameStore.Services\GameStore.Services.csproj" />
+    <ProjectReference Include="..\GameStore.Web\GameStore.Web.csproj" />
   </ItemGroup>
 
   <ItemGroup>

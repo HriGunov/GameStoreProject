@@ -59,11 +59,11 @@ namespace GameStore.Services
 
         public void RemoveCommentsFromAccount(Account account)
         {
-            var tempAccount = accountsService.FindAccount(account.Username, true);
+            var tempAccount = accountsService.FindAccount(account.UserName, true);
             if (tempAccount == null) throw new UserException("Could not find account.");
             foreach (var comment in tempAccount.Comments)
                 // TODO: Will change it to Flag later...
-                storeContext.Accounts.Include(c => c.Comments).ToList().Single(a => a.Username == account.Username)
+                storeContext.Accounts.Include(c => c.Comments).ToList().Single(a => a.UserName == account.UserName)
                     .Comments.Remove(comment);
             storeContext.SaveChanges();
         }

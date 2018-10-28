@@ -10,13 +10,7 @@ namespace GameStore.Data.Models
     public class Account : IdentityUser, IAuditable, IDeletable
     {
         public string FirstName { get; set; }
-
         public string LastName { get; set; }
-
-        public string Username { get; set; }
-
-        // SHA-512
-        public string Password { get; set; }
         public string CreditCard { get; set; }
         public string DeletedBy { get; set; }
 

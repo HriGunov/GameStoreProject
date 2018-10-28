@@ -21,8 +21,8 @@ namespace GameStore.Tests.AuthenticationServiceTests
 
             var accountToBeFound = new Account
             {
-                Username = "TestUsername",
-                Password = "TestPassword",
+                UserName = "TestUsername",
+                PasswordHash = "TestPassword",
                 FirstName = "FirstName",
                 LastName = "LastName",
                 CreatedOn = DateTime.Now,
@@ -46,10 +46,10 @@ namespace GameStore.Tests.AuthenticationServiceTests
             using (var curContext = new GameStoreContext(options))
             {
                 var sut = new AuthenticationService(mockAccountsService.Object);
-                accFound = sut.Authenticate(accountToBeFound.Username, accountToBeFound.Password);
+                accFound = sut.Authenticate(accountToBeFound.UserName, accountToBeFound.PasswordHash);
             }
 
-            Assert.IsTrue(accFound.Username == accountToBeFound.Username);
+            Assert.IsTrue(accFound.UserName == accountToBeFound.UserName);
         }
 
         [TestMethod]
@@ -60,8 +60,8 @@ namespace GameStore.Tests.AuthenticationServiceTests
 
             var accountToBeFound = new Account
             {
-                Username = "TestUsername",
-                Password = "TestPassword",
+                UserName = "TestUsername",
+                PasswordHash = "TestPassword",
                 FirstName = "FirstName",
                 LastName = "LastName",
                 CreatedOn = DateTime.Now,
@@ -85,7 +85,7 @@ namespace GameStore.Tests.AuthenticationServiceTests
             using (var curContext = new GameStoreContext(options))
             {
                 var sut = new AuthenticationService(mockAccountsService.Object);
-                accFound = sut.Authenticate(accountToBeFound.Username, "Some Password");
+                accFound = sut.Authenticate(accountToBeFound.UserName, "Some Password");
             }
 
             Assert.IsTrue(accFound == null);

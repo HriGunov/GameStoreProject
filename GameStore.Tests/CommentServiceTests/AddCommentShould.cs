@@ -39,8 +39,8 @@ namespace GameStore.Tests.CommentServiceTests
 
             var accountToBeReturnedByMock = new Account
             {
-                Username = "TestUsername",
-                Password = "TestPassword",
+                UserName = "TestUsername",
+                PasswordHash = "TestPassword",
                 FirstName = "FirstName",
                 LastName = "LastName",
                 CreatedOn = DateTime.Now,
@@ -61,7 +61,7 @@ namespace GameStore.Tests.CommentServiceTests
             using (var curContext = new GameStoreContext(options))
             {
                 var sut = new CommentService(curContext, mockAccountsService.Object, mockProductsService.Object);
-                sut.AddCommentToProduct(productToBeReturnedByMock.Name, accountToBeReturnedByMock.Username,
+                sut.AddCommentToProduct(productToBeReturnedByMock.Name, accountToBeReturnedByMock.UserName,
                     "TestDescription");
                 curContext.SaveChanges();
             }
@@ -72,8 +72,8 @@ namespace GameStore.Tests.CommentServiceTests
             {
                 Assert.IsTrue(curContext.Comments.Count() == 1);
                 Assert.IsTrue(curContext.Comments.FirstOrDefault().Text == "TestDescription");
-                Assert.IsTrue(curContext.Comments.Include(c => c.Account).FirstOrDefault().Account.Username ==
-                              accountToBeReturnedByMock.Username);
+                Assert.IsTrue(curContext.Comments.Include(c => c.Account).FirstOrDefault().Account.UserName ==
+                              accountToBeReturnedByMock.UserName);
             }
         }
     }

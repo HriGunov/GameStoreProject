@@ -40,7 +40,7 @@ namespace GameStore.Services
             var tempCart = account.ShoppingCart;
 
             if (tempCart == null)
-                throw new UserException($"User ({account.Username}) doesn't have Shopping Cart.");
+                throw new UserException($"User ({account.UserName}) doesn't have Shopping Cart.");
 
             var shoppingCart = new ShoppingCartProducts
             {
@@ -74,7 +74,7 @@ namespace GameStore.Services
             var tempCart = account.ShoppingCart;
 
             if (tempCart == null)
-                throw new UserException($"User ({account.Username}) doesn't have Shopping Cart.");
+                throw new UserException($"User ({account.UserName}) doesn't have Shopping Cart.");
 
             foreach (var p in product)
                 if (p != null)

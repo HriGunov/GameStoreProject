@@ -1,5 +1,6 @@
-﻿@using GameStore.Web.Views.Manage
-@inject SignInManager<ApplicationUser> SignInManager
+﻿@using GameStore.Data.Models
+@using GameStore.Web.Views.Manage
+@inject SignInManager<Account> SignInManager
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }

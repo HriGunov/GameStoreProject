@@ -33,7 +33,7 @@ namespace GameStore.Tests.AccountsServiceTests
                 {
                     var validUser = new Account
                     {
-                        Username = $"TestUsername{i}", Password = "foo", FirstName = "FirstName", LastName = "LastName"
+                        UserName = $"TestUsername{i}", PasswordHash = "foo", FirstName = "FirstName", LastName = "LastName"
                     };
 
 
@@ -68,7 +68,7 @@ namespace GameStore.Tests.AccountsServiceTests
                 var sut = new AccountsService(curContext);
 
                 var validUser = new Account
-                    {Username = name, Password = "foo", FirstName = "FirstName", LastName = "LastName"};
+                    {UserName = name, PasswordHash = "foo", FirstName = "FirstName", LastName = "LastName"};
 
                 sut.AddAccount(validUser);
             }
