@@ -145,7 +145,7 @@ namespace GameStore.Services
         /// <returns></returns>
         public Account GetGuestAccount()
         {
-            return storeContext.Accounts.Where(a => a.IsGuest).Single();
+            return storeContext.Accounts.Where(a => a.IsGuest).SingleOrDefault();
         }
 
         /// <summary>
