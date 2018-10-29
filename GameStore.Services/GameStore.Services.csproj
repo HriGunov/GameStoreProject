@@ -13,4 +13,7 @@
     <ProjectReference Include="..\GameStore.Data\GameStore.Data.csproj" />
     <ProjectReference Include="..\GameStore.Exceptions\GameStore.Exceptions.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Injections\GameStoreServicesModule.cs" />
+  </ItemGroup>
 </Project>

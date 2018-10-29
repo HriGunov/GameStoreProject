@@ -22,6 +22,7 @@
     <ProjectReference Include="..\GameStore.Data\GameStore.Data.csproj" />
     <ProjectReference Include="..\GameStore.Exceptions\GameStore.Exceptions.csproj" />
     <ProjectReference Include="..\GameStore.Services\GameStore.Services.csproj" />
+    <ProjectReference Include="..\GameStore.External.Services\GameStore.External.Services.csproj" />
   </ItemGroup>
 
 </Project>

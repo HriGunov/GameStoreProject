@@ -13,6 +13,8 @@ using Microsoft.Extensions.DependencyInjection;
 using GameStore.Web.Models;
 using GameStore.Web.Services;
 using Microsoft.AspNetCore.Mvc;
+using GameStore.Services.Abstract;
+using GameStore.Services;
 
 namespace GameStore.Web
 {
@@ -33,7 +35,7 @@ namespace GameStore.Web
             services.AddDbContext<GameStoreContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<Account, IdentityRole>(config => config.SignIn.RequireConfirmedEmail = true)
+            services.AddIdentity<Account, IdentityRole>()
                 .AddEntityFrameworkStores<GameStoreContext>()
                 .AddDefaultTokenProviders();
 
@@ -57,6 +59,12 @@ namespace GameStore.Web
 
             // Add application services.
             services.AddSingleton<IEmailSender, EmailSender>();
+
+            services.AddScoped<IProductsService, ProductsService>();
+            services.AddScoped<IAccountsService, AccountsService>();
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IShoppingCartsService, ShoppingCartsService>();
+            services.AddScoped<ICommentService, CommentService>();
 
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
