@@ -13,8 +13,9 @@ using Microsoft.Extensions.DependencyInjection;
 using GameStore.Web.Models;
 using GameStore.Web.Services;
 using Microsoft.AspNetCore.Mvc;
-using GameStore.Services.Abstract;
+using GameStore.Data.Context.Abstract;
 using GameStore.Services;
+using GameStore.Services.Abstract;
 
 namespace GameStore.Web
 {
@@ -32,6 +33,7 @@ namespace GameStore.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddDbContext<GameStoreContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -66,6 +68,7 @@ namespace GameStore.Web
             services.AddScoped<IShoppingCartsService, ShoppingCartsService>();
             services.AddScoped<ICommentService, CommentService>();
 
+            services.AddScoped<IGameStoreContext, GameStoreContext>();
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

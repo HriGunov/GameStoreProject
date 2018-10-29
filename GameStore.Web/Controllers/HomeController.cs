@@ -5,11 +5,18 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using GameStore.Web.Models;
+using GameStore.Services.Abstract;
 
 namespace GameStore.Web.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IProductsService productsService;
+
+        public HomeController(IProductsService productsService)
+        {
+            this.productsService = productsService;
+        }
         public IActionResult Index()
         {
             return View();
@@ -17,7 +24,7 @@ namespace GameStore.Web.Controllers
 
         public IActionResult About()
         {
-            ViewData["Message"] = "Your application description page.";
+            ViewData["Message"] = productsService.FindProduct("Banana").Name;
 
             return View();
         }
