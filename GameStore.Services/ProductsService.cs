@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GameStore.Data.Context.Abstract;
+using GameStore.Data.Context;
 using GameStore.Data.Models;
 using GameStore.Exceptions;
 using GameStore.Services.Abstract;
@@ -12,9 +12,9 @@ namespace GameStore.Services
 {
     public class ProductsService : IProductsService
     {
-        private readonly IGameStoreContext storeContext;
+        private readonly GameStoreContext storeContext;
 
-        public ProductsService(IGameStoreContext storeContext)
+        public ProductsService(GameStoreContext storeContext)
         {
             this.storeContext = storeContext ?? throw new ArgumentNullException(nameof(storeContext));
         }

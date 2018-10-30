@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using GameStore.Data.Context.Abstract;
+using GameStore.Data.Context; 
 using GameStore.Data.Models;
 using GameStore.Exceptions;
 using GameStore.Services.Abstract;
@@ -15,9 +15,9 @@ namespace GameStore.Services
         private const string Pattern = @"^(?=[a-zA-Z])[-\w.]{0,23}([a-zA-Z\d]|(?<![-.])_)$";
         private static readonly Regex usernameFormat = new Regex(Pattern);
 
-        private readonly IGameStoreContext storeContext;
+        private readonly GameStoreContext storeContext;
 
-        public AccountsService(IGameStoreContext storeContext)
+        public AccountsService(GameStoreContext storeContext)
         {
             this.storeContext = storeContext ?? throw new ArgumentNullException(nameof(storeContext));
         }

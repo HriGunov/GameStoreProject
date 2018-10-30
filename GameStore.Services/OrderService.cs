@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GameStore.Data.Context.Abstract;
+using GameStore.Data.Context;
 using GameStore.Data.Models;
 using GameStore.Services.Abstract;
 using Microsoft.EntityFrameworkCore;
@@ -10,9 +10,9 @@ namespace GameStore.Services
 {
     public class OrderService : IOrderService
     {
-        private readonly IGameStoreContext storeContext;
+        private readonly GameStoreContext storeContext;
 
-        public OrderService(IGameStoreContext storeContext)
+        public OrderService(GameStoreContext storeContext)
         {
             this.storeContext = storeContext ?? throw new ArgumentNullException(nameof(storeContext));
         }

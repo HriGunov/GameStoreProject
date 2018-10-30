@@ -13,7 +13,6 @@ using Microsoft.Extensions.DependencyInjection;
 using GameStore.Web.Models;
 using GameStore.Web.Services;
 using Microsoft.AspNetCore.Mvc;
-using GameStore.Data.Context.Abstract;
 using GameStore.Services;
 using GameStore.Services.Abstract;
 
@@ -68,7 +67,7 @@ namespace GameStore.Web
             services.AddScoped<IShoppingCartsService, ShoppingCartsService>();
             services.AddScoped<ICommentService, CommentService>();
 
-            services.AddScoped<IGameStoreContext, GameStoreContext>();
+           
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

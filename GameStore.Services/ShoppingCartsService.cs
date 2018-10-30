@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GameStore.Data.Context.Abstract;
+using GameStore.Data.Context;
 using GameStore.Data.Models;
 using GameStore.Exceptions;
 using GameStore.Services.Abstract;
@@ -11,9 +11,9 @@ namespace GameStore.Services
     public class ShoppingCartsService : IShoppingCartsService
     {
         private readonly IAccountsService accountService;
-        private readonly IGameStoreContext storeContext;
+        private readonly GameStoreContext storeContext;
 
-        public ShoppingCartsService(IGameStoreContext storeContext, IAccountsService accountService)
+        public ShoppingCartsService(GameStoreContext storeContext, IAccountsService accountService)
         {
             this.storeContext = storeContext ?? throw new ArgumentNullException(nameof(storeContext));
             this.accountService = accountService;

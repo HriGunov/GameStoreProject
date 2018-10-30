@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using GameStore.Data.Context.Abstract;
 using GameStore.Data.Context.Configurations;
 using GameStore.Data.Models;
 using GameStore.Data.Models.Abstract;
@@ -10,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GameStore.Data.Context
 {
-    public class GameStoreContext : IdentityDbContext<Account>, IGameStoreContext
+    public class GameStoreContext : IdentityDbContext<Account>
     {
         public GameStoreContext(DbContextOptions options) : base(options)
         {
