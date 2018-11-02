@@ -67,7 +67,7 @@ namespace GameStore.Web
             services.AddScoped<IShoppingCartsService, ShoppingCartsService>();
             services.AddScoped<ICommentService, CommentService>();
 
-           
+
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
@@ -93,8 +93,8 @@ namespace GameStore.Web
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                    name : "areas",
-                    template : "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                    name: "areas",
+                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
                 );
 
                 routes.MapRoute(
