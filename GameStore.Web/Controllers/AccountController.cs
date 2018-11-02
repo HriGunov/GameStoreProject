@@ -24,17 +24,20 @@ namespace GameStore.Web.Controllers
     {
         private readonly UserManager<Account> _userManager;
         private readonly SignInManager<Account> _signInManager;
+        private readonly RoleManager<Account> _roleManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
 
         public AccountController(
             UserManager<Account> userManager,
             SignInManager<Account> signInManager,
+            RoleManager<Account> roleManager,
             IEmailSender emailSender,
             ILogger<AccountController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
             _emailSender = emailSender;
             _logger = logger;
         }
@@ -387,6 +390,14 @@ namespace GameStore.Web.Controllers
         public IActionResult ForgotPasswordConfirmation()
         {
             return View();
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> AddAccountToRole()
+        {
+            await this._signInManager.UserManager.AddToRoleAsync(await this._signInManager.UserManager.GetUserAsync(User), "Admin");
+            return RedirectToAction("Index", "Manage");
         }
 
         [HttpGet]
