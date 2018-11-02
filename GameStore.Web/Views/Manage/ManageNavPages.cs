@@ -16,7 +16,7 @@ namespace GameStore.Web.Views.Manage
         public static string ChangePassword => "ChangePassword";
 
         public static string ExternalLogins => "ExternalLogins";
-
+        public static string ChangeAvatar => "ChangeAvatar";
         public static string TwoFactorAuthentication => "TwoFactorAuthentication";
 
         public static string IndexNavClass(ViewContext viewContext) => PageNavClass(viewContext, Index);

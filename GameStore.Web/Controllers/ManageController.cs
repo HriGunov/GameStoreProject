@@ -15,6 +15,10 @@ using Microsoft.Extensions.Options;
 using GameStore.Web.Models;
 using GameStore.Web.Models.ManageViewModels;
 using GameStore.Web.Services;
+using Microsoft.AspNetCore.Http;
+using GameStore.Services.Abstract;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
 
 namespace GameStore.Web.Controllers
 {
@@ -22,6 +26,7 @@ namespace GameStore.Web.Controllers
     [Route("[controller]/[action]")]
     public class ManageController : Controller
     {
+        private readonly IAccountsService _accountsService;
         private readonly UserManager<Account> _userManager;
         private readonly SignInManager<Account> _signInManager;
         private readonly IEmailSender _emailSender;
@@ -32,12 +37,14 @@ namespace GameStore.Web.Controllers
         private const string RecoveryCodesKey = nameof(RecoveryCodesKey);
 
         public ManageController(
+          IAccountsService accountsService,
           UserManager<Account> userManager,
           SignInManager<Account> signInManager,
           IEmailSender emailSender,
           ILogger<ManageController> logger,
           UrlEncoder urlEncoder)
         {
+            _accountsService = accountsService;
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
@@ -259,6 +266,60 @@ namespace GameStore.Web.Controllers
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl, _userManager.GetUserId(User));
             return new ChallengeResult(provider, properties);
         }
+
+       public IActionResult ChangeAvatar()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Avatar(IFormFile avatarImage)
+        {
+            if (avatarImage == null)
+            {
+                this.StatusMessage = "Error: Please provide an image";
+                return this.RedirectToAction(nameof(ChangeAvatar));
+            }
+
+            if (!this.IsValidImage(avatarImage))
+            {
+                this.StatusMessage = "Error: Please provide a .jpg or .png file smaller than 1MB";
+                return this.RedirectToAction(nameof(ChangeAvatar));
+            }
+
+            await this._accountsService.SaveAvatarImageAsync(
+                this.GetUploadsRoot(),
+                avatarImage.FileName,
+                avatarImage.OpenReadStream(),
+                _userManager.GetUserId(User)
+            );
+
+            this.StatusMessage = "Profile image updated";
+
+            return this.RedirectToAction(nameof(ChangeAvatar));
+        }
+
+        private string GetUploadsRoot()
+        {
+            var environment = this.HttpContext.RequestServices
+                .GetService(typeof(IHostingEnvironment)) as IHostingEnvironment;
+
+            return Path.Combine(environment.WebRootPath, "images", "avatars");
+        }
+
+        private bool IsValidImage(IFormFile image)
+        {
+            string type = image.ContentType;
+            if (type != "image/png" && type != "image/jpg" && type != "image/jpeg")
+            {
+                return false;
+            }
+
+            return image.Length <= 1024 * 1024;
+        }
+
+
 
         [HttpGet]
         public async Task<IActionResult> LinkLoginCallback()
