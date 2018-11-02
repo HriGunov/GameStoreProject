@@ -12,6 +12,9 @@ namespace GameStore.Data.Context.Configurations
 
             builder.ToTable("Accounts");
 
+            builder.Property(x => x.AvatarImageName)
+                .HasMaxLength(100)
+               .IsRequired(false);
             builder.Property(x => x.FirstName)
                 .HasMaxLength(20)
                 .IsRequired(false);

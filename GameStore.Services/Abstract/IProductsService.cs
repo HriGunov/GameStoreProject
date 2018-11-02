@@ -17,5 +17,6 @@ namespace GameStore.Services.Abstract
         void DeleteProductsLoadedFromJSON(string jsonString);
         string AddGenreToProduct(string name, Product product);
         string RemoveGenreFromProduct(string name, Product product);
+        IEnumerable<Product> SkipAndTakeLatestProducts(int productsToSkip, int productsToTake);
     }
 }

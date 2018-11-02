@@ -33,4 +33,14 @@
     <Folder Include="Areas\Administration\Views\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Views\Home\Products.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Products\Index.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+  </ItemGroup>
+
 </Project>

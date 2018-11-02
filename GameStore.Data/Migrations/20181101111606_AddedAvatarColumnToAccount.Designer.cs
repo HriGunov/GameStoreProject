@@ -4,14 +4,16 @@ using GameStore.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GameStore.Data.Migrations
 {
     [DbContext(typeof(GameStoreContext))]
-    partial class GameStoreContextModelSnapshot : ModelSnapshot
+    [Migration("20181101111606_AddedAvatarColumnToAccount")]
+    partial class AddedAvatarColumnToAccount
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -200,8 +202,6 @@ namespace GameStore.Data.Migrations
                         .HasMaxLength(70);
 
                     b.Property<decimal>("Price");
-
-                    b.Property<string>("ProductImageName");
 
                     b.HasKey("Id");
 

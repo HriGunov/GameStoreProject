@@ -7,6 +7,8 @@ namespace GameStore.Data.Models
     {
         public int Id { get; set; }
 
+        public string ProductImageName { get; set; }
+
         public string Name { get; set; }
         public string Description { get; set; }
 

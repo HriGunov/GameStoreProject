@@ -11,6 +11,10 @@ namespace GameStore.Data.Context
 {
     public class GameStoreContext : IdentityDbContext<Account>
     {
+        public GameStoreContext()
+        {
+
+        }
         public GameStoreContext(DbContextOptions options) : base(options)
         {
         }

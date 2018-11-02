@@ -9,8 +9,10 @@ namespace GameStore.Data.Models
 {
     public class Account : IdentityUser, IAuditable, IDeletable
     {
+        public string AvatarImageName { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+         
         public string CreditCard { get; set; }
         public string DeletedBy { get; set; }
 

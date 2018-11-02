@@ -85,6 +85,10 @@ namespace GameStore.Services
             return product;
         }
 
+        public IEnumerable<Product> SkipAndTakeLatestProducts(int productsToSkip,int productsToTake)
+        {
+            return storeContext.Products.OrderBy(product => product.CreatedOn).Skip(productsToSkip).Take(productsToTake).ToArray();
+        }
         public IEnumerable<Product> FindProductsByGenre(IEnumerable<Genre> productGenre)
         {
             var products = GetProducts().Where(p => { return productGenre.All(genre => p.Genre.Contains(genre)); });

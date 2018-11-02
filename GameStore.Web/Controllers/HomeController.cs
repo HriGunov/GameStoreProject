@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using GameStore.Web.Models;
 using GameStore.Services.Abstract;
+using GameStore.Web.Models.ProductsViewModels;
 
 namespace GameStore.Web.Controllers
 {
@@ -34,6 +35,10 @@ namespace GameStore.Web.Controllers
             ViewData["Message"] = "Your contact page.";
 
             return View();
+        }
+        public IActionResult Products()
+        {
+           return RedirectToAction("Index", "Products");            
         }
 
         public IActionResult Error()
