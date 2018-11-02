@@ -28,9 +28,6 @@ namespace GameStore.Services
         public ShoppingCart AddToCart(Product product, Account account)
         {
             // Move this check to Commands
-            if (account.IsGuest)
-                throw new UserException("Guests cannot add to their carts.");
-
             if (product == null)
                 throw new UserException("No product given to add.");
 
@@ -65,8 +62,6 @@ namespace GameStore.Services
         public ShoppingCart AddToCart(IEnumerable<Product> product, Account account)
         {
             // Move this check to Commands
-            if (account.IsGuest)
-                throw new UserException("Guests cannot add to their carts.");
 
             if (!product.Any())
                 throw new UserException("No products given to add.");

@@ -2,6 +2,7 @@
 using GameStore.Web.Models.ProductsViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GameStore.Web.Controllers
 {
@@ -13,24 +14,26 @@ namespace GameStore.Web.Controllers
         {
             this.productsService = productsService;
         }
+
         public IActionResult Index()
         {
             List<ProductListingViewModel> productListings = new List<ProductListingViewModel>();
-            var latestProducts = productsService.SkipAndTakeLatestProducts(0, 9);
+            var latestProducts = productsService.SkipAndTakeLatestProducts(10);
             foreach (var product in latestProducts)
             {
-                productListings.Add(new ProductListingViewModel()
-                {
-                    Name = product.Name,
-                    Price = product.Price,
-                    ImageName = product.ProductImageName
-                });
+                productListings.Add(new ProductListingViewModel(product));
             }
-            return View(new ProductsPageViewModel()
-            {
-                ProductsToList = productListings
-            });
-            
+
+            return View(new ProductsPageViewModel(productListings));
+        }
+
+        public IActionResult Details(int id)
+        {
+            var product = this.productsService.FindProductById(id);
+
+            var viewModel = new ProductListingViewModel(product);
+
+            return View(viewModel);
         }
     }
 }

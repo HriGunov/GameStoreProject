@@ -25,7 +25,7 @@ namespace GameStore.Web.Controllers
 
         public IActionResult About()
         {
-            ViewData["Message"] = productsService.FindProduct("Banana").Name;
+            ViewData["Message"] = "Your about page.";
 
             return View();
         }
@@ -38,7 +38,7 @@ namespace GameStore.Web.Controllers
         }
         public IActionResult Products()
         {
-           return RedirectToAction("Index", "Products");            
+            return RedirectToAction("Index", "Products");
         }
 
         public IActionResult Error()

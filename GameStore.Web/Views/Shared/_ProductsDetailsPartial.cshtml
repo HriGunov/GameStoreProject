@@ -1,0 +1,37 @@
+@using GameStore.Data.Models
+@using Microsoft.AspNetCore.Identity
+@using GameStore.Web.Models
+@model ProductListingViewModel
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="card col-lg-8 pl-0 pr-0">
+            <div class="card-header text-center">
+                Featured
+            </div>
+            <div class="card-body text-center">
+                <img src="~/images/@(Model.ImageName ?? "card.png")" class="img-thumbnail img-fluid" alt="@Model.Name">
+            </div>
+            <hr />
+            <div class="card-body">
+                <h4 class="card-title">@Model.Name</h4>
+                @if (Model.Genres.Any())
+                {
+                    <p class="card-text text-justify">
+                        Genres: @{
+                            foreach (var genre in Model.Genres)
+                            {
+                                <span class="badge badge-pill badge-primary">@genre</span>
+                            }
+                        }
+                    </p>
+                }
+                <p class="card-text text-justify">Description: @Model.Description</p>
+                <a href="#!" class="btn btn-primary"><i class="fas fa-shopping-cart"></i> Add to cart</a>
+                <a href="#!" class="btn btn-primary"><i class="fas fa-shopping-bag"></i> Buy Now</a>
+            </div>
+            <div class="card-footer text-muted">
+                Last Purchased: <strong>2 days ago</strong>
+            </div>
+        </div>
+    </div>
+</div>

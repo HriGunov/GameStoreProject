@@ -14,11 +14,12 @@ namespace GameStore.Data.Context.Configurations
 
             builder.HasIndex(p => p.Name)
                 .IsUnique(true);
+
             builder.Property(p => p.ProductImageName)
                   .IsRequired(false);
 
             builder.Property(p => p.Name)
-                .HasMaxLength(70)
+                .HasMaxLength(30)
                 .IsRequired(true);
 
             builder.Property(p => p.Description)

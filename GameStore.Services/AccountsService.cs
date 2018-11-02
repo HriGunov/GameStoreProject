@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using GameStore.Data.Context; 
+using GameStore.Data.Context;
 using GameStore.Data.Models;
 using GameStore.Exceptions;
 using GameStore.Services.Abstract;
@@ -24,43 +24,12 @@ namespace GameStore.Services
             this.storeContext = storeContext ?? throw new ArgumentNullException(nameof(storeContext));
         }
 
-        /// <summary>
-        ///     Creates an Account entity and adds it to the DB
-        /// </summary>
-        public Account AddAccount(string firstName, string lastName, string userName, string password,
-            bool isAdmin = false, bool isGuest = false)
-        {
-            if (!IsUserNameAllowed(userName))
-                throw new UserException($"Account username ({userName}) is not in valid format.");
-
-            if (storeContext.Accounts.Where(a => a.UserName == userName).SingleOrDefault() != null)
-                throw new UserException($"Account ({userName}) already exists.");
-
-            var account = new Account
-            {
-                FirstName = firstName,
-                LastName = lastName,
-                UserName = userName,
-                PasswordHash = password,
-                CreatedOn = DateTime.Now,
-                ShoppingCart = new ShoppingCart(),
-                OrderProducts = new List<Order>(),
-                Comments = new List<Comment>(),
-                IsAdmin = isAdmin
-            };
-
-            storeContext.Accounts.Add(account);
-            storeContext.SaveChanges();
-
-            return account;
-        }
-
         public async Task SaveAvatarImageAsync(string root, string filename, Stream stream, string userId)
         {
             var user = this.storeContext.Users.Find(userId);
             if (user == null)
             {
-                throw new Exception("user not found");
+                throw new Exception("User Not Found");
             }
 
             var imageName = Guid.NewGuid().ToString() + Path.GetExtension(filename);
@@ -73,18 +42,6 @@ namespace GameStore.Services
 
             user.AvatarImageName = imageName;
             this.storeContext.SaveChanges();
-        }
-
-
-        /// <summary>
-        ///     Adds an already setup Account Type.
-        /// </summary>
-        /// <param name="account">Account Type</param>
-        /// <returns></returns>
-        public Account AddAccount(Account account)
-        {
-            return AddAccount(account.FirstName, account.LastName, account.UserName, account.PasswordHash, account.IsAdmin,
-                account.IsGuest);
         }
 
         /// <summary>
@@ -102,15 +59,6 @@ namespace GameStore.Services
             account.DeletedBy = commandExecutor.UserName;
             storeContext.SaveChanges();
             return $"Account {accountName} has been successfully removed.";
-        }
-
-        /// <summary>
-        ///     Checks if an account has admin privileges
-        /// </summary>
-        /// <param name="account">Account Type</param>
-        public bool IsAdmin(Account account)
-        {
-            return storeContext.Accounts.Where(a => a.UserName == account.UserName).Select(a => a.IsAdmin).Single();
         }
 
         /// <summary>
@@ -160,15 +108,6 @@ namespace GameStore.Services
             account.DeletedBy = null;
             storeContext.SaveChanges();
             return $"Account {accountName} has been successfully restored.";
-        }
-
-        /// <summary>
-        ///     Returns the Guest Account from the database.
-        /// </summary>
-        /// <returns></returns>
-        public Account GetGuestAccount()
-        {
-            return storeContext.Accounts.Where(a => a.IsGuest).SingleOrDefault();
         }
 
         /// <summary>

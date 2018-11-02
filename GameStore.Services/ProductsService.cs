@@ -40,7 +40,6 @@ namespace GameStore.Services
                 Price = productPrice,
                 CreatedOn = DateTime.Now
             };
-            if (product.Name.Length > 20) product.Name = product.Name.Substring(0, 20);
 
             if (productGenres != null)
                 product.Genre = productGenres;
@@ -85,10 +84,16 @@ namespace GameStore.Services
             return product;
         }
 
-        public IEnumerable<Product> SkipAndTakeLatestProducts(int productsToSkip,int productsToTake)
+        public Product FindProductById(int productId)
         {
-            return storeContext.Products.OrderBy(product => product.CreatedOn).Skip(productsToSkip).Take(productsToTake).ToArray();
+            return this.storeContext.Products.Include(g => g.Genre).FirstOrDefault(p => p.Id == productId && !p.IsDeleted);
         }
+
+        public IEnumerable<Product> SkipAndTakeLatestProducts(int productsToTake)
+        {
+            return storeContext.Products.Include(g => g.Genre).OrderByDescending(product => product.CreatedOn).Take(productsToTake).ToList();
+        }
+
         public IEnumerable<Product> FindProductsByGenre(IEnumerable<Genre> productGenre)
         {
             var products = GetProducts().Where(p => { return productGenre.All(genre => p.Genre.Contains(genre)); });
@@ -112,12 +117,22 @@ namespace GameStore.Services
                 .ToList();
         }
 
+        public IQueryable<Product> GetProductsWithComments()
+        {
+            return storeContext.Products
+                .Include(c => c.Comments)
+                .ThenInclude(comment => comment.Account)
+                .Include(c => c.Comments)
+                .ThenInclude(comment => comment.Product)
+                .AsQueryable();
+        }
+
         public string AddGenreToProduct(string name, Product product)
         {
             if (FindProduct(product.Name).Genre.Any(g => g.Name == name))
                 throw new UserException($"The {product.Name} already has this genre ({name}).");
 
-            storeContext.Genres.Add(new Genre {Name = name, ProductId = product.Id});
+            storeContext.Genres.Add(new Genre { Name = name, ProductId = product.Id });
             storeContext.SaveChanges();
 
             return $"Added {name} to {product.Name}.";

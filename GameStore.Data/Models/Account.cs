@@ -12,7 +12,7 @@ namespace GameStore.Data.Models
         public string AvatarImageName { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-         
+
         public string CreditCard { get; set; }
         public string DeletedBy { get; set; }
 
@@ -30,7 +30,5 @@ namespace GameStore.Data.Models
         public ShoppingCart ShoppingCart { get; set; } = new ShoppingCart();
 
         public bool IsDeleted { get; set; } = false;
-        public bool IsGuest { get; set; } = false;
-        public bool IsAdmin { get; set; } = false;
     }
 }

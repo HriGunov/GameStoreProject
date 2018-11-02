@@ -10,6 +10,7 @@ namespace GameStore.Services.Abstract
 
         string RemoveProduct(string productName);
         Product FindProduct(string productName, bool isDeleted = false);
+        Product FindProductById(int productId);
         IEnumerable<Product> FindProductsByGenre(IEnumerable<Genre> productGenre);
         IEnumerable<Product> FindProductsByGenre(Genre productGenre);
         IEnumerable<Product> GetProducts();
@@ -17,6 +18,6 @@ namespace GameStore.Services.Abstract
         void DeleteProductsLoadedFromJSON(string jsonString);
         string AddGenreToProduct(string name, Product product);
         string RemoveGenreFromProduct(string name, Product product);
-        IEnumerable<Product> SkipAndTakeLatestProducts(int productsToSkip, int productsToTake);
+        IEnumerable<Product> SkipAndTakeLatestProducts(int productsToTake);
     }
 }

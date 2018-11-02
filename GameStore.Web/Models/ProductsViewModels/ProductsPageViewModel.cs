@@ -6,6 +6,11 @@ namespace GameStore.Web.Models.ProductsViewModels
 {
     public class ProductsPageViewModel
     {
-        public IEnumerable<ProductListingViewModel> ProductsToList { get; set; } = new List<ProductListingViewModel>();
+        public ProductsPageViewModel(IEnumerable<ProductListingViewModel> productListings)
+        {
+            this.ProductsList = productListings;
+        }
+
+        public IEnumerable<ProductListingViewModel> ProductsList { get; set; } = new List<ProductListingViewModel>();
     }
 }
