@@ -23,8 +23,6 @@ namespace GameStore.Data.Context.Configurations
                 .HasMaxLength(20)
                 .IsRequired(false);
 
-            builder.HasData()
-
             #endregion
         }
     }

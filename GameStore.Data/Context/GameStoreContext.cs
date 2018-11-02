@@ -35,7 +35,7 @@ namespace GameStore.Data.Context
 
             return base.SaveChanges();
         }
-        
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new AccountConfiguration());
@@ -45,6 +45,9 @@ namespace GameStore.Data.Context
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
             modelBuilder.ApplyConfiguration(new ShoppingCartProductsConfiguration());
             modelBuilder.ApplyConfiguration(new OrderProductsConfiguration());
+
+            modelBuilder.Entity<IdentityRole>()
+                .HasData(new IdentityRole { Name = "Admin" });
 
             base.OnModelCreating(modelBuilder);
         }
@@ -70,7 +73,7 @@ namespace GameStore.Data.Context
 
             foreach (var entry in newlyCreatedEntities)
             {
-                var entity = (IAuditable) entry.Entity;
+                var entity = (IAuditable)entry.Entity;
 
                 if (entry.State == EntityState.Added && entity.CreatedOn == null)
                 {
