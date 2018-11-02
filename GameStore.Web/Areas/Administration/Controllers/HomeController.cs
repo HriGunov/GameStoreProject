@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace GameStore.Web.Areas.Administration.Controllers
 {
     [Area("Administration")]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class HomeController : Controller
     {
         public IActionResult Index()
