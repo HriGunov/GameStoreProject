@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using GameStore.Data.Context; 
 using GameStore.Data.Models;
 using GameStore.Exceptions;
@@ -52,6 +54,27 @@ namespace GameStore.Services
 
             return account;
         }
+
+        public async Task SaveAvatarImageAsync(string root, string filename, Stream stream, string userId)
+        {
+            var user = this.storeContext.Users.Find(userId);
+            if (user == null)
+            {
+                throw new Exception("user not found");
+            }
+
+            var imageName = Guid.NewGuid().ToString() + Path.GetExtension(filename);
+            var path = Path.Combine(root, imageName);
+
+            using (var fileStream = File.Create(path))
+            {
+                await stream.CopyToAsync(fileStream);
+            }
+
+            user.AvatarImageName = imageName;
+            this.storeContext.SaveChanges();
+        }
+
 
         /// <summary>
         ///     Adds an already setup Account Type.
