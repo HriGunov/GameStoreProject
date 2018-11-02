@@ -33,7 +33,6 @@
   <ItemGroup>
     <Content Remove="Areas\Administration\Views\Shared\_LoginPartial.cshtml" />
     <Content Remove="Views\Home\Products.cshtml" />
-    <Content Remove="Views\Shared\_ProductsPartialGrid.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="Areas\Administration\Views\Home\Index.cshtml">

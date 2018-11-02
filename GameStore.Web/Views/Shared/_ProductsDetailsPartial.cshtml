@@ -9,7 +9,7 @@
                 Featured
             </div>
             <div class="card-body text-center">
-                <img src="~/images/@(Model.ImageName ?? "card.png")" class="img-thumbnail img-fluid" alt="@Model.Name">
+                <img src="~/images/products/@(Model.ImageName ?? "card.png")" class="img-thumbnail img-fluid" alt="@Model.Name">
             </div>
             <hr />
             <div class="card-body">
@@ -29,9 +29,27 @@
                 <a href="#!" class="btn btn-primary"><i class="fas fa-shopping-cart"></i> Add to cart</a>
                 <a href="#!" class="btn btn-primary"><i class="fas fa-shopping-bag"></i> Buy Now</a>
             </div>
-            <div class="card-footer text-muted">
-                Last Purchased: <strong>2 days ago</strong>
-            </div>
+            @if (@Model.LastPurchased != null)
+            {
+                if (DateTime.Now.Subtract(Model.LastPurchased.Value).Days > 0)
+                 {
+                     <div class="card-footer text-muted">
+                         Last Purchased: <strong>@DateTime.Now.Subtract(Model.LastPurchased.Value).Days days ago</strong>
+                     </div>
+                 }
+                 else
+                 {
+                     <div class="card-footer text-muted">
+                         Last Purchased: <strong>Few hours ago</strong>
+                     </div>
+                 }
+            }
+            else
+            {
+                <div class="card-footer text-muted">
+                    Last Purchased: <strong>Not Purchased Yet</strong>
+                </div>
+            }
         </div>
     </div>
 </div>

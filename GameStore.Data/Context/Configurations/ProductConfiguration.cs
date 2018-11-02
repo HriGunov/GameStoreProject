@@ -19,7 +19,7 @@ namespace GameStore.Data.Context.Configurations
                   .IsRequired(false);
 
             builder.Property(p => p.Name)
-                .HasMaxLength(30)
+                .HasMaxLength(50)
                 .IsRequired(true);
 
             builder.Property(p => p.Description)

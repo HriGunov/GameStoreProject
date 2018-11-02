@@ -7,7 +7,7 @@
         @foreach (var item in Model)
         {
             <div class="card col-3 mr-4 mb-4">
-                <img class="card-img-top img-thumbnail mt-3" src="~/images/@(item.ImageName ?? "card.png")" alt="@item.Name">
+                <img class="card-img-top img-thumbnail img-fluid mt-3" src="~/images/products/@(item.ImageName ?? "card.png")" alt="@item.Name">
                 <div class="card-body">
                     <h4 class="card-title">@item.Name</h4>
                     <p class="card-text">

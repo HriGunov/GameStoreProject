@@ -16,6 +16,8 @@ namespace GameStore.Web.Models.ProductsViewModels
             this.Description = product.Description;
             this.Genres = product.Genre.Select(g => g.Name).ToList();
             this.Price = product.Price;
+            this.CreatedOn = product.CreatedOn;
+            this.LastPurchased = product.LastPurchased;
         }
 
         public int Id { get; set; }
@@ -24,5 +26,7 @@ namespace GameStore.Web.Models.ProductsViewModels
         public string Description { get; set; }
         public IEnumerable<string> Genres { get; set; } = new List<string>();
         public decimal Price { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public DateTime? LastPurchased { get; set; }
     }
 }

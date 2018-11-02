@@ -48,11 +48,7 @@ namespace GameStore.Data.Migrations
                     b.Property<string>("FirstName")
                         .HasMaxLength(20);
 
-                    b.Property<bool>("IsAdmin");
-
                     b.Property<bool>("IsDeleted");
-
-                    b.Property<bool>("IsGuest");
 
                     b.Property<string>("LastName")
                         .HasMaxLength(20);
@@ -195,9 +191,11 @@ namespace GameStore.Data.Migrations
 
                     b.Property<bool>("IsOnSale");
 
+                    b.Property<DateTime?>("LastPurchased");
+
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(70);
+                        .HasMaxLength(50);
 
                     b.Property<decimal>("Price");
 
@@ -261,7 +259,7 @@ namespace GameStore.Data.Migrations
                     b.ToTable("AspNetRoles");
 
                     b.HasData(
-                        new { Id = "752e3287-1772-4142-8a87-5f01c8e8a36e", ConcurrencyStamp = "98e9f45a-277c-4596-baa8-ef10a9acc31d", Name = "Admin" }
+                        new { Id = "1fb7dff8-1dbb-4c6e-b4e4-9f7f49813ffe", ConcurrencyStamp = "b635297e-a0e7-4c67-b797-4cba027324c1", Name = "Admin" }
                     );
                 });
 

@@ -67,8 +67,7 @@ namespace GameStore.Tests.AuthenticationServiceTests
                 CreatedOn = DateTime.Now,
                 ShoppingCart = new ShoppingCart(),
                 OrderProducts = new List<Order>(),
-                Comments = new List<Comment>(),
-                IsAdmin = true
+                Comments = new List<Comment>()
             };
 
             using (var curContext = new GameStoreContext(options))

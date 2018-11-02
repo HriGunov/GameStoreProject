@@ -19,7 +19,8 @@ namespace GameStore.Data.Models
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
         public ICollection<Genre> Genre { get; set; } = new List<Genre>();
 
-        public DateTime CreatedOn { get; set; }
+        public DateTime CreatedOn { get; set; } = DateTime.Now;
+        public DateTime? LastPurchased { get; set; }
 
         public bool IsDeleted { get; set; } = false;
         public bool IsOnSale { get; set; } = false;
