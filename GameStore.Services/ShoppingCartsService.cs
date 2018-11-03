@@ -5,18 +5,17 @@ using GameStore.Data.Context;
 using GameStore.Data.Models;
 using GameStore.Exceptions;
 using GameStore.Services.Abstract;
+using Microsoft.EntityFrameworkCore;
 
 namespace GameStore.Services
 {
     public class ShoppingCartsService : IShoppingCartsService
-    {
-        private readonly IAccountsService accountService;
+    {        
         private readonly GameStoreContext storeContext;
 
-        public ShoppingCartsService(GameStoreContext storeContext, IAccountsService accountService)
+        public ShoppingCartsService(GameStoreContext storeContext, IAccountsService accountService,IProductsService productsService)
         {
-            this.storeContext = storeContext ?? throw new ArgumentNullException(nameof(storeContext));
-            this.accountService = accountService;
+            this.storeContext = storeContext ?? throw new ArgumentNullException(nameof(storeContext));             
         }
 
         /// <summary>
@@ -25,11 +24,11 @@ namespace GameStore.Services
         /// <param name="product">Product Type</param>
         /// <param name="account">Account Type</param>
         /// <returns></returns>
-        public ShoppingCart AddToCart(Product product, Account account)
+        public ShoppingCart AddToCart(int productId,string accountId )
         {
-            // Move this check to Commands
-            if (account.IsGuest)
-                throw new UserException("Guests cannot add to their carts.");
+            Product product = storeContext.Products.Find(productId);
+            var account = storeContext.Accounts.Where(acc => acc.Id == accountId).Include(acc => acc.ShoppingCart).Single();
+            // Move this check to Commands 
 
             if (product == null)
                 throw new UserException("No product given to add.");
@@ -62,21 +61,17 @@ namespace GameStore.Services
         /// <param name="product">Product Type</param>
         /// <param name="account">Account Type</param>
         /// <returns></returns>
-        public ShoppingCart AddToCart(IEnumerable<Product> product, Account account)
+        public ShoppingCart AddToCart(IEnumerable<int> productsId, string accountId)
         {
-            // Move this check to Commands
-            if (account.IsGuest)
-                throw new UserException("Guests cannot add to their carts.");
-
-            if (!product.Any())
-                throw new UserException("No products given to add.");
+            var account = storeContext.Accounts.Where(acc => acc.Id == accountId).Include(acc => acc.ShoppingCart).Single();
+            IEnumerable<Product> products = storeContext.Products.Where( prod => productsId.Contains(prod.Id)).ToList();
 
             var tempCart = account.ShoppingCart;
 
             if (tempCart == null)
                 throw new UserException($"User ({account.UserName}) doesn't have Shopping Cart.");
 
-            foreach (var p in product)
+            foreach (var p in products)
                 if (p != null)
                 {
                     if (ProductExistsInCart(p, account))
@@ -92,28 +87,27 @@ namespace GameStore.Services
                     account.ShoppingCart.ShoppingCartProducts.Add(shoppingCart);
                 }
 
-            storeContext.SaveChanges();
+            storeContext.SaveChanges();            
 
-            account.ShoppingCart = GetUserCart(account);
-
-            return tempCart;
+            return account.ShoppingCart;
         }
 
         /// <summary>
         ///     Clears the user's cart.
         /// </summary>
         /// <param name="account">Account Type</param>
-        public void ClearUserCart(Account account)
+        public void ClearUserCart(string accountId)
         {
-            var userCartProducts = storeContext.ShoppingCartProducts
-                .Where(s => s.ShoppingCartId == account.ShoppingCartId).ToList();
+            var cart = GetUserCart(accountId);
+
+            var userCartProducts = cart.ShoppingCartProducts.ToList();
             foreach (var product in userCartProducts)
             {
                 storeContext.ShoppingCartProducts.Remove(product);
-                storeContext.SaveChanges();
             }
+            storeContext.SaveChanges();
 
-            account.ShoppingCart.ShoppingCartProducts = new List<ShoppingCartProducts>();
+           // account.ShoppingCart.ShoppingCartProducts = new List<ShoppingCartProducts>();
         }
 
         /// <summary>
@@ -121,9 +115,10 @@ namespace GameStore.Services
         /// </summary>
         /// <returns>The user cart.</returns>
         /// <param name="account">Account Type</param>
-        public ShoppingCart GetUserCart(Account account)
+        public ShoppingCart GetUserCart(string accountId)
         {
-            return accountService.GetAccounts().Single(a => a.Id == account.Id).ShoppingCart;
+            var account = storeContext.Accounts.Where(acc => acc.Id == accountId).Include(acc => acc.ShoppingCart).Single();
+            return account.ShoppingCart;
         }
 
         /// <summary>

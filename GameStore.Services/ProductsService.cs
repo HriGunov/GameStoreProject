@@ -85,6 +85,18 @@ namespace GameStore.Services
             return product;
         }
 
+        public Product FindProduct(int id, bool includeDeleted = false)
+        {
+            var product = storeContext.Products.Find(id);
+
+            if (product == null) return null;
+
+            if (includeDeleted) return product;
+
+            if (product.IsDeleted)
+                return null;
+            return product;
+        }
         public IEnumerable<Product> SkipAndTakeLatestProducts(int productsToSkip,int productsToTake)
         {
             return storeContext.Products.OrderBy(product => product.CreatedOn).Skip(productsToSkip).Take(productsToTake).ToArray();
@@ -181,5 +193,7 @@ namespace GameStore.Services
         {
             return AddProduct(product.Name, product.Description, product.Price, product.Genre);
         }
+
+        
     }
 }
