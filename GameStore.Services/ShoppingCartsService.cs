@@ -49,8 +49,8 @@ namespace GameStore.Services
 
             storeContext.ShoppingCartProducts.Add(shoppingCart);
             storeContext.SaveChanges();
-
-            account.ShoppingCart = GetUserCart(account);
+ 
+            account.ShoppingCart = GetUserCart(accountId);
 
             return tempCart;
         }
