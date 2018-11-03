@@ -178,7 +178,7 @@ namespace GameStore.Services
 
         public Product AddProduct(Product product)
         {
-            return AddProduct(product.Name, product.Description, product.Price, product.Genre);
+            return AddProduct(product.Name, product.ProductImageName, product.Description, product.Price, product.Genre);
         }
 
         

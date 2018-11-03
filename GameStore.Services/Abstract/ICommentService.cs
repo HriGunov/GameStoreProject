@@ -1,11 +1,11 @@
 ﻿using GameStore.Data.Models;
 
-namespace GameStore.Services.Abstract
+namespace GameStore.Services
 {
     public interface ICommentService
     {
-        Comment AddCommentToProduct(string productName, string username, string commentText);
-        void RemoveCommentsFromProduct(string productName);
-        void RemoveCommentsFromAccount(Account account);
+        Comment AddCommentToProduct(int productId, string commentorId, string commentText);
+        void RemoveCommentsFromAccount(string accountId);
+        void RemoveCommentsFromProduct(int productId);
     }
 }
