@@ -1,6 +1,6 @@
 ﻿using GameStore.Data.Models;
 
-namespace GameStore.Services
+namespace GameStore.Services.Abstract
 {
     public interface ICommentService
     {
