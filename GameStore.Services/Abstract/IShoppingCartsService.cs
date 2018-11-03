@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using GameStore.Data.Models;
 
-namespace GameStore.Services
+namespace GameStore.Services.Abstract
 {
     public interface IShoppingCartsService
     {

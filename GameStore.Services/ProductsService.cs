@@ -27,7 +27,7 @@ namespace GameStore.Services
         /// <param name="productPrice">Product Price</param>
         /// <param name="productGenres">Product Genres (ICollection)</param>
         /// <returns></returns>
-        public Product AddProduct(string productName, string productDescription, decimal productPrice,
+        public Product AddProduct(string productName,string imageName, string productDescription, decimal productPrice,
             ICollection<Genre> productGenres = null)
         {
             if (FindProduct(productName) != null)
@@ -36,6 +36,7 @@ namespace GameStore.Services
             var product = new Product
             {
                 Name = productName,
+                ProductImageName = imageName,
                 Description = productDescription,
                 Price = productPrice,
                 CreatedOn = DateTime.Now
@@ -74,7 +75,7 @@ namespace GameStore.Services
         /// <returns></returns>
         public Product FindProduct(string productName, bool includeDeleted = false)
         {
-            var product = GetProducts().SingleOrDefault(p => p.Name == productName);
+            var product = storeContext.Products.FirstOrDefault(p => p.Name == productName);
 
             if (product == null) return null;
 
@@ -103,27 +104,13 @@ namespace GameStore.Services
         }
         public IEnumerable<Product> FindProductsByGenre(IEnumerable<Genre> productGenre)
         {
-            var products = GetProducts().Where(p => { return productGenre.All(genre => p.Genre.Contains(genre)); });
+            var products = storeContext.Products.Include( prod => prod.Genre)
+                .Where(p =>productGenre
+                    .All(genre => p.Genre.Contains(genre)));
+            
 
             return !products.Any() ? null : products;
-        }
-
-        public IEnumerable<Product> GetProducts()
-        {
-            return storeContext.Products
-                .Include(s => s.ShoppingCartProducts)
-                .ThenInclude(cart => cart.Product)
-                .Include(s => s.ShoppingCartProducts)
-                .ThenInclude(cart => cart.ShoppingCart)
-                .Include(c => c.Comments)
-                .ThenInclude(comment => comment.Account)
-                .Include(c => c.Comments)
-                .ThenInclude(comment => comment.Product)
-                .Include(g => g.Genre)
-                .ThenInclude(p => p.Product)
-                .ToList();
-        }
-
+        } 
         public string AddGenreToProduct(string name, Product product)
         {
             if (FindProduct(product.Name).Genre.Any(g => g.Name == name))
@@ -149,7 +136,7 @@ namespace GameStore.Services
 
         public IEnumerable<Product> FindProductsByGenre(Genre productGenre)
         {
-            var products = GetProducts().Where(p => p.Genre.Contains(productGenre));
+            var products = storeContext.Products.Include(prod => prod.Genre).Where(p => p.Genre.Contains(productGenre)).ToList();
 
             return !products.Any() ? null : products;
         }
