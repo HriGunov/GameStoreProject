@@ -5,9 +5,9 @@ namespace GameStore.Services.Abstract
 {
     public interface IShoppingCartsService
     {
-        ShoppingCart AddToCart(Product product, Account account);
-        ShoppingCart AddToCart(IEnumerable<Product> product, Account account);
-        ShoppingCart GetUserCart(Account account);
-        void ClearUserCart(Account account);
+        ShoppingCart AddToCart(IEnumerable<int> productsId, string accountId);
+        ShoppingCart AddToCart(int productId, string accountId);
+        void ClearUserCart(string accountId);
+        ShoppingCart GetUserCart(string accountId);
     }
 }

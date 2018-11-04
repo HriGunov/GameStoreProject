@@ -16,28 +16,29 @@ namespace GameStore.Services
         {
             this.storeContext = storeContext ?? throw new ArgumentNullException(nameof(storeContext));
         }
-
-        public Order AddToOrder(Account account, Product product)
+         
+        public Order AddToOrder(string accountId, int productId)
         {
-            var tempOrder = CreateOrder(account);
+            var tempOrder = CreateOrder(accountId);
 
             var newOrderProducts = new OrderProducts
             {
                 OrderId = tempOrder.Id,
-                ProductId = product.Id
+                ProductId = productId
             };
             storeContext.OrdersProducts.Add(newOrderProducts);
             storeContext.SaveChanges();
-            return FindLastOrder(account);
+            return tempOrder;
         }
 
-        public Order AddToOrder(Account account, IEnumerable<Product> product)
+        public Order AddToOrder(string accountId, IEnumerable<Product> products)
         {
-            CreateOrder(account);
-
-            foreach (var tempProduct in product)
+            CreateOrder(accountId);
+            Order tempOrder = null;
+            foreach (var tempProduct in products)
             {
-                var tempOrder = FindLastOrder(account);
+
+                tempOrder = FindLastOrder(accountId);
                 if (tempOrder.OrderProducts.Any(p => p.ProductId == tempProduct.Id)) continue;
 
                 var newOrderProducts = new OrderProducts
@@ -49,17 +50,17 @@ namespace GameStore.Services
             }
 
             storeContext.SaveChanges();
-            return FindLastOrder(account);
+            return tempOrder;
         }
 
-        public IEnumerable<Order> FindOrders(Account account)
+        public IEnumerable<Order> FindOrders(string accountId)
         {
-            return GetOrders().Where(o => o.AccountId == int.Parse(account.Id));
+            return storeContext.Orders.Where(o => o.AccountId == accountId).ToList();
         }
 
-        public Order FindLastOrder(Account account)
+        public Order FindLastOrder(string accountId)
         {
-            return GetOrders().LastOrDefault(o => o.AccountId == int.Parse(account.Id));
+            return storeContext.Orders.LastOrDefault(o => o.AccountId == accountId);
         }
 
         /// <summary>
@@ -68,28 +69,18 @@ namespace GameStore.Services
         /// </summary>
         /// <param name="account">Account (type)</param>
         /// <returns></returns>
-        private Order CreateOrder(Account account)
+        private Order CreateOrder(string accountId)
         {
             var newOrder = new Order
             {
-                AccountId = int.Parse(account.Id),
+                AccountId = accountId,
                 OrderTimestamp = DateTime.Now
             };
             storeContext.Orders.Add(newOrder);
             storeContext.SaveChanges();
 
-            return FindLastOrder(account);
+            return newOrder;
         }
-
-        private IEnumerable<Order> GetOrders()
-        {
-            return storeContext.Orders
-                .Include(a => a.Account)
-                .Include(op => op.OrderProducts)
-                .ThenInclude(o => o.Order)
-                .Include(op => op.OrderProducts)
-                .ThenInclude(p => p.Product)
-                .ToList();
-        }
+  
     }
 }

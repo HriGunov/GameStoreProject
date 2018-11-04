@@ -4,14 +4,16 @@ using GameStore.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GameStore.Data.Migrations
 {
     [DbContext(typeof(GameStoreContext))]
-    partial class GameStoreContextModelSnapshot : ModelSnapshot
+    [Migration("20181103223309_OrdersToUseSringBasedAccountID")]
+    partial class OrdersToUseSringBasedAccountID
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,7 +50,11 @@ namespace GameStore.Data.Migrations
                     b.Property<string>("FirstName")
                         .HasMaxLength(20);
 
+                    b.Property<bool>("IsAdmin");
+
                     b.Property<bool>("IsDeleted");
+
+                    b.Property<bool>("IsGuest");
 
                     b.Property<string>("LastName")
                         .HasMaxLength(20);
@@ -190,19 +196,13 @@ namespace GameStore.Data.Migrations
 
                     b.Property<bool>("IsOnSale");
 
-                    b.Property<DateTime?>("LastPurchased");
-
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(50);
+                        .HasMaxLength(70);
 
                     b.Property<decimal>("Price");
 
                     b.Property<string>("ProductImageName");
-
-                    b.Property<string>("Publisher")
-                        .IsRequired()
-                        .HasMaxLength(50);
 
                     b.HasKey("Id");
 

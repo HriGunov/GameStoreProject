@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20181102210944_LastPurchased.cs" />
+    <Compile Remove="Migrations\20181103225858_RemovedIsGuestAndIsAdminColumns.cs" />
   </ItemGroup>
 
   <ItemGroup>

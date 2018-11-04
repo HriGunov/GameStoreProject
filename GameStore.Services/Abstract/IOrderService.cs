@@ -5,9 +5,9 @@ namespace GameStore.Services.Abstract
 {
     public interface IOrderService
     {
-        Order AddToOrder(Account account, Product product);
-        Order AddToOrder(Account account, IEnumerable<Product> product);
-        IEnumerable<Order> FindOrders(Account account);
-        Order FindLastOrder(Account account);
+        Order AddToOrder(string accountId, IEnumerable<Product> products);
+        Order AddToOrder(string accountId, int productId);
+        Order FindLastOrder(string accountId);
+        IEnumerable<Order> FindOrders(string accountId);
     }
 }

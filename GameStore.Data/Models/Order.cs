@@ -7,7 +7,7 @@ namespace GameStore.Data.Models
     {
         public int Id { get; set; }
 
-        public int AccountId { get; set; }
+        public string AccountId { get; set; }
         public Account Account { get; set; }
 
         public ICollection<OrderProducts> OrderProducts { get; set; } = new List<OrderProducts>();

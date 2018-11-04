@@ -6,28 +6,26 @@ using GameStore.Exceptions;
 using GameStore.Services.Abstract;
 using Microsoft.EntityFrameworkCore;
 
-namespace GameStore.Services
+namespace GameStore.Services.Abstract
 {
     public class CommentService : ICommentService
     {
-        private readonly IAccountsService accountsService;
-        private readonly IProductsService productsService;
+         
         private readonly GameStoreContext storeContext;
 
-        public CommentService(GameStoreContext storeContext, IAccountsService accountsService,
-            IProductsService productsService)
+        public CommentService(GameStoreContext storeContext)
         {
-            this.storeContext = storeContext ?? throw new ArgumentNullException(nameof(storeContext));
-            this.accountsService = accountsService;
-            this.productsService = productsService;
+            this.storeContext = storeContext ?? throw new ArgumentNullException(nameof(storeContext)); 
         }
 
-        public Comment AddCommentToProduct(string productName, string username, string commentText)
+        public Comment AddCommentToProduct(int productId, string commentorId, string commentText)
         {
-            var commentor = accountsService.FindAccount(username, true);
+            var commentor = storeContext.Accounts.Include(acc => acc.Comments).Where(acc => acc.Id == commentorId).Single();
             if (commentor == null) throw new UserException("Could not find the user who commented...");
-            var productToBeCommentedTo = productsService.FindProduct(productName);
+
+            var productToBeCommentedTo = storeContext.Products.Include(prod => prod.Comments).Where(prod => prod.Id == productId).Single();
             if (productToBeCommentedTo == null) throw new UserException("Could not find product...");
+
             if (productToBeCommentedTo.Comments.Any(x => x.AccountId == int.Parse(commentor.Id) && x.Text == commentText))
                 throw new UserException("Cannot add duplicate comments...");
 
@@ -42,29 +40,33 @@ namespace GameStore.Services
             commentor.Comments.Add(newComment);
             storeContext.Accounts.Update(commentor);
 
+            /*  Ako ne raboti mahni komentara
             productToBeCommentedTo.Comments.Add(newComment);
             storeContext.Products.Update(productToBeCommentedTo);
-            storeContext.Comments.Add(newComment);
+            storeContext.Comments.Add(newComment);*/
             storeContext.SaveChanges();
             return newComment;
         }
 
-        public void RemoveCommentsFromProduct(string productName)
+        public void RemoveCommentsFromProduct(int productId)
         {
-            var product = productsService.FindProduct(productName);
+            var product   = storeContext.Products.Include(prod => prod.Comments).Where(prod => prod.Id == productId).Single();
             if (product == null) throw new UserException("Could not find product.");
+
             foreach (var comment in product.Comments) comment.IsDeleted = true;
+            storeContext.Update(storeContext.Products);
+
             storeContext.SaveChanges();
         }
 
-        public void RemoveCommentsFromAccount(Account account)
+        public void RemoveCommentsFromAccount(string accountId)
         {
-            var tempAccount = accountsService.FindAccount(account.UserName, true);
+            var tempAccount = storeContext.Accounts.Include(acc => acc.Comments).Where(acc => acc.Id == accountId).Single();
+             
             if (tempAccount == null) throw new UserException("Could not find account.");
             foreach (var comment in tempAccount.Comments)
-                // TODO: Will change it to Flag later...
-                storeContext.Accounts.Include(c => c.Comments).ToList().Single(a => a.UserName == account.UserName)
-                    .Comments.Remove(comment);
+                comment.IsDeleted = true;
+            storeContext.Update(storeContext.Accounts);
             storeContext.SaveChanges();
         }
     }
