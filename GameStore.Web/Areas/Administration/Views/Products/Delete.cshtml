@@ -8,5 +8,11 @@
     <hr />
     <div class="row col-md-6">
         @Html.Partial("_ProductsDetailsPartial", Model)
+        <form method="post" asp-action="Delete" asp-route-id="@Model.Id" asp-controller="Products">
+            <div class="form-group">
+                <button class="btn btn-outline-primary" type="submit">Delete</button> |
+                <a class="btn btn-outline-primary" asp-action="Index" asp-controller="Products">Back to List</a>
+            </div>
+        </form>
     </div>
 </div>

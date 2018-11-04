@@ -3,6 +3,7 @@ using GameStore.Web.Models.ProductsViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace GameStore.Web.Controllers
 {
@@ -15,10 +16,10 @@ namespace GameStore.Web.Controllers
             this.productsService = productsService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var productListings = new List<ProductListingViewModel>();
-            var latestProducts = productsService.SkipAndTakeLatestProducts(10);
+            var latestProducts = await productsService.SkipAndTakeLatestProductsAsync(10);
             foreach (var product in latestProducts)
             {
                 productListings.Add(new ProductListingViewModel(product));
@@ -27,9 +28,9 @@ namespace GameStore.Web.Controllers
             return View(productListings);
         }
 
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            var product = this.productsService.FindProduct(id);
+            var product = await this.productsService.FindProductAsync(id);
 
             var viewModel = new ProductListingViewModel(product);
 

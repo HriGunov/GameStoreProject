@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GameStore.Data.Context;
 using GameStore.Data.Models;
+using GameStore.Services.Abstract;
 using GameStore.Web.Areas.Administration.Models;
 using Microsoft.AspNetCore.Authorization;
 
@@ -16,11 +17,11 @@ namespace GameStore.Web.Areas.Administration.Controllers
     [Authorize(Roles = "Admin")]
     public class ProductsController : Controller
     {
-        private readonly GameStoreContext _context;
+        private readonly IProductsService _productsService;
 
-        public ProductsController(GameStoreContext context)
+        public ProductsController(IProductsService productsService)
         {
-            _context = context;
+            _productsService = productsService;
         }
 
         [TempData]
@@ -29,7 +30,7 @@ namespace GameStore.Web.Areas.Administration.Controllers
         // GET: Administration/Products
         public async Task<IActionResult> Index()
         {
-            var products = await _context.Products.ToListAsync();
+            var products = await _productsService.GetAllProducts();
             var viewModel = new List<ProductsViewModel>();
 
             foreach (var product in products)
@@ -41,15 +42,9 @@ namespace GameStore.Web.Areas.Administration.Controllers
         }
 
         // GET: Administration/Products/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var product = await _context.Products
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var product = await _productsService.FindProductAsync(id);
 
             if (product == null)
             {
@@ -85,8 +80,7 @@ namespace GameStore.Web.Areas.Administration.Controllers
                     IsOnSale = product.IsOnSale
                 };
 
-                _context.Add(newModel);
-                await _context.SaveChangesAsync();
+                await _productsService.AddProductAsync(newModel);
                 this.StatusMessage = $"Successfully added {newModel.Name}";
                 return RedirectToAction(nameof(Index));
             }
@@ -95,14 +89,9 @@ namespace GameStore.Web.Areas.Administration.Controllers
         }
 
         // GET: Administration/Products/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var product = await _context.Products.FindAsync(id);
+            var product = await _productsService.FindProductAsync(id);
             if (product == null)
             {
                 return NotFound();
@@ -141,12 +130,11 @@ namespace GameStore.Web.Areas.Administration.Controllers
                         IsOnSale = product.IsOnSale
                     };
 
-                    _context.Update(newModel);
-                    await _context.SaveChangesAsync();
+                    await _productsService.UpdateProductAsync(newModel);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProductExists(product.Id))
+                    if (await this._productsService.ProductExistsAsync(product.Id) == false)
                     {
                         return NotFound();
                     }
@@ -163,15 +151,9 @@ namespace GameStore.Web.Areas.Administration.Controllers
         }
 
         // GET: Administration/Products/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var product = await _context.Products
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var product = await _productsService.FindProductAsync(id);
 
             if (product == null)
             {
@@ -188,19 +170,13 @@ namespace GameStore.Web.Areas.Administration.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var product = await _context.Products.FindAsync(id);
+            var product = await _productsService.FindProductAsync(id);
             var productName = product.Name;
-            _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
+            await this._productsService.RemoveProductAsync(product);
 
             this.StatusMessage = $"Successfully deleted {productName}";
 
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool ProductExists(int id)
-        {
-            return _context.Products.Any(e => e.Id == id);
         }
     }
 }

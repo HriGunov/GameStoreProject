@@ -1,24 +1,23 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using GameStore.Data.Models;
 
 namespace GameStore.Services.Abstract
 {
     public interface IProductsService
     {
-        string AddGenreToProduct(string name, Product product);
-        Product AddProduct(Product product);
-
-        Product AddProduct(string productName, string imageName, string productDescription, decimal productPrice,
-            ICollection<Genre> productGenres = null);
-
-        void DeleteProductsLoadedFromJSON(string jsonString);
-        Product FindProduct(int id, bool includeDeleted = false);
-        Product FindProduct(string productName, bool includeDeleted = false);
-        IEnumerable<Product> FindProductsByGenre(Genre productGenre);
-        IEnumerable<Product> FindProductsByGenre(IEnumerable<Genre> productGenre);
-        void LoadProductsLoadedFromJSON(string jsonString);
-        string RemoveGenreFromProduct(string name, Product product);
-        string RemoveProduct(string productName);
-        IEnumerable<Product> SkipAndTakeLatestProducts(int productsToTake);
+        Task<Product> AddGenreToProductAsync(string name, Product product);
+        Task<Product> AddProductAsync(Product product);
+        Task<Product> FindProductAsync(int id, bool includeDeleted = false);
+        Task<Product> FindProductAsync(string productName, bool includeDeleted = false);
+        Task<IEnumerable<Product>> GetAllProducts();
+        Task<IEnumerable<Product>> FindProductsByGenreAsync(Genre productGenre);
+        Task<IEnumerable<Product>> FindProductsByGenreAsync(IEnumerable<Genre> productGenre);
+        Task<Product> RemoveGenreFromProductAsync(string name, Product product);
+        Task<string> RemoveProductAsync(int id);
+        Task<string> RemoveProductAsync(Product product);
+        Task<IEnumerable<Product>> SkipAndTakeLatestProductsAsync(int productsToTake);
+        Task<Product> UpdateProductAsync(Product product);
+        Task<bool> ProductExistsAsync(int id);
     }
 }

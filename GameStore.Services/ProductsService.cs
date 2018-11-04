@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using GameStore.Data.Context;
 using GameStore.Data.Models;
 using GameStore.Exceptions;
@@ -20,49 +21,28 @@ namespace GameStore.Services
         }
 
         /// <summary>
-        ///     Creates a product from the given parameters and adds it to the database.
+        ///     Removes the first product that matches the given id parameter in the database.
         /// </summary>
-        /// <param name="productName">Product Name</param>
-        /// <param name="productDescription">Product Description</param>
-        /// <param name="productPrice">Product Price</param>
-        /// <param name="productGenres">Product Genres (ICollection)</param>
+        /// <param name="id">Product Id</param>
         /// <returns></returns>
-        public Product AddProduct(string productName, string imageName, string productDescription, decimal productPrice,
-            ICollection<Genre> productGenres = null)
+        public async Task<string> RemoveProductAsync(int id)
         {
-            if (FindProduct(productName) != null)
-                throw new UserException($"Product ({productName}) already exists.");
+            var product = await this.FindProductAsync(id);
+            var productName = product.Name;
+            if (product.IsDeleted) return $"Product {product.Name} was not found.";
 
-            var product = new Product
-            {
-                Name = productName,
-                ProductImageName = imageName,
-                Description = productDescription,
-                Price = productPrice,
-                CreatedOn = DateTime.Now
-            };
-
-            if (productGenres != null)
-                product.Genre = productGenres;
-
-            storeContext.Products.Add(product);
-            storeContext.SaveChanges();
-
-            return product;
+            storeContext.Products.Remove(product);
+            await storeContext.SaveChangesAsync();
+            return $"Product {productName} has been successfully removed.";
         }
 
-        /// <summary>
-        ///     Removes the first product that matches the given name parameter in the database.
-        /// </summary>
-        /// <param name="productName">Product Name</param>
-        /// <returns></returns>
-        public string RemoveProduct(string productName)
+        public async Task<string> RemoveProductAsync(Product product)
         {
-            var product = storeContext.Products.ToList().SingleOrDefault(p => p.Name == productName);
-            if (product == null || product.IsDeleted) return $"Product {productName} was not found.";
+            var productName = product.Name;
+            if (product.IsDeleted) return $"Product {product.Name} was not found.";
 
-            product.IsDeleted = true;
-            storeContext.SaveChanges();
+            storeContext.Products.Remove(product);
+            await storeContext.SaveChangesAsync();
             return $"Product {productName} has been successfully removed.";
         }
 
@@ -72,9 +52,9 @@ namespace GameStore.Services
         /// </summary>
         /// <param name="productName">Product Name</param>
         /// <returns></returns>
-        public Product FindProduct(string productName, bool includeDeleted = false)
+        public async Task<Product> FindProductAsync(string productName, bool includeDeleted = false)
         {
-            var product = storeContext.Products.FirstOrDefault(p => p.Name == productName);
+            var product = await storeContext.Products.FirstOrDefaultAsync(p => p.Name == productName);
 
             if (product == null) return null;
 
@@ -82,12 +62,13 @@ namespace GameStore.Services
 
             if (product.IsDeleted)
                 return null;
+
             return product;
         }
 
-        public Product FindProduct(int id, bool includeDeleted = false)
+        public async Task<Product> FindProductAsync(int id, bool includeDeleted = false)
         {
-            var product = storeContext.Products.Find(id);
+            var product = await storeContext.Products.FindAsync(id);
 
             if (product == null) return null;
 
@@ -95,95 +76,80 @@ namespace GameStore.Services
 
             if (product.IsDeleted)
                 return null;
+
             return product;
         }
 
-        public IEnumerable<Product> SkipAndTakeLatestProducts(int productsToTake)
+        public async Task<IEnumerable<Product>> GetAllProducts()
         {
-            return storeContext.Products.Include(g => g.Genre).OrderByDescending(product => product.CreatedOn)
-                .Take(productsToTake).ToList();
+            var products = await storeContext.Products.ToListAsync();
+            return !products.Any() ? null : products;
         }
 
-        public IEnumerable<Product> FindProductsByGenre(IEnumerable<Genre> productGenre)
+        public async Task<IEnumerable<Product>> SkipAndTakeLatestProductsAsync(int productsToTake)
         {
-            var products = storeContext.Products.Include(prod => prod.Genre)
-                .Where(p => productGenre
-                    .All(genre => p.Genre.Contains(genre)));
-
+            var products = await storeContext.Products.Include(g => g.Genre).OrderByDescending(product => product.CreatedOn)
+                .Take(productsToTake).ToListAsync();
 
             return !products.Any() ? null : products;
         }
 
-        public string AddGenreToProduct(string name, Product product)
+        public async Task<IEnumerable<Product>> FindProductsByGenreAsync(IEnumerable<Genre> productGenre)
         {
-            if (FindProduct(product.Name).Genre.Any(g => g.Name == name))
+            var products = await storeContext.Products.Include(prod => prod.Genre)
+                .Where(p => productGenre
+                    .All(genre => p.Genre.Contains(genre))).ToListAsync();
+
+            return !products.Any() ? null : products;
+        }
+
+        public async Task<Product> AddGenreToProductAsync(string name, Product product)
+        {
+            if (product.Genre.Any(g => g.Name == name))
                 throw new UserException($"The {product.Name} already has this genre ({name}).");
 
-            storeContext.Genres.Add(new Genre {Name = name, ProductId = product.Id});
-            storeContext.SaveChanges();
+            await storeContext.Genres.AddAsync(new Genre {Name = name, ProductId = product.Id});
+            await storeContext.SaveChangesAsync();
 
-            return $"Added {name} to {product.Name}.";
+            return product;
         }
 
-        public string RemoveGenreFromProduct(string name, Product product)
+        public async Task<Product> RemoveGenreFromProductAsync(string name, Product product)
         {
-            var tempGenre = storeContext.Genres.FirstOrDefault(g => g.Name == name && g.ProductId == product.Id);
+            var tempGenre = await storeContext.Genres.FirstOrDefaultAsync(g => g.Name == name && g.ProductId == product.Id);
             if (tempGenre == null)
-                return $"Product {product.Name} doesn't have {name} genre.";
+                throw new UserException($"Product {product.Name} doesn't have {name} genre.");
 
             storeContext.Genres.Remove(tempGenre);
-            storeContext.SaveChanges();
+            await storeContext.SaveChangesAsync();
 
-            return $"Removed {name} from {product.Name}.";
+            return product;
         }
 
-        public IEnumerable<Product> FindProductsByGenre(Genre productGenre)
+        public async Task<IEnumerable<Product>> FindProductsByGenreAsync(Genre productGenre)
         {
-            var products = storeContext.Products.Include(prod => prod.Genre).Where(p => p.Genre.Contains(productGenre))
-                .ToList();
+            var products = await storeContext.Products.Include(prod => prod.Genre).Where(p => p.Genre.Contains(productGenre))
+                .ToListAsync();
 
             return !products.Any() ? null : products;
         }
 
-        public void LoadProductsLoadedFromJSON(string jsonString)
+        public async Task<Product> AddProductAsync(Product product)
         {
-            var results = JsonConvert.DeserializeObject<List<Product>>(jsonString);
-
-            foreach (var product in results)
-            {
-                var collision = FindProduct(product.Name, true);
-                if (collision == null)
-                {
-                    AddProduct(product);
-                }
-                else
-                {
-                    if (collision.IsDeleted) collision.IsDeleted = false;
-                }
-            }
-
-            storeContext.SaveChanges();
+            await this.storeContext.Products.AddAsync(product);
+            await storeContext.SaveChangesAsync();
+            return product;
         }
 
-        public void DeleteProductsLoadedFromJSON(string jsonString)
+        public async Task<Product> UpdateProductAsync(Product product)
         {
-            var results = JsonConvert.DeserializeObject<List<Product>>(jsonString);
-            foreach (var product in results)
-            {
-                var collision = FindProduct(product.Name);
-                if (collision != null)
-                    if (collision.IsDeleted == false)
-                        collision.IsDeleted = true;
-            }
-
-            storeContext.SaveChanges();
+            this.storeContext.Update(product);
+            await this.storeContext.SaveChangesAsync();
+            return product;
         }
-
-
-        public Product AddProduct(Product product)
+        public async Task<bool> ProductExistsAsync(int id)
         {
-            return AddProduct(product.Name, product.ProductImageName, product.Description, product.Price,
-                product.Genre);
+            return await this.storeContext.Products.AnyAsync(e => e.Id == id);
         }
     }
 }
