@@ -14,7 +14,7 @@ namespace GameStore.Data.Context.Configurations
 
             builder.Property(x => x.AvatarImageName)
                 .HasMaxLength(100)
-               .IsRequired(false);
+                .IsRequired(false);
             builder.Property(x => x.FirstName)
                 .HasMaxLength(20)
                 .IsRequired(false);

@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using GameStore.Data.Context;
 using GameStore.Data.Models;
-using GameStore.Exceptions;
 using GameStore.Services.Abstract;
-using Microsoft.EntityFrameworkCore;
 
 namespace GameStore.Services
 {
@@ -26,13 +23,10 @@ namespace GameStore.Services
 
         public async Task SaveAvatarImageAsync(string root, string filename, Stream stream, string userId)
         {
-            var user = this.storeContext.Users.Find(userId);
-            if (user == null)
-            {
-                throw new Exception("User Not Found");
-            }
+            var user = storeContext.Users.Find(userId);
+            if (user == null) throw new Exception("User Not Found");
 
-            var imageName = Guid.NewGuid().ToString() + Path.GetExtension(filename);
+            var imageName = Guid.NewGuid() + Path.GetExtension(filename);
             var path = Path.Combine(root, imageName);
 
             using (var fileStream = File.Create(path))
@@ -41,10 +35,9 @@ namespace GameStore.Services
             }
 
             user.AvatarImageName = imageName;
-            this.storeContext.SaveChanges();
+            storeContext.SaveChanges();
         }
 
- 
 
         /// <summary>
         ///     Deletes an account by changing it's IsDeleted flag and sets the DeletedBy to the commandExecutor's name.
@@ -54,12 +47,9 @@ namespace GameStore.Services
         /// <returns></returns>
         public string DeleteAccount(string accountId)
         {
-            var account = this.storeContext.Users.Find(accountId);
-            if (account == null)
-            {
-                throw new Exception("Account not found");
-            }
-             
+            var account = storeContext.Users.Find(accountId);
+            if (account == null) throw new Exception("Account not found");
+
             if (account.IsDeleted) return $"Account {account.UserName} was not found.";
 
             account.IsDeleted = true;
@@ -67,7 +57,7 @@ namespace GameStore.Services
             storeContext.SaveChanges();
             return $"Account {account.UserName} has been successfully removed.";
         }
- 
+
         /// <summary>
         ///     Adds credit card to the given user.
         /// </summary>
@@ -79,7 +69,7 @@ namespace GameStore.Services
             account.CreditCard = cardNumber;
             tempAccount.CreditCard = cardNumber;
             storeContext.SaveChanges();
-        } 
+        }
 
         /// <summary>
         ///     Restores an account by changing it's IsDeleted flag and clears the DeletedBy field.
@@ -98,7 +88,7 @@ namespace GameStore.Services
             return $"Account {accountName} has been successfully restored.";
         }
 
-        
+
         /// <summary>
         ///     Determines whether the username meets conditions.
         ///     Username conditions:

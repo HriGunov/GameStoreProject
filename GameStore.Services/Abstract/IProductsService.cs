@@ -7,7 +7,10 @@ namespace GameStore.Services.Abstract
     {
         string AddGenreToProduct(string name, Product product);
         Product AddProduct(Product product);
-        Product AddProduct(string productName, string imageName, string productDescription, decimal productPrice, ICollection<Genre> productGenres = null);
+
+        Product AddProduct(string productName, string imageName, string productDescription, decimal productPrice,
+            ICollection<Genre> productGenres = null);
+
         void DeleteProductsLoadedFromJSON(string jsonString);
         Product FindProduct(int id, bool includeDeleted = false);
         Product FindProduct(string productName, bool includeDeleted = false);
@@ -16,6 +19,6 @@ namespace GameStore.Services.Abstract
         void LoadProductsLoadedFromJSON(string jsonString);
         string RemoveGenreFromProduct(string name, Product product);
         string RemoveProduct(string productName);
-        IEnumerable<Product> SkipAndTakeLatestProducts(int productsToSkip, int productsToTake);
+        IEnumerable<Product> SkipAndTakeLatestProducts(int productsToTake);
     }
 }

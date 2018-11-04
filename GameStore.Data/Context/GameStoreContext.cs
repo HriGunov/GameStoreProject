@@ -13,8 +13,8 @@ namespace GameStore.Data.Context
     {
         public GameStoreContext()
         {
-
         }
+
         public GameStoreContext(DbContextOptions options) : base(options)
         {
         }
@@ -30,8 +30,8 @@ namespace GameStore.Data.Context
 
         public override int SaveChanges()
         {
-            this.ApplyAuditInfoRules();
-            this.ApplyDeletionRules();
+            ApplyAuditInfoRules();
+            ApplyDeletionRules();
 
             return base.SaveChanges();
         }
@@ -47,19 +47,19 @@ namespace GameStore.Data.Context
             modelBuilder.ApplyConfiguration(new OrderProductsConfiguration());
 
             modelBuilder.Entity<IdentityRole>()
-                .HasData(new IdentityRole { Name = "Admin", NormalizedName = "ADMIN" });
+                .HasData(new IdentityRole {Name = "Admin", NormalizedName = "ADMIN"});
 
             base.OnModelCreating(modelBuilder);
         }
 
         private void ApplyDeletionRules()
         {
-            var entitiesForDeletion = this.ChangeTracker.Entries()
+            var entitiesForDeletion = ChangeTracker.Entries()
                 .Where(e => e.State == EntityState.Deleted && e.Entity is IDeletable);
 
             foreach (var entry in entitiesForDeletion)
             {
-                var entity = (IDeletable)entry.Entity;
+                var entity = (IDeletable) entry.Entity;
                 entity.DeletedOn = DateTime.Now;
                 entity.IsDeleted = true;
                 entry.State = EntityState.Modified;
@@ -68,23 +68,19 @@ namespace GameStore.Data.Context
 
         private void ApplyAuditInfoRules()
         {
-            var newlyCreatedEntities = this.ChangeTracker.Entries()
-                .Where(e => e.Entity is IAuditable && ((e.State == EntityState.Added) || (e.State == EntityState.Modified)));
+            var newlyCreatedEntities = ChangeTracker.Entries()
+                .Where(e => e.Entity is IAuditable &&
+                            (e.State == EntityState.Added || e.State == EntityState.Modified));
 
             foreach (var entry in newlyCreatedEntities)
             {
-                var entity = (IAuditable)entry.Entity;
+                var entity = (IAuditable) entry.Entity;
 
                 if (entry.State == EntityState.Added && entity.CreatedOn == null)
-                {
                     entity.CreatedOn = DateTime.Now;
-                }
                 else
-                {
                     entity.ModifiedOn = DateTime.Now;
-                }
             }
         }
-
     }
 }

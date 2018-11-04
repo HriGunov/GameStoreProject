@@ -29,7 +29,7 @@ namespace GameStore.Web.Controllers
 
         public IActionResult Details(int id)
         {
-            var product = this.productsService.FindProductById(id);
+            var product = this.productsService.FindProduct(id);
 
             var viewModel = new ProductListingViewModel(product);
 

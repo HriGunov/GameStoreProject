@@ -4,7 +4,6 @@ using System.Linq;
 using GameStore.Data.Context;
 using GameStore.Data.Models;
 using GameStore.Services.Abstract;
-using Microsoft.EntityFrameworkCore;
 
 namespace GameStore.Services
 {
@@ -16,7 +15,7 @@ namespace GameStore.Services
         {
             this.storeContext = storeContext ?? throw new ArgumentNullException(nameof(storeContext));
         }
-         
+
         public Order AddToOrder(string accountId, int productId)
         {
             var tempOrder = CreateOrder(accountId);
@@ -37,7 +36,6 @@ namespace GameStore.Services
             Order tempOrder = null;
             foreach (var tempProduct in products)
             {
-
                 tempOrder = FindLastOrder(accountId);
                 if (tempOrder.OrderProducts.Any(p => p.ProductId == tempProduct.Id)) continue;
 
@@ -81,6 +79,5 @@ namespace GameStore.Services
 
             return newOrder;
         }
-  
     }
 }

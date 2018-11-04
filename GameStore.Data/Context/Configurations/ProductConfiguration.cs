@@ -16,7 +16,7 @@ namespace GameStore.Data.Context.Configurations
                 .IsUnique(true);
 
             builder.Property(p => p.ProductImageName)
-                  .IsRequired(false);
+                .IsRequired(false);
 
             builder.Property(p => p.Name)
                 .HasMaxLength(50)

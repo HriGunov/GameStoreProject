@@ -27,7 +27,7 @@ namespace GameStore.Services
         /// <param name="productPrice">Product Price</param>
         /// <param name="productGenres">Product Genres (ICollection)</param>
         /// <returns></returns>
-        public Product AddProduct(string productName,string imageName, string productDescription, decimal productPrice,
+        public Product AddProduct(string productName, string imageName, string productDescription, decimal productPrice,
             ICollection<Genre> productGenres = null)
         {
             if (FindProduct(productName) != null)
@@ -97,31 +97,29 @@ namespace GameStore.Services
                 return null;
             return product;
         }
-        public IEnumerable<Product> SkipAndTakeLatestProducts(int productsToSkip,int productsToTake)
-        {
-            return this.storeContext.Products.Include(g => g.Genre).FirstOrDefault(p => p.Id == productId && !p.IsDeleted);
-        }
 
         public IEnumerable<Product> SkipAndTakeLatestProducts(int productsToTake)
         {
-            return storeContext.Products.Include(g => g.Genre).OrderByDescending(product => product.CreatedOn).Take(productsToTake).ToList();
+            return storeContext.Products.Include(g => g.Genre).OrderByDescending(product => product.CreatedOn)
+                .Take(productsToTake).ToList();
         }
 
         public IEnumerable<Product> FindProductsByGenre(IEnumerable<Genre> productGenre)
         {
-            var products = storeContext.Products.Include( prod => prod.Genre)
-                .Where(p =>productGenre
+            var products = storeContext.Products.Include(prod => prod.Genre)
+                .Where(p => productGenre
                     .All(genre => p.Genre.Contains(genre)));
-            
+
 
             return !products.Any() ? null : products;
-        } 
+        }
+
         public string AddGenreToProduct(string name, Product product)
         {
             if (FindProduct(product.Name).Genre.Any(g => g.Name == name))
                 throw new UserException($"The {product.Name} already has this genre ({name}).");
 
-            storeContext.Genres.Add(new Genre { Name = name, ProductId = product.Id });
+            storeContext.Genres.Add(new Genre {Name = name, ProductId = product.Id});
             storeContext.SaveChanges();
 
             return $"Added {name} to {product.Name}.";
@@ -141,14 +139,15 @@ namespace GameStore.Services
 
         public IEnumerable<Product> FindProductsByGenre(Genre productGenre)
         {
-            var products = storeContext.Products.Include(prod => prod.Genre).Where(p => p.Genre.Contains(productGenre)).ToList();
+            var products = storeContext.Products.Include(prod => prod.Genre).Where(p => p.Genre.Contains(productGenre))
+                .ToList();
 
             return !products.Any() ? null : products;
         }
 
         public void LoadProductsLoadedFromJSON(string jsonString)
         {
-            List<Product> results = JsonConvert.DeserializeObject<List<Product>>(jsonString);
+            var results = JsonConvert.DeserializeObject<List<Product>>(jsonString);
 
             foreach (var product in results)
             {
@@ -168,7 +167,7 @@ namespace GameStore.Services
 
         public void DeleteProductsLoadedFromJSON(string jsonString)
         {
-            List<Product> results = JsonConvert.DeserializeObject<List<Product>>(jsonString);
+            var results = JsonConvert.DeserializeObject<List<Product>>(jsonString);
             foreach (var product in results)
             {
                 var collision = FindProduct(product.Name);
@@ -183,9 +182,8 @@ namespace GameStore.Services
 
         public Product AddProduct(Product product)
         {
-            return AddProduct(product.Name, product.ProductImageName, product.Description, product.Price, product.Genre);
+            return AddProduct(product.Name, product.ProductImageName, product.Description, product.Price,
+                product.Genre);
         }
-
-        
     }
 }

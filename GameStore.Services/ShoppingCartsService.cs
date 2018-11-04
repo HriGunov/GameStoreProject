@@ -10,12 +10,13 @@ using Microsoft.EntityFrameworkCore;
 namespace GameStore.Services
 {
     public class ShoppingCartsService : IShoppingCartsService
-    {        
+    {
         private readonly GameStoreContext storeContext;
 
-        public ShoppingCartsService(GameStoreContext storeContext, IAccountsService accountService,IProductsService productsService)
+        public ShoppingCartsService(GameStoreContext storeContext, IAccountsService accountService,
+            IProductsService productsService)
         {
-            this.storeContext = storeContext ?? throw new ArgumentNullException(nameof(storeContext));             
+            this.storeContext = storeContext ?? throw new ArgumentNullException(nameof(storeContext));
         }
 
         /// <summary>
@@ -24,10 +25,11 @@ namespace GameStore.Services
         /// <param name="product">Product Type</param>
         /// <param name="account">Account Type</param>
         /// <returns></returns>
-        public ShoppingCart AddToCart(int productId,string accountId )
+        public ShoppingCart AddToCart(int productId, string accountId)
         {
-            Product product = storeContext.Products.Find(productId);
-            var account = storeContext.Accounts.Where(acc => acc.Id == accountId).Include(acc => acc.ShoppingCart).Single();
+            var product = storeContext.Products.Find(productId);
+            var account = storeContext.Accounts.Where(acc => acc.Id == accountId).Include(acc => acc.ShoppingCart)
+                .Single();
             // Move this check to Commands 
 
             if (product == null)
@@ -49,7 +51,7 @@ namespace GameStore.Services
 
             storeContext.ShoppingCartProducts.Add(shoppingCart);
             storeContext.SaveChanges();
- 
+
             account.ShoppingCart = GetUserCart(accountId);
 
             return tempCart;
@@ -63,8 +65,9 @@ namespace GameStore.Services
         /// <returns></returns>
         public ShoppingCart AddToCart(IEnumerable<int> productsId, string accountId)
         {
-            var account = storeContext.Accounts.Where(acc => acc.Id == accountId).Include(acc => acc.ShoppingCart).Single();
-            IEnumerable<Product> products = storeContext.Products.Where( prod => productsId.Contains(prod.Id)).ToList();
+            var account = storeContext.Accounts.Where(acc => acc.Id == accountId).Include(acc => acc.ShoppingCart)
+                .Single();
+            IEnumerable<Product> products = storeContext.Products.Where(prod => productsId.Contains(prod.Id)).ToList();
 
             var tempCart = account.ShoppingCart;
 
@@ -87,7 +90,7 @@ namespace GameStore.Services
                     account.ShoppingCart.ShoppingCartProducts.Add(shoppingCart);
                 }
 
-            storeContext.SaveChanges();            
+            storeContext.SaveChanges();
 
             return account.ShoppingCart;
         }
@@ -101,13 +104,10 @@ namespace GameStore.Services
             var cart = GetUserCart(accountId);
 
             var userCartProducts = cart.ShoppingCartProducts.ToList();
-            foreach (var product in userCartProducts)
-            {
-                storeContext.ShoppingCartProducts.Remove(product);
-            }
+            foreach (var product in userCartProducts) storeContext.ShoppingCartProducts.Remove(product);
             storeContext.SaveChanges();
 
-           // account.ShoppingCart.ShoppingCartProducts = new List<ShoppingCartProducts>();
+            // account.ShoppingCart.ShoppingCartProducts = new List<ShoppingCartProducts>();
         }
 
         /// <summary>
@@ -117,7 +117,8 @@ namespace GameStore.Services
         /// <param name="account">Account Type</param>
         public ShoppingCart GetUserCart(string accountId)
         {
-            var account = storeContext.Accounts.Where(acc => acc.Id == accountId).Include(acc => acc.ShoppingCart).Single();
+            var account = storeContext.Accounts.Where(acc => acc.Id == accountId).Include(acc => acc.ShoppingCart)
+                .Single();
             return account.ShoppingCart;
         }
 

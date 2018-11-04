@@ -7,8 +7,8 @@ namespace GameStore.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<string>(
-                name: "Name",
-                table: "Products",
+                "Name",
+                "Products",
                 maxLength: 70,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -18,8 +18,8 @@ namespace GameStore.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<string>(
-                name: "Name",
-                table: "Products",
+                "Name",
+                "Products",
                 maxLength: 20,
                 nullable: false,
                 oldClrType: typeof(string),

@@ -7,36 +7,36 @@ namespace GameStore.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropIndex(
-                name: "IX_AspNetUsers_ShoppingCartId",
-                table: "AspNetUsers");
+                "IX_AspNetUsers_ShoppingCartId",
+                "AspNetUsers");
 
             migrationBuilder.AddColumn<int>(
-                name: "AccountId",
-                table: "ShoppingCarts",
+                "AccountId",
+                "ShoppingCarts",
                 nullable: false,
                 defaultValue: 0);
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_ShoppingCartId",
-                table: "AspNetUsers",
-                column: "ShoppingCartId",
+                "IX_AspNetUsers_ShoppingCartId",
+                "AspNetUsers",
+                "ShoppingCartId",
                 unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropIndex(
-                name: "IX_AspNetUsers_ShoppingCartId",
-                table: "AspNetUsers");
+                "IX_AspNetUsers_ShoppingCartId",
+                "AspNetUsers");
 
             migrationBuilder.DropColumn(
-                name: "AccountId",
-                table: "ShoppingCarts");
+                "AccountId",
+                "ShoppingCarts");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_ShoppingCartId",
-                table: "AspNetUsers",
-                column: "ShoppingCartId");
+                "IX_AspNetUsers_ShoppingCartId",
+                "AspNetUsers",
+                "ShoppingCartId");
         }
     }
 }
