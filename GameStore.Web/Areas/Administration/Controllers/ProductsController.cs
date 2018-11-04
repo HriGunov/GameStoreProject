@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +11,8 @@ using GameStore.Data.Models;
 using GameStore.Services.Abstract;
 using GameStore.Web.Areas.Administration.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 
 namespace GameStore.Web.Areas.Administration.Controllers
 {
@@ -177,6 +180,53 @@ namespace GameStore.Web.Areas.Administration.Controllers
             this.StatusMessage = $"Successfully deleted {productName}";
 
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeProductImage(int productId, IFormFile productImage)
+        {
+            if (productImage == null)
+            {
+                this.StatusMessage = "Error: Please provide an image";
+                return this.RedirectToAction(nameof(Edit), new { id = productId });
+            }
+
+            if (!this.IsValidImage(productImage))
+            {
+                this.StatusMessage = "Error: Please provide a .jpg or .png file smaller than 2MB";
+                return this.RedirectToAction(nameof(Edit), new { id = productId });
+            }
+
+            await this._productsService.SaveProductImageAsync(
+                this.GetUploadsRoot(),
+                productImage.FileName,
+                productImage.OpenReadStream(),
+                productId
+            );
+
+            this.StatusMessage = "Product Image Updated Successfully";
+
+            return this.RedirectToAction(nameof(Edit), new { id = productId });
+        }
+
+        private string GetUploadsRoot()
+        {
+            var environment = this.HttpContext.RequestServices
+                .GetService(typeof(IHostingEnvironment)) as IHostingEnvironment;
+
+            return Path.Combine(environment.WebRootPath, "images", "products");
+        }
+
+        private bool IsValidImage(IFormFile image)
+        {
+            string type = image.ContentType;
+            if (type != "image/png" && type != "image/jpg" && type != "image/jpeg")
+            {
+                return false;
+            }
+
+            return image.Length <= 2048 * 2048;
         }
     }
 }

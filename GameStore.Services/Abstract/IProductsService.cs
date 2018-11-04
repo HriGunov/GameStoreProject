@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using GameStore.Data.Models;
 
@@ -19,5 +20,6 @@ namespace GameStore.Services.Abstract
         Task<IEnumerable<Product>> SkipAndTakeLatestProductsAsync(int productsToTake);
         Task<Product> UpdateProductAsync(Product product);
         Task<bool> ProductExistsAsync(int id);
+        Task SaveProductImageAsync(string root, string filename, Stream stream, int productId);
     }
 }

@@ -7,7 +7,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" id="editForm" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="CreatedOn" />
@@ -16,8 +16,8 @@
             @Html.Partial("_StatusMessage", TempData["StatusMessage"])
             <div class="form-group">
                 <img src="~/images/products/@(Model.ImageName ?? "card.png")" class="img-thumbnail img-fluid mb-2" alt="@Model.Name">
-                <button class="btn btn-primary">Change Picture</button>
-                <button class="btn btn-danger float-right">Delete Picture</button>
+                <span class="btn btn-primary" data-toggle="modal" data-target="#upload-modal">Change Picture</span>
+                <button type="submit" disabled class="btn btn-danger float-right">Delete Picture (Soon)</button>
             </div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -57,7 +57,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save Changes" class="btn btn-primary" />
+                <input type="submit" value="Save Changes" form="editForm" class="btn btn-primary" />
             </div>
         </form>
     </div>
@@ -70,3 +70,30 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+<div id="upload-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Change Product Image</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form asp-controller="Products" asp-route-productId="@Model.Id" asp-action="ChangeProductImage" id="changePictureForm" method="post" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="customFile" name="productImage" onchange="$(this).next().after().text($(this).val().split('\\').slice(-1)[0])">
+                        <label class="custom-file-label text-truncate" for="customFile">
+                            Choose Picture
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-danger">Close</button>
+                    <button type="submit" form="changePictureForm" class="btn btn-success">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using GameStore.Data.Context;
@@ -51,6 +52,7 @@ namespace GameStore.Services
         ///     type.
         /// </summary>
         /// <param name="productName">Product Name</param>
+        /// <param name="includeDeleted">Is Deleted</param>
         /// <returns></returns>
         public async Task<Product> FindProductAsync(string productName, bool includeDeleted = false)
         {
@@ -150,6 +152,23 @@ namespace GameStore.Services
         public async Task<bool> ProductExistsAsync(int id)
         {
             return await this.storeContext.Products.AnyAsync(e => e.Id == id);
+        }
+
+        public async Task SaveProductImageAsync(string root, string filename, Stream stream, int productId)
+        {
+            var product = await this.FindProductAsync(productId);
+            if (product == null) throw new Exception("Product Not Found");
+
+            var imageName = Guid.NewGuid() + Path.GetExtension(filename);
+            var path = Path.Combine(root, imageName);
+
+            using (var fileStream = File.Create(path))
+            {
+                await stream.CopyToAsync(fileStream);
+            }
+
+            product.ProductImageName = imageName;
+            storeContext.SaveChanges();
         }
     }
 }

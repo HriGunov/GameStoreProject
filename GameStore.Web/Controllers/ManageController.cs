@@ -308,7 +308,7 @@ namespace GameStore.Web.Controllers
                 _userManager.GetUserId(User)
             );
 
-            this.StatusMessage = "Avatar updated successfully";
+            this.StatusMessage = "ChangeProductImage updated successfully";
 
             return this.RedirectToAction(nameof(ChangeAvatar));
         }
@@ -331,9 +331,7 @@ namespace GameStore.Web.Controllers
 
             return image.Length <= 1024 * 1024;
         }
-
-
-
+        
         [HttpGet]
         public async Task<IActionResult> LinkLoginCallback()
         {
