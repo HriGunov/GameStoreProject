@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using GameStore.Data.Context;
 using GameStore.Data.Models;
 using GameStore.Exceptions;
@@ -17,14 +18,14 @@ namespace GameStore.Services
             this.storeContext = storeContext ?? throw new ArgumentNullException(nameof(storeContext));
         }
 
-        public Comment AddCommentToProduct(int productId, string commentorId, string commentText)
+        public async Task<Comment> AddCommentToProduct(int productId, string commentorId, string commentText)
         {
-            var commentor = storeContext.Accounts.Include(acc => acc.Comments).Where(acc => acc.Id == commentorId)
-                .Single();
+            var commentor = await storeContext.Accounts.Include(acc => acc.Comments).Where(acc => acc.Id == commentorId)
+                .SingleAsync();
             if (commentor == null) throw new UserException("Could not find the user who commented...");
 
-            var productToBeCommentedTo = storeContext.Products.Include(prod => prod.Comments)
-                .Where(prod => prod.Id == productId).Single();
+            var productToBeCommentedTo = await storeContext.Products.Include(prod => prod.Comments)
+                .Where(prod => prod.Id == productId).SingleAsync();
             if (productToBeCommentedTo == null) throw new UserException("Could not find product...");
 
             if (productToBeCommentedTo.Comments.Any(
@@ -46,32 +47,32 @@ namespace GameStore.Services
             productToBeCommentedTo.Comments.Add(newComment);
             storeContext.Products.Update(productToBeCommentedTo);
             storeContext.Comments.Add(newComment);*/
-            storeContext.SaveChanges();
+            await storeContext.SaveChangesAsync();
             return newComment;
         }
 
-        public void RemoveCommentsFromProduct(int productId)
+        public async Task RemoveCommentsFromProduct(int productId)
         {
-            var product = storeContext.Products.Include(prod => prod.Comments).Where(prod => prod.Id == productId)
-                .Single();
+            var product = await storeContext.Products.Include(prod => prod.Comments).Where(prod => prod.Id == productId)
+                .SingleAsync();
             if (product == null) throw new UserException("Could not find product.");
 
             foreach (var comment in product.Comments) comment.IsDeleted = true;
             storeContext.Update(storeContext.Products);
 
-            storeContext.SaveChanges();
+            await storeContext.SaveChangesAsync();
         }
 
-        public void RemoveCommentsFromAccount(string accountId)
+        public async Task RemoveCommentsFromAccount(string accountId)
         {
-            var tempAccount = storeContext.Accounts.Include(acc => acc.Comments).Where(acc => acc.Id == accountId)
-                .Single();
+            var tempAccount = await storeContext.Accounts.Include(acc => acc.Comments).Where(acc => acc.Id == accountId)
+                .SingleAsync();
 
             if (tempAccount == null) throw new UserException("Could not find account.");
             foreach (var comment in tempAccount.Comments)
                 comment.IsDeleted = true;
             storeContext.Update(storeContext.Accounts);
-            storeContext.SaveChanges();
+            await storeContext.SaveChangesAsync();
         }
     }
 }

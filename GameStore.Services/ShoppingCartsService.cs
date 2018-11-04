@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using GameStore.Data.Context;
 using GameStore.Data.Models;
 using GameStore.Exceptions;
@@ -25,17 +26,17 @@ namespace GameStore.Services
         /// <param name="product">Product Type</param>
         /// <param name="account">Account Type</param>
         /// <returns></returns>
-        public ShoppingCart AddToCart(int productId, string accountId)
+        public async Task<ShoppingCart> AddToCart(int productId, string accountId)
         {
-            var product = storeContext.Products.Find(productId);
-            var account = storeContext.Accounts.Where(acc => acc.Id == accountId).Include(acc => acc.ShoppingCart)
-                .Single();
+            var product = await storeContext.Products.FindAsync(productId);
+            var account = await storeContext.Accounts.Where(acc => acc.Id == accountId).Include(acc => acc.ShoppingCart)
+                .SingleAsync();
             // Move this check to Commands 
 
             if (product == null)
                 throw new UserException("No product given to add.");
 
-            if (ProductExistsInCart(product, account))
+            if (await ProductExistsInCart(product, account))
                 throw new UserException($"Product {product.Name} already exists in the user's cart.");
 
             var tempCart = account.ShoppingCart;
@@ -49,10 +50,8 @@ namespace GameStore.Services
                 ProductId = product.Id
             };
 
-            storeContext.ShoppingCartProducts.Add(shoppingCart);
-            storeContext.SaveChanges();
-
-            account.ShoppingCart = GetUserCart(accountId);
+            await storeContext.ShoppingCartProducts.AddAsync(shoppingCart);
+            await storeContext.SaveChangesAsync(); 
 
             return tempCart;
         }
@@ -63,11 +62,11 @@ namespace GameStore.Services
         /// <param name="product">Product Type</param>
         /// <param name="account">Account Type</param>
         /// <returns></returns>
-        public ShoppingCart AddToCart(IEnumerable<int> productsId, string accountId)
+        public async Task<ShoppingCart> AddToCart(IEnumerable<int> productsId, string accountId)
         {
-            var account = storeContext.Accounts.Where(acc => acc.Id == accountId).Include(acc => acc.ShoppingCart)
-                .Single();
-            IEnumerable<Product> products = storeContext.Products.Where(prod => productsId.Contains(prod.Id)).ToList();
+            var account = await storeContext.Accounts.Where(acc => acc.Id == accountId).Include(acc => acc.ShoppingCart)
+                .SingleAsync();
+            var products =  await storeContext.Products.Where(prod => productsId.Contains(prod.Id)).ToListAsync();
 
             var tempCart = account.ShoppingCart;
 
@@ -77,7 +76,7 @@ namespace GameStore.Services
             foreach (var p in products)
                 if (p != null)
                 {
-                    if (ProductExistsInCart(p, account))
+                    if ( await ProductExistsInCart(p, account))
                         throw new UserException($"Product {p.Name} already exists in the user's cart.");
 
                     var shoppingCart = new ShoppingCartProducts
@@ -86,11 +85,11 @@ namespace GameStore.Services
                         ProductId = p.Id
                     };
 
-                    storeContext.ShoppingCartProducts.Add(shoppingCart);
+                     await storeContext.ShoppingCartProducts.AddAsync(shoppingCart);
                     account.ShoppingCart.ShoppingCartProducts.Add(shoppingCart);
                 }
 
-            storeContext.SaveChanges();
+            await storeContext.SaveChangesAsync();
 
             return account.ShoppingCart;
         }
@@ -99,13 +98,13 @@ namespace GameStore.Services
         ///     Clears the user's cart.
         /// </summary>
         /// <param name="account">Account Type</param>
-        public void ClearUserCart(string accountId)
+        public async Task ClearUserCart(string accountId)
         {
-            var cart = GetUserCart(accountId);
+            var cart = await GetUserCart(accountId);
 
             var userCartProducts = cart.ShoppingCartProducts.ToList();
             foreach (var product in userCartProducts) storeContext.ShoppingCartProducts.Remove(product);
-            storeContext.SaveChanges();
+            await storeContext.SaveChangesAsync();
 
             // account.ShoppingCart.ShoppingCartProducts = new List<ShoppingCartProducts>();
         }
@@ -115,10 +114,10 @@ namespace GameStore.Services
         /// </summary>
         /// <returns>The user cart.</returns>
         /// <param name="account">Account Type</param>
-        public ShoppingCart GetUserCart(string accountId)
+        public async Task<ShoppingCart> GetUserCart(string accountId)
         {
-            var account = storeContext.Accounts.Where(acc => acc.Id == accountId).Include(acc => acc.ShoppingCart)
-                .Single();
+            var account = await storeContext.Accounts.Where(acc => acc.Id == accountId).Include(acc => acc.ShoppingCart)
+                .SingleAsync();
             return account.ShoppingCart;
         }
 
@@ -128,9 +127,9 @@ namespace GameStore.Services
         /// <param name="product">Product Type</param>
         /// <param name="account">Account Type</param>
         /// <returns></returns>
-        private bool ProductExistsInCart(Product product, Account account)
+        private Task<bool> ProductExistsInCart(Product product, Account account)
         {
-            return storeContext.ShoppingCartProducts.Any(s =>
+            return  storeContext.ShoppingCartProducts.AnyAsync(s =>
                 s.ShoppingCartId == account.ShoppingCartId && s.ProductId == product.Id);
         }
     }
