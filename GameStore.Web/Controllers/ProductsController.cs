@@ -17,14 +17,14 @@ namespace GameStore.Web.Controllers
 
         public IActionResult Index()
         {
-            List<ProductListingViewModel> productListings = new List<ProductListingViewModel>();
+            var productListings = new List<ProductListingViewModel>();
             var latestProducts = productsService.SkipAndTakeLatestProducts(10);
             foreach (var product in latestProducts)
             {
                 productListings.Add(new ProductListingViewModel(product));
             }
 
-            return View(new ProductsPageViewModel(productListings));
+            return View(productListings);
         }
 
         public IActionResult Details(int id)

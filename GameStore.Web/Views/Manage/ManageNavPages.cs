@@ -20,6 +20,7 @@ namespace GameStore.Web.Views.Manage
         public static string TwoFactorAuthentication => "TwoFactorAuthentication";
 
         public static string IndexNavClass(ViewContext viewContext) => PageNavClass(viewContext, Index);
+        public static string ChangeAvatarNavClass(ViewContext viewContext) => PageNavClass(viewContext, ChangeAvatar);
 
         public static string ChangePasswordNavClass(ViewContext viewContext) => PageNavClass(viewContext, ChangePassword);
 

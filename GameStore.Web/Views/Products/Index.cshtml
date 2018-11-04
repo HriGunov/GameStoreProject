@@ -1,7 +1,7 @@
-﻿@model ProductsPageViewModel
+﻿@model IList<ProductListingViewModel>
 @{
     ViewData["Title"] = "Products";
 }
 <h3 class="text-center"><i class="fas fa-gamepad mr-2"></i>Products</h3>
 <hr />
-@await Html.PartialAsync("_ProductsPartialGrid", Model.ProductsList)
+@await Html.PartialAsync("_ProductsPartialGrid", Model)

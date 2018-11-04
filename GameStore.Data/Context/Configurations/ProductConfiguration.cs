@@ -22,6 +22,10 @@ namespace GameStore.Data.Context.Configurations
                 .HasMaxLength(50)
                 .IsRequired(true);
 
+            builder.Property(p => p.Publisher)
+                .HasMaxLength(50)
+                .IsRequired(true);
+
             builder.Property(p => p.Description)
                 .HasMaxLength(100)
                 .IsRequired(true);

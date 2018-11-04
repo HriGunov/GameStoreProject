@@ -1,0 +1,35 @@
+@model GameStore.Web.Areas.Administration.Models.ProductsViewModel
+<form>
+    <div class="form-group">
+        <img src="~/images/products/@(Model.ImageName ?? "card.png")" class="img-thumbnail img-fluid mb-2" alt="@Model.Name"><hr />
+    </div>
+    <div class="form-group">
+        <span class="badge badge-pill badge-danger">Name: @Html.DisplayFor(modelItem => Model.Name)</span>
+    </div>
+    <div class="form-group">
+        <span class="badge badge-pill badge-danger">Description: @Html.DisplayFor(modelItem => Model.Description)</span>
+    </div>
+    <div class="form-group">
+        <span class="badge badge-pill badge-warning">Publisher: @Html.DisplayFor(modelItem => Model.Publisher)</span>
+    </div>
+    <div class="form-group">
+        <span class="badge badge-pill badge-success">Price: @Html.DisplayFor(modelItem => Model.Price)</span>
+    </div>
+    <div class="form-group">
+        <span class="badge badge-pill badge-dark">Created On: @Html.DisplayFor(modelItem => Model.CreatedOn)</span>
+    </div>
+    <div class="form-group">
+        <span class="badge badge-pill badge-dark">Last Purchased: @Html.DisplayFor(modelItem => Model.LastPurchased)</span>
+    </div>
+    <div class="form-group">
+        <span class="badge badge-pill badge-primary">Is Deleted: @Model.IsDeleted</span>
+    </div>
+    <div class="form-group">
+        <span class="badge badge-pill badge-primary">On Sale: @Model.IsOnSale</span>
+    </div>
+    <hr />
+    <div class="form-group">
+        <a class="btn btn-outline-primary" asp-action="Edit" asp-controller="Products" asp-route-id="@Model.Id">Edit</a> |
+        <a class="btn btn-outline-primary" asp-action="Index" asp-controller="Products">Back to List</a>
+    </div>
+</form>

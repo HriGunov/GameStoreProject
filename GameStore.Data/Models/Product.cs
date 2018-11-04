@@ -11,6 +11,7 @@ namespace GameStore.Data.Models
 
         public string Name { get; set; }
         public string Description { get; set; }
+        public string Publisher { get; set; }
 
         public decimal Price { get; set; }
 

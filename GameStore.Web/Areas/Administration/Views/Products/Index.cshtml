@@ -1,0 +1,67 @@
+﻿@model IList<GameStore.Web.Areas.Administration.Models.ProductsViewModel>
+
+@{
+    ViewData["Title"] = "Manage Products";
+}
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+    <h2 class="mr-auto ml-auto"><span class="fas fa-edit"></span> Manage Products</h2>
+        <p>
+            <a class="btn btn-outline-primary float-right" asp-action="Create">Add Product</a>
+        </p>
+        @Html.Partial("_StatusMessage", TempData["StatusMessage"])
+        <table class="table table-hover table-striped">
+            <thead class="thead-dark">
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Publisher</th>
+                <th>Price</th>
+                <th>Created On</th>
+                <th>Last Purchased</th>
+                <th>Manage</th>
+            </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr scope="row">
+                    <th scope="row">
+                        <span class="badge badge-pill badge-primary">@Html.DisplayFor(modelItem => item.Id)</span>
+                    </th>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id"><span class="badge badge-pill badge-danger">@Html.DisplayFor(modelItem => item.Name)</span></a>
+                    </td>
+                    <td>
+                        <span class="badge badge-pill badge-danger text-truncate" style="max-width: 200px;">@Html.DisplayFor(modelItem => item.Publisher)</span>
+                    </td>
+                    <td>
+                        <span class="badge badge-pill badge-success">@Html.DisplayFor(modelItem => item.Price)</span>
+                    </td>
+                    <td>
+                        <span class="badge badge-pill badge-primary">@Html.DisplayFor(modelItem => item.CreatedOn)</span>
+                    </td>
+                    <td>
+                        @{
+                            if (item.LastPurchased == null)
+                            {
+                                <span class="badge badge-pill badge-primary">Never</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-pill badge-primary">@Html.DisplayFor(modelItem => item.LastPurchased)</span>
+                            }
+                        }
+                    </td>
+                    <td>
+                        <a class="btn btn-sm btn-outline-danger" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a class="btn btn-sm btn-outline-primary" asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a class="btn btn-sm btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

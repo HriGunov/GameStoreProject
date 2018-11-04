@@ -267,9 +267,22 @@ namespace GameStore.Web.Controllers
             return new ChallengeResult(provider, properties);
         }
 
-       public IActionResult ChangeAvatar()
+       [HttpGet]
+       public async Task<IActionResult> ChangeAvatar()
         {
-            return View();
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            var viewModel = new ChangeAvatarViewModel
+            {
+                AvatarName = user.AvatarImageName,
+                StatusMessage = this.StatusMessage
+            };
+
+            return View(viewModel);
         }
 
         [HttpPost]
@@ -295,7 +308,7 @@ namespace GameStore.Web.Controllers
                 _userManager.GetUserId(User)
             );
 
-            this.StatusMessage = "Profile image updated";
+            this.StatusMessage = "Avatar updated successfully";
 
             return this.RedirectToAction(nameof(ChangeAvatar));
         }

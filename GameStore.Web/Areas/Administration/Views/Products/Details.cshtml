@@ -1,0 +1,13 @@
+﻿@model GameStore.Web.Areas.Administration.Models.ProductsViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+<div class="container-fluid">
+    <h2>Details</h2>
+    <h4>@Model.Name</h4>
+    <hr />
+    <div class="row col-md-6">
+        @Html.Partial("_ProductsDetailsPartial", Model)
+    </div>
+</div>

@@ -47,7 +47,7 @@ namespace GameStore.Data.Context
             modelBuilder.ApplyConfiguration(new OrderProductsConfiguration());
 
             modelBuilder.Entity<IdentityRole>()
-                .HasData(new IdentityRole { Name = "Admin" });
+                .HasData(new IdentityRole { Name = "Admin", NormalizedName = "ADMIN" });
 
             base.OnModelCreating(modelBuilder);
         }
