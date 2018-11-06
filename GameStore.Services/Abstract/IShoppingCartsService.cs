@@ -6,9 +6,10 @@ namespace GameStore.Services.Abstract
 {
     public interface IShoppingCartsService
     {
-       Task<ShoppingCart> AddToCart(IEnumerable<int> productsId, string accountId);
-        Task<ShoppingCart> AddToCart(int productId, string accountId);
-        Task ClearUserCart(string accountId);
-        Task<ShoppingCart> GetUserCart(string accountId);
+       Task<ShoppingCart> AddToCartAsync(IEnumerable<int> productsId, string accountId);
+        Task<ShoppingCart> AddToCartAsync(int productId, string accountId);
+        Task ClearUserCartAsync(string accountId);
+        Task<ShoppingCart> GetUserCartAsync(string accountId);
+        Task<bool> ProductExistsInCartAsync(int productId, string accountId);
     }
 }

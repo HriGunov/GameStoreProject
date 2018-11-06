@@ -6,9 +6,9 @@ namespace GameStore.Services.Abstract
 {
     public interface IOrderService
     {
-        Task<Order> AddToOrder(string accountId, IEnumerable<Product> products);
-        Task<Order> AddToOrder(string accountId, int productId);
-        Task<Order> FindLastOrder(string accountId);
-        Task<IEnumerable<Order>> FindOrders(string accountId);
+        Task<Order> AddToOrderAsync(string accountId, IEnumerable<Product> products);
+        Task<Order> AddToOrderAsync(string accountId, int productId);
+        Task<Order> FindLastOrderAsync(string accountId);
+        Task<IEnumerable<Order>> FindOrdersAsync(string accountId);
     }
 }

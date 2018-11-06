@@ -20,6 +20,7 @@ namespace GameStore.Web.Models.ProductsViewModels
             this.CreatedOn = product.CreatedOn;
             this.LastPurchased = product.LastPurchased;
             this.IsDeleted = product.IsDeleted;
+            this.Comments = product.Comments.ToList();
         }
 
         public int Id { get; set; }
@@ -29,6 +30,7 @@ namespace GameStore.Web.Models.ProductsViewModels
         public string Publisher { get; set; }
         public IEnumerable<string> Genres { get; set; }
         public decimal Price { get; set; }
+        public IEnumerable<Comment> Comments { get; set; }
         public DateTime CreatedOn { get; set; }
         public DateTime? LastPurchased { get; set; }
         public bool IsDeleted { get; set; }

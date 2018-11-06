@@ -20,6 +20,11 @@ namespace GameStore.Services
             this.storeContext = storeContext ?? throw new ArgumentNullException(nameof(storeContext));
         }
 
+        public async Task<Account> FindAccountAsync(string accountId)
+        { 
+            return await storeContext.Users.FindAsync(accountId); 
+        }
+
         public async Task SaveAvatarImageAsync(string root, string filename, Stream stream, string userId)
         {
             var user = storeContext.Users.Find(userId);
@@ -44,7 +49,7 @@ namespace GameStore.Services
         /// <param name="commandExecutor">The username of the command giver.</param>
         /// <param name="accountName">The username of the account to be removed</param>
         /// <returns></returns>
-        public async Task<string> DeleteAccount(string accountId)
+        public async Task<string> DeleteAccountAsync(string accountId)
         {
             var account = await storeContext.Users.FindAsync(accountId);
             if (account == null) throw new Exception("Account not found");
@@ -62,7 +67,7 @@ namespace GameStore.Services
         /// </summary>
         /// <param name="cardNumber">Card number.</param>
         /// <param name="account">Account Type</param>
-        public async Task AddCreditCard(string cardNumber, Account account)
+        public async Task AddCreditCardAsync(string cardNumber, Account account)
         {
             var tempAccount = await storeContext.Accounts.Where(a => a.UserName == account.UserName).SingleAsync();
             account.CreditCard = cardNumber;
@@ -76,7 +81,7 @@ namespace GameStore.Services
         /// <param name="commandExecutor">The username of the command giver.</param>
         /// <param name="accountName">The username of the account to be restored</param>
         /// <returns></returns>
-        public async Task<string> RestoreAccount(Account commandExecutor, Account accountName)
+        public async Task<string> RestoreAccountAsync(Account commandExecutor, Account accountName)
         {
             var account = await storeContext.Accounts.Where(a => a.UserName == accountName.UserName).SingleAsync();
             if (!account.IsDeleted) return $"Account {accountName} is already restored.";

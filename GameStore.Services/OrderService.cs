@@ -18,9 +18,9 @@ namespace GameStore.Services
             this.storeContext = storeContext ?? throw new ArgumentNullException(nameof(storeContext));
         }
 
-        public async Task<Order> AddToOrder(string accountId, int productId)
+        public async Task<Order> AddToOrderAsync(string accountId, int productId)
         {
-            var tempOrder = await CreateOrder(accountId);
+            var tempOrder = await CreateOrderAsync(accountId);
 
             var newOrderProducts = new OrderProducts
             {
@@ -32,13 +32,13 @@ namespace GameStore.Services
             return tempOrder;
         }
 
-        public async Task<Order> AddToOrder(string accountId, IEnumerable<Product> products)
+        public async Task<Order> AddToOrderAsync(string accountId, IEnumerable<Product> products)
         {
             
-            Order tempOrder = await CreateOrder(accountId);
+            Order tempOrder = await CreateOrderAsync(accountId);
             foreach (var tempProduct in products)
             {
-                tempOrder = await FindLastOrder(accountId);
+                tempOrder = await FindLastOrderAsync(accountId);
                 if (tempOrder.OrderProducts.Any(p => p.ProductId == tempProduct.Id)) continue;
 
                 var newOrderProducts = new OrderProducts
@@ -53,12 +53,12 @@ namespace GameStore.Services
             return tempOrder;
         }
 
-        public async Task<IEnumerable<Order>> FindOrders(string accountId)
+        public async Task<IEnumerable<Order>> FindOrdersAsync(string accountId)
         {
             return await storeContext.Orders.Where(o => o.AccountId == accountId).ToListAsync();
         }
 
-        public async Task<Order> FindLastOrder(string accountId)
+        public async Task<Order> FindLastOrderAsync(string accountId)
         {
             return await storeContext.Orders.Where(o => o.AccountId == accountId).OrderBy(o => o.OrderTimestamp).FirstAsync();
         }
@@ -69,7 +69,7 @@ namespace GameStore.Services
         /// </summary>
         /// <param name="account">Account (type)</param>
         /// <returns></returns>
-        private async Task<Order> CreateOrder(string accountId)
+        private async Task<Order> CreateOrderAsync(string accountId)
         {
             var newOrder = new Order
             {

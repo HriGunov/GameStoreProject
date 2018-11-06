@@ -1,5 +1,8 @@
-﻿using GameStore.Services.Abstract;
+﻿using GameStore.Data.Models;
+using GameStore.Services.Abstract;
 using GameStore.Web.Models.ProductsViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,17 +12,23 @@ namespace GameStore.Web.Controllers
 {
     public class ProductsController : Controller
     {
-        private readonly IProductsService productsService;
+        private readonly UserManager<Account> _userManager;
+        private readonly IProductsService _productsService;
+        private readonly ICommentService _commentService;
+        private readonly IAccountsService _accountsService;
 
-        public ProductsController(IProductsService productsService)
+        public ProductsController(UserManager<Account> userManager, IProductsService productsService, ICommentService commentService,IAccountsService accountsService)
         {
-            this.productsService = productsService;
+            this._userManager = userManager;
+            this._productsService = productsService;
+            this._commentService = commentService;
+            this._accountsService = accountsService;
         }
 
         public async Task<IActionResult> Index()
         {
             var productListings = new List<ProductListingViewModel>();
-            var latestProducts = await productsService.SkipAndTakeLatestProductsAsync(10);
+            var latestProducts = await _productsService.SkipAndTakeLatestProductsAsync(10);
             foreach (var product in latestProducts)
             {
                 productListings.Add(new ProductListingViewModel(product));
@@ -30,11 +39,25 @@ namespace GameStore.Web.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
-            var product = await this.productsService.FindProductAsync(id);
-
+            var product = await this._productsService.FindProductAsync(id);
             var viewModel = new ProductListingViewModel(product);
+            viewModel.Comments =  await _commentService.GetCommentsFromProductAsync(id);
+
+            foreach (var comment in viewModel.Comments)
+            {
+                var debug = await _accountsService.FindAccountAsync(comment.AccountId);
+                comment.Account  = debug;
+            }
 
             return View(viewModel);
+        }
+        [Authorize]
+        public async Task<IActionResult> AddComment(AddCommentViewModel comment)
+        {
+            await _commentService.AddCommentToProductAsync(comment.ProductId, _userManager.GetUserId(this.User), comment.Text);
+
+
+            return RedirectToAction("Details", "Products", new { id = comment.ProductId });
         }
     }
 }

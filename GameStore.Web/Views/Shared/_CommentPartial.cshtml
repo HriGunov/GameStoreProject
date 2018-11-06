@@ -1,0 +1,20 @@
+﻿@model GameStore.Data.Models.Comment
+ 
+<li class="media">
+
+
+    <div class="col-md-2">
+        <img src="~/images/products/@(Model.Account.AvatarImageName ?? "card.png")" class="float-left mr-3 img-fluid img-thumbnail " alt="Account avatar">
+    </div>
+    
+    <div class="media-body">
+        <h5 class="mt-0"><strong>@Model.Account.UserName</strong></h5>
+        <hr />
+        <p>@Model.Text</p>
+        <span class="mr-1">@Model.TimeStamp</span>
+         
+    </div>
+
+
+
+</li>

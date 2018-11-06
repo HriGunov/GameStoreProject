@@ -2,6 +2,8 @@
 @using Microsoft.AspNetCore.Identity
 @using GameStore.Web.Models
 @model ProductListingViewModel
+@inject SignInManager<Account> SignInManager
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="card col-lg-8 pl-0 pr-0">
@@ -25,31 +27,52 @@
                         }
                     </p>
                 }
+
                 <p class="card-text text-justify">Description: @Model.Description</p>
-                <a href="#!" class="btn btn-primary"><i class="fas fa-shopping-cart"></i> Add to cart</a>
+
+                <a asp-area="" asp-controller="ShoppingCart" asp-action="Add" asp-route-id="@Model.Id" class="btn btn-primary"><i class="fas fa-shopping-bag"></i> Add to Cart</a>
+
                 <a href="#!" class="btn btn-primary"><i class="fas fa-shopping-bag"></i> Buy Now</a>
             </div>
             @if (@Model.LastPurchased != null)
             {
                 if (DateTime.Now.Subtract(Model.LastPurchased.Value).Days > 0)
-                 {
-                     <div class="card-footer text-muted">
-                         Last Purchased: <strong>@DateTime.Now.Subtract(Model.LastPurchased.Value).Days days ago</strong>
-                     </div>
-                 }
-                 else
-                 {
-                     <div class="card-footer text-muted">
-                         Last Purchased: <strong>Few hours ago</strong>
-                     </div>
-                 }
+                {
+                    <div class="card-footer text-muted">
+                        Last Purchased: <strong>@DateTime.Now.Subtract(Model.LastPurchased.Value).Days days ago</strong>
+                    </div>
+                }
+                else
+                {
+                    <div class="card-footer text-muted">
+                        Last Purchased: <strong>Few hours ago</strong>
+                    </div>
+                }
             }
             else
             {
+
                 <div class="card-footer text-muted">
                     Last Purchased: <strong>Not Purchased Yet</strong>
                 </div>
             }
+
+            <ul class="list-unstyled">
+
+                <li class="media my-4">
+                    @foreach (var comment in Model.Comments)
+                    {
+                        @(await Html.PartialAsync("_CommentPartial", comment))
+                    }
+                </li>
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <li>
+                        @(await Html.PartialAsync("_AddCommentPartial", new AddCommentViewModel() { ProductId = Model.Id }))
+                    </li>
+                }
+
+            </ul>
         </div>
     </div>
 </div>

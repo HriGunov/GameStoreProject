@@ -26,7 +26,7 @@ namespace GameStore.Services
         /// <param name="product">Product Type</param>
         /// <param name="account">Account Type</param>
         /// <returns></returns>
-        public async Task<ShoppingCart> AddToCart(int productId, string accountId)
+        public async Task<ShoppingCart> AddToCartAsync(int productId, string accountId)
         {
             var product = await storeContext.Products.FindAsync(productId);
             var account = await storeContext.Accounts.Where(acc => acc.Id == accountId).Include(acc => acc.ShoppingCart)
@@ -36,7 +36,7 @@ namespace GameStore.Services
             if (product == null)
                 throw new UserException("No product given to add.");
 
-            if (await ProductExistsInCart(product, account))
+            if (await ProductExistsInCartAsync(productId, accountId))
                 throw new UserException($"Product {product.Name} already exists in the user's cart.");
 
             var tempCart = account.ShoppingCart;
@@ -55,6 +55,7 @@ namespace GameStore.Services
 
             return tempCart;
         }
+ 
 
         /// <summary>
         ///     Adds multiple products to the account's cart.
@@ -62,7 +63,7 @@ namespace GameStore.Services
         /// <param name="product">Product Type</param>
         /// <param name="account">Account Type</param>
         /// <returns></returns>
-        public async Task<ShoppingCart> AddToCart(IEnumerable<int> productsId, string accountId)
+        public async Task<ShoppingCart> AddToCartAsync(IEnumerable<int> productsId, string accountId)
         {
             var account = await storeContext.Accounts.Where(acc => acc.Id == accountId).Include(acc => acc.ShoppingCart)
                 .SingleAsync();
@@ -76,7 +77,7 @@ namespace GameStore.Services
             foreach (var p in products)
                 if (p != null)
                 {
-                    if ( await ProductExistsInCart(p, account))
+                    if ( await ProductExistsInCartAsync(p.Id, accountId))
                         throw new UserException($"Product {p.Name} already exists in the user's cart.");
 
                     var shoppingCart = new ShoppingCartProducts
@@ -98,9 +99,9 @@ namespace GameStore.Services
         ///     Clears the user's cart.
         /// </summary>
         /// <param name="account">Account Type</param>
-        public async Task ClearUserCart(string accountId)
+        public async Task ClearUserCartAsync(string accountId)
         {
-            var cart = await GetUserCart(accountId);
+            var cart = await GetUserCartAsync(accountId);
 
             var userCartProducts = cart.ShoppingCartProducts.ToList();
             foreach (var product in userCartProducts) storeContext.ShoppingCartProducts.Remove(product);
@@ -114,7 +115,7 @@ namespace GameStore.Services
         /// </summary>
         /// <returns>The user cart.</returns>
         /// <param name="account">Account Type</param>
-        public async Task<ShoppingCart> GetUserCart(string accountId)
+        public async Task<ShoppingCart> GetUserCartAsync(string accountId)
         {
             var account = await storeContext.Accounts.Where(acc => acc.Id == accountId).Include(acc => acc.ShoppingCart)
                 .SingleAsync();
@@ -127,10 +128,11 @@ namespace GameStore.Services
         /// <param name="product">Product Type</param>
         /// <param name="account">Account Type</param>
         /// <returns></returns>
-        private Task<bool> ProductExistsInCart(Product product, Account account)
+        public async Task<bool> ProductExistsInCartAsync(int productId, string accountId)
         {
-            return  storeContext.ShoppingCartProducts.AnyAsync(s =>
-                s.ShoppingCartId == account.ShoppingCartId && s.ProductId == product.Id);
+            return await storeContext.Accounts.Where(acc => acc.Id == accountId)
+                .Include(acc => acc.ShoppingCart)
+                .AnyAsync(account => account.ShoppingCart.ShoppingCartProducts.Any(prod => prod.ProductId == productId));
         }
     }
 }

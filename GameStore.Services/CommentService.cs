@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GameStore.Data.Context;
@@ -18,7 +19,17 @@ namespace GameStore.Services
             this.storeContext = storeContext ?? throw new ArgumentNullException(nameof(storeContext));
         }
 
-        public async Task<Comment> AddCommentToProduct(int productId, string commentorId, string commentText)
+        public async Task<IEnumerable<Comment>> GetCommentsFromProductAsync(int productId)
+        {
+            var product = await storeContext.Products.Include( prod => prod.Comments).FirstOrDefaultAsync(prod => prod.Id == productId);
+            return product.Comments;
+        }
+        public async Task<IEnumerable<Comment>> GetCommentsByUserAsync(string accountId)
+        {
+            var account = await storeContext.Accounts.Include(acc => acc.Comments).FirstOrDefaultAsync(acc => acc.Id == accountId);
+            return account.Comments;
+        }
+        public async Task<Comment> AddCommentToProductAsync(int productId, string commentorId, string commentText)
         {
             var commentor = await storeContext.Accounts.Include(acc => acc.Comments).Where(acc => acc.Id == commentorId)
                 .SingleAsync();
@@ -29,12 +40,12 @@ namespace GameStore.Services
             if (productToBeCommentedTo == null) throw new UserException("Could not find product...");
 
             if (productToBeCommentedTo.Comments.Any(
-                x => x.AccountId == int.Parse(commentor.Id) && x.Text == commentText))
+                x => x.AccountId == commentor.Id  && x.Text == commentText))
                 throw new UserException("Cannot add duplicate comments...");
 
             var newComment = new Comment
             {
-                AccountId = int.Parse(commentor.Id),
+                AccountId = commentor.Id,
                 Text = commentText,
                 ProductId = productToBeCommentedTo.Id,
                 TimeStamp = DateTime.Now,
@@ -51,7 +62,7 @@ namespace GameStore.Services
             return newComment;
         }
 
-        public async Task RemoveCommentsFromProduct(int productId)
+        public async Task RemoveCommentsFromProductAsync(int productId)
         {
             var product = await storeContext.Products.Include(prod => prod.Comments).Where(prod => prod.Id == productId)
                 .SingleAsync();
@@ -63,7 +74,7 @@ namespace GameStore.Services
             await storeContext.SaveChangesAsync();
         }
 
-        public async Task RemoveCommentsFromAccount(string accountId)
+        public async Task RemoveCommentsFromAccountAsync(string accountId)
         {
             var tempAccount = await storeContext.Accounts.Include(acc => acc.Comments).Where(acc => acc.Id == accountId)
                 .SingleAsync();
