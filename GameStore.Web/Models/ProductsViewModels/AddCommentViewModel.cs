@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,6 +12,7 @@ namespace GameStore.Web.Models.ProductsViewModels
         {
 
         }
+
         public AddCommentViewModel(int productId, string text)
         {
             ProductId = productId;
@@ -19,7 +21,9 @@ namespace GameStore.Web.Models.ProductsViewModels
 
         public int ProductId { get; set; }
 
+        [Required]
+        [DataType(DataType.MultilineText)]
+        [StringLength(250, MinimumLength = 2)]
         public string Text { get; set; }
-        public string AccountAvatar { get; set; }
     }
 }

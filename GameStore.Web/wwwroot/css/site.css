@@ -1,5 +1,23 @@
-﻿body {
+﻿html {
+    height: 100vh;
+}
+
+body {
+    /*background-repeat: no-repeat;
+    background-size: auto;
+    background: linear-gradient(rgba(255,255,255,.4), rgba(255,255,255,.4)), url('/images/products/horizonzerodownbg.jpg');*/
     padding-bottom: 20px;
+}
+
+hv {
+    border: none;
+    border-left: 1px solid hsla(200, 10%, 50%,100);
+    width: 1px;
+}
+
+footer p {
+    color: black;
+    /*text-shadow: 1px 1px black;*/
 }
 
 /* Wrapping element */

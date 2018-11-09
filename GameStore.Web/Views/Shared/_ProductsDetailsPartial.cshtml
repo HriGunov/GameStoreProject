@@ -58,21 +58,20 @@
             }
 
             <ul class="list-unstyled">
-
-                <li class="media my-4">
+                <li class="media mb-3">
                     @foreach (var comment in Model.Comments)
                     {
                         @(await Html.PartialAsync("_CommentPartial", comment))
                     }
                 </li>
-                @if (SignInManager.IsSignedIn(User))
-                {
-                    <li>
-                        @(await Html.PartialAsync("_AddCommentPartial", new AddCommentViewModel() { ProductId = Model.Id }))
-                    </li>
-                }
-
             </ul>
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <hr/>
+                <div>
+                    @(await Html.PartialAsync("_AddCommentPartial", new AddCommentViewModel() { ProductId = Model.Id }))
+                </div>
+            }
         </div>
     </div>
 </div>

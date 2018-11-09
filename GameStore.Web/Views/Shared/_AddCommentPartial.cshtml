@@ -1,18 +1,14 @@
 ﻿@model AddCommentViewModel  
 
- 
 <form asp-area="" asp-controller="Products" asp-action="AddComment" asp-route-ProductId="@Model.ProductId">
-    <div asp-validation-summary="All" class="text-danger"></div>
-         
-    <div class="form-group">
-
-        <textarea asp-for="Text" rows="5" placeholder="Your Comment Here"></textarea>
-        <span asp-validation-for="Text" class="text-danger"></span>
-    </div>
-           
-    <div class="form-group">
-        <button type="reset" class="btn btn-warning">Clear</button>
-        <button type="submit" class="btn btn-primary">Comment</button>
+    <div class="form-group col">
+        <div class="form-group">
+            <textarea class="form-control" asp-for="Text" rows="3" placeholder="Write something... GOD DAMNIT!"></textarea>
+            <span asp-validation-for="Text" class="text-danger"></span>
+        </div>
+        <div class="form-group float-right">
+            <button type="reset" class="btn btn-warning">Clear</button>
+            <button type="submit" class="btn btn-primary">Comment</button>
+        </div>
     </div>
 </form>
- 
