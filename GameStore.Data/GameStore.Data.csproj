@@ -8,6 +8,7 @@
   <ItemGroup>
     <Compile Remove="Migrations\20181103225858_RemovedIsGuestAndIsAdminColumns.cs" />
     <Compile Remove="Migrations\20181106175721_CommentsAccountIdTypeChangedToString.cs" />
+    <Compile Remove="Migrations\20181107213804_NewLeftOvers.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -9,29 +9,23 @@
     <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" id="logoutForm" class="navbar-right">
         <ul class="nav navbar-nav bg-primary">
             <li class="btn-group">
-
-                <button type="submit" asp-area="" asp-controller="ShoppingCart" asp-action="Index" title="Cart" class="btn btn-outline-light ml-2"><i class="fas fa-sign-out-alt"></i>  Cart </button>
-
+                <button type="submit" asp-area="" asp-controller="ShoppingCart" asp-action="Index" title="Cart" class="btn btn-outline-light mr-2"><span class="fas fa-shopping-cart mr-2"></span>My Cart</button>
             </li>
             <li class="btn-group">
                 <button type="button" class="btn dropdown-toggle btn-outline-light" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
-                    Hello @UserManager.GetUserName(User)!
+                    <span class="fas fa-hand-peace"></span> Hello @UserManager.GetUserName(User)!
                 </button>
                 <div class="dropdown-menu dropdown-menu-right">
                     <a class="dropdown-item" asp-area="" asp-controller="Manage" asp-action="Index" title="Manage"><span class="fas fa-home mr-2"></span> Your Profile</a>
                     <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="AddAccountToRole" title="Manage"><span class="fas fa-lock mr-2"></span> Make Admin</a>
-
-
                     @if (User.IsInRole("Admin"))
                     {
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" asp-area="Administration" asp-controller="Home" asp-action="Index" title="Admin Control Panel"><span class="fas fa-unlock mr-2"></span> Admin Panel</a>
                     }
-
                     <div class="dropdown-divider"></div>
-                    <button type="submit" form="logoutForm" class="dropdown-item btn btn-outline-light ml-2"><i class="fas fa-sign-out-alt"></i> Log out</button>
-
+                    <button type="submit" form="logoutForm" class="dropdown-item"><span class="fas fa-sign-out-alt mr-2"></span> Log out</button>
                 </div>
             </li>
 
