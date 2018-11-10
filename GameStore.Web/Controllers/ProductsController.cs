@@ -28,9 +28,15 @@ namespace GameStore.Web.Controllers
         public async Task<IActionResult> Index(string search)
         {
             IEnumerable<Product> latestProducts;
+
             if (search != null)
             {
                 latestProducts = await _productsService.SkipAndTakeLatestProductsAsync(10, x => x.Name.Contains(search));
+                if (latestProducts == null || !latestProducts.Any())
+                {
+                    latestProducts = await _productsService.SkipAndTakeLatestProductsAsync(10);
+                    TempData["Message"] = $"No products found matching your search ({search}).";
+                }
             }
             else
             {

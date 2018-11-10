@@ -4,5 +4,11 @@
 }
 <h3 class="text-center"><i class="fas fa-gamepad mr-2"></i>Products</h3>
 <hr />
-
+@if (!string.IsNullOrEmpty((string)TempData["Message"]))
+{
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @TempData["Message"]
+    </div>
+}
 @await Html.PartialAsync("_ProductsPartialGrid", Model)
