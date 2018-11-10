@@ -1,6 +1,4 @@
-﻿html {
-    height: 100vh;
-}
+﻿html { height: 100vh; }
 
 body {
     /*background-repeat: no-repeat;
@@ -11,7 +9,7 @@ body {
 
 hv {
     border: none;
-    border-left: 1px solid hsla(200, 10%, 50%,100);
+    border-left: 1px solid hsla(200, 10%, 50%, 100);
     width: 1px;
 }
 
@@ -21,7 +19,9 @@ footer p {
 }
 
 /* Wrapping element */
+
 /* Set some basic padding to keep content from hitting the edges */
+
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
@@ -29,37 +29,36 @@ footer p {
 }
 
 /* Carousel */
+
 .carousel-caption p {
     font-size: 20px;
     line-height: 1.4;
 }
 
 .card-img-top {
-    width: 100%;
     height: 15vw;
     object-fit: cover;
+    width: 100%;
 }
 
 /* Make .svg files in the carousel display properly in older browsers */
-.carousel-inner .item img[src$=".svg"] {
-    width: 100%;
-}
+
+.carousel-inner .item img[src$=".svg"] { width: 100%; }
 
 /* QR code generator */
-#qrCode {
-    margin: 15px;
-}
+
+#qrCode { margin: 15px; }
 
 .comment-avatar {
-    color: white;
     background: limegreen;
     border-radius: 100%;
-    margin: 5px auto;
-    width: 50px;
-    height: 50px;
+    color: white;
     font-size: 30px;
+    height: 50px;
     line-height: 50px;
+    margin: 5px auto;
     text-align: center;
+    width: 50px;
 }
 
 .comment-body {
@@ -68,9 +67,8 @@ footer p {
 }
 
 /* Hide/rearrange for smaller screens */
+
 @media screen and (max-width: 767px) {
     /* Hide captions */
-    .carousel-caption {
-        display: none;
-    }
+    .carousel-caption { display: none; }
 }

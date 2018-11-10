@@ -1,5 +1,3 @@
-using System;
-
 namespace GameStore.Web.Models
 {
     public class ErrorViewModel

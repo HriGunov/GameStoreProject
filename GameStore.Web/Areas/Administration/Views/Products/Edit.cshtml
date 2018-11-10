@@ -4,15 +4,15 @@
     ViewData["Title"] = "Edit";
 }
 <h2>@Model.Name</h2>
-<hr />
+<hr/>
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit" id="editForm" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <input type="hidden" asp-for="CreatedOn" />
-            <input type="hidden" asp-for="LastPurchased" />
-            <input type="hidden" asp-for="ImageName" />
+            <input type="hidden" asp-for="Id"/>
+            <input type="hidden" asp-for="CreatedOn"/>
+            <input type="hidden" asp-for="LastPurchased"/>
+            <input type="hidden" asp-for="ImageName"/>
             @Html.Partial("_StatusMessage", TempData["StatusMessage"])
             <div class="form-group">
                 <img src="~/images/products/@(Model.ImageName ?? "card.png")" class="img-thumbnail img-fluid mb-2" alt="@Model.Name">
@@ -21,7 +21,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
+                <input asp-for="Name" class="form-control"/>
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -31,7 +31,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Publisher" class="control-label"></label>
-                <input asp-for="Publisher" class="form-control" />
+                <input asp-for="Publisher" class="form-control"/>
                 <span asp-validation-for="Publisher" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -40,7 +40,7 @@
                     <div class="input-group-prepend">
                         <div class="input-group-text">$</div>
                     </div>
-                    <input asp-for="Price" class="form-control" />
+                    <input asp-for="Price" class="form-control"/>
                     <span asp-validation-for="Price" class="text-danger"></span>
                 </div>
             </div>
@@ -57,7 +57,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save Changes" form="editForm" class="btn btn-primary" />
+                <input type="submit" value="Save Changes" form="editForm" class="btn btn-primary"/>
                 <a class="btn btn-outline-primary float-right" asp-action="Index">Back to List</a>
             </div>
         </form>
@@ -65,7 +65,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }
 
 <div id="upload-modal" class="modal fade" role="dialog">

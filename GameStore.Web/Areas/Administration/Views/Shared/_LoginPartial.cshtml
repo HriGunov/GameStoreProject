@@ -1,6 +1,4 @@
 @using GameStore.Data.Models
-@using Microsoft.AspNetCore.Identity
-@using GameStore.Web.Models
 @inject SignInManager<Account> SignInManager
 @inject UserManager<Account> UserManager
 @if (SignInManager.IsSignedIn(User))
@@ -26,7 +24,11 @@
 else
 {
     <ul class="nav navbar-nav bg-primary">
-        <li class="btn-group"><a class="btn btn-outline-light" asp-area="" asp-controller="Account" asp-action="Register"><i class="fas fa-user-plus"></i> Register</a></li>
-        <li class="btn-group"><a class="btn btn-outline-light ml-2" asp-area="" asp-controller="Account" asp-action="Login"><i class="fas fa-sign-in-alt"></i> Log in</a></li>
+        <li class="btn-group">
+            <a class="btn btn-outline-light" asp-area="" asp-controller="Account" asp-action="Register"><i class="fas fa-user-plus"></i> Register</a>
+        </li>
+        <li class="btn-group">
+            <a class="btn btn-outline-light ml-2" asp-area="" asp-controller="Account" asp-action="Login"><i class="fas fa-sign-in-alt"></i> Log in</a>
+        </li>
     </ul>
 }

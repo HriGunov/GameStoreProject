@@ -6,8 +6,8 @@
 <div class="row form-group">
     <div class="col-md-6">
         @Html.Partial("_StatusMessage", Model.StatusMessage)
-        <img class="img-thumbnail img-fluid mt-1" src="~/images/avatars/@(Model.AvatarName ?? "default.jpg")" />
-        <hr />
+        <img class="img-thumbnail img-fluid mt-1" src="~/images/avatars/@(Model.AvatarName ?? "default.jpg")"/>
+        <hr/>
         <button class="btn btn-primary" data-toggle="modal" data-target="#upload-modal">Change Profile Picture</button>
     </div>
 </div>

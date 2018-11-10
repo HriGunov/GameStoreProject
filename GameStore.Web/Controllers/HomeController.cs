@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using GameStore.Web.Models;
+﻿using System.Diagnostics;
 using GameStore.Services.Abstract;
-using GameStore.Web.Models.ProductsViewModels;
+using GameStore.Web.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace GameStore.Web.Controllers
 {
@@ -18,6 +13,7 @@ namespace GameStore.Web.Controllers
         {
             this.productsService = productsService;
         }
+
         public IActionResult Index()
         {
             return View();
@@ -36,6 +32,7 @@ namespace GameStore.Web.Controllers
 
             return View();
         }
+
         public IActionResult Products()
         {
             return RedirectToAction("Index", "Products");
@@ -43,7 +40,7 @@ namespace GameStore.Web.Controllers
 
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(new ErrorViewModel {RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier});
         }
     }
 }

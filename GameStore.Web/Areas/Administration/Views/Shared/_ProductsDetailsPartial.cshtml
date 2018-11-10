@@ -1,7 +1,7 @@
 @model GameStore.Web.Areas.Administration.Models.ProductsViewModel
 <form>
     <div class="form-group">
-        <img src="~/images/products/@(Model.ImageName ?? "card.png")" class="img-thumbnail img-fluid mb-2" alt="@Model.Name"><hr />
+        <img src="~/images/products/@(Model.ImageName ?? "card.png")" class="img-thumbnail img-fluid mb-2" alt="@Model.Name"><hr/>
     </div>
     <div class="form-group">
         <span class="badge badge-pill badge-danger">Name: @Html.DisplayFor(modelItem => Model.Name)</span>

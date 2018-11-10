@@ -1,12 +1,10 @@
 @using GameStore.Data.Models
-@using Microsoft.AspNetCore.Identity
-@using GameStore.Web.Models
 @model ProductListingViewModel
 @inject SignInManager<Account> SignInManager
 
- 
+
 <div class="container">
-    
+
     <div class="row justify-content-center">
 
         <div class="card col-lg-8 pl-0 pr-0">
@@ -16,15 +14,15 @@
             <div class="card-body text-center">
                 <img src="~/images/products/@(Model.ImageName ?? "card.png")" class="img-thumbnail img-fluid" alt="@Model.Name">
             </div>
-            <hr />
+            <hr/>
             <div class="card-body pt-0">
                 <div class="card-text text-justify">
                     <div class="alert alert-primary" role="alert">
                         <h4 class="d-inline">@Model.Name</h4><span class="badge badge-pill badge-success ml-2">$@Model.Price</span>
-                        <hr />
+                        <hr/>
                         <h5 class="alert-heading">Description</h5>
                         <i>@Model.Description</i>
-                        <hr />
+                        <hr/>
                         <h5 class="alert-heading">Genres</h5>
                         <span>
                             @if (Model.Genres.Any())
@@ -44,7 +42,7 @@
                         <i>@Model.Publisher</i>
                     </div>
                 </div>
-                
+
                 @if (User.IsInRole("Admin"))
                 {
                     <div class="float-left">
@@ -56,7 +54,7 @@
                     <a href="#!" class="btn btn-success"><i class="fas fa-shopping-bag"></i> Buy Now</a>
                 </div>
             </div>
-            @if (@Model.LastPurchased != null)
+            @if (Model.LastPurchased != null)
             {
                 if (DateTime.Now.Subtract(Model.LastPurchased.Value).Days > 0)
                 {
@@ -73,7 +71,6 @@
             }
             else
             {
-
                 <div class="card-footer text-muted">
                     Last Purchased: <strong>Not Purchased Yet</strong>
                 </div>
@@ -89,9 +86,9 @@
             </ul>
             @if (SignInManager.IsSignedIn(User))
             {
-                <hr />
+                <hr/>
                 <div>
-                    @(await Html.PartialAsync("_AddCommentPartial", new AddCommentViewModel() { ProductId = Model.Id }))
+                    @(await Html.PartialAsync("_AddCommentPartial", new AddCommentViewModel {ProductId = Model.Id}))
                 </div>
             }
         </div>

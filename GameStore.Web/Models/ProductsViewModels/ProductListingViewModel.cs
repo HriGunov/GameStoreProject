@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using GameStore.Data.Models;
 using System.Linq;
+using GameStore.Data.Models;
 
 namespace GameStore.Web.Models.ProductsViewModels
 {
@@ -10,17 +9,17 @@ namespace GameStore.Web.Models.ProductsViewModels
     {
         public ProductListingViewModel(Product product)
         {
-            this.Id = product.Id;
-            this.ImageName = product.ProductImageName;
-            this.Name = product.Name;
-            this.Description = product.Description;
-            this.Publisher = product.Publisher;
-            this.Genres = product.Genre.Select(g => g.Name).ToList();
-            this.Price = product.Price;
-            this.CreatedOn = product.CreatedOn;
-            this.LastPurchased = product.LastPurchased;
-            this.IsDeleted = product.IsDeleted;
-            this.Comments = product.Comments.ToList();
+            Id = product.Id;
+            ImageName = product.ProductImageName;
+            Name = product.Name;
+            Description = product.Description;
+            Publisher = product.Publisher;
+            Genres = product.Genre.Select(g => g.Name).ToList();
+            Price = product.Price;
+            CreatedOn = product.CreatedOn;
+            LastPurchased = product.LastPurchased;
+            IsDeleted = product.IsDeleted;
+            Comments = product.Comments.ToList();
         }
 
         public int Id { get; set; }

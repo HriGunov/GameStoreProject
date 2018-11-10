@@ -1,20 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using GameStore.Data.Context;
 using GameStore.Data.Models;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using GameStore.Web.Models;
-using GameStore.Web.Services;
-using Microsoft.AspNetCore.Mvc;
+using GameStore.External.Services;
 using GameStore.Services;
 using GameStore.Services.Abstract;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace GameStore.Web
 {
@@ -32,7 +28,6 @@ namespace GameStore.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddDbContext<GameStoreContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -40,8 +35,7 @@ namespace GameStore.Web
                 .AddEntityFrameworkStores<GameStoreContext>()
                 .AddDefaultTokenProviders();
 
-            if (this.Environment.IsDevelopment())
-            {
+            if (Environment.IsDevelopment())
                 services.Configure<IdentityOptions>(options =>
                 {
                     // Password settings
@@ -56,7 +50,6 @@ namespace GameStore.Web
                     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromSeconds(1);
                     options.Lockout.MaxFailedAccessAttempts = 999;
                 });
-            }
 
             // Add application services.
             services.AddSingleton<IEmailSender, EmailSender>();
@@ -93,13 +86,13 @@ namespace GameStore.Web
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                    name: "areas",
-                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                    "areas",
+                    "{area:exists}/{controller=Home}/{action=Index}/{id?}"
                 );
 
                 routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    "default",
+                    "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using GameStore.Data.Context;
 using GameStore.Data.Models;
 using GameStore.Services.Abstract;
 using GameStore.Web.Areas.Administration.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace GameStore.Web.Areas.Administration.Controllers
 {
@@ -27,8 +24,7 @@ namespace GameStore.Web.Areas.Administration.Controllers
             _productsService = productsService;
         }
 
-        [TempData]
-        public string StatusMessage { get; set; }
+        [TempData] public string StatusMessage { get; set; }
 
         // GET: Administration/Products
         public async Task<IActionResult> Index()
@@ -36,10 +32,7 @@ namespace GameStore.Web.Areas.Administration.Controllers
             var products = await _productsService.GetAllProducts();
             var viewModel = new List<ProductsViewModel>();
 
-            foreach (var product in products)
-            {
-                viewModel.Add(new ProductsViewModel(product));
-            }
+            foreach (var product in products) viewModel.Add(new ProductsViewModel(product));
 
             return View(viewModel);
         }
@@ -49,10 +42,7 @@ namespace GameStore.Web.Areas.Administration.Controllers
         {
             var product = await _productsService.FindProductAsync(id, true);
 
-            if (product == null)
-            {
-                return NotFound();
-            }
+            if (product == null) return NotFound();
 
             var newProduct = new ProductsViewModel(product);
 
@@ -84,10 +74,11 @@ namespace GameStore.Web.Areas.Administration.Controllers
                 };
 
                 await _productsService.AddProductAsync(newModel);
-                this.StatusMessage = $"Successfully added {newModel.Name}";
+                StatusMessage = $"Successfully added {newModel.Name}";
                 return RedirectToAction(nameof(Index));
             }
-            this.StatusMessage = "Error: Something went wrong...";
+
+            StatusMessage = "Error: Something went wrong...";
             return View(product);
         }
 
@@ -95,10 +86,7 @@ namespace GameStore.Web.Areas.Administration.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             var product = await _productsService.FindProductAsync(id, true);
-            if (product == null)
-            {
-                return NotFound();
-            }
+            if (product == null) return NotFound();
 
             var newProduct = new ProductsViewModel(product);
 
@@ -110,16 +98,13 @@ namespace GameStore.Web.Areas.Administration.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, ProductsViewModel product)
         {
-            if (id != product.Id)
-            {
-                return NotFound();
-            }
+            if (id != product.Id) return NotFound();
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var newModel = new Product()
+                    var newModel = new Product
                     {
                         Id = product.Id,
                         Name = product.Name,
@@ -137,19 +122,16 @@ namespace GameStore.Web.Areas.Administration.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (await this._productsService.ProductExistsAsync(product.Id) == false)
-                    {
+                    if (await _productsService.ProductExistsAsync(product.Id) == false)
                         return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    throw;
                 }
-                this.StatusMessage = $"Successfully modified {product.Name}";
+
+                StatusMessage = $"Successfully modified {product.Name}";
                 return RedirectToAction(nameof(Index));
             }
-            this.StatusMessage = "Error: Something went wrong...";
+
+            StatusMessage = "Error: Something went wrong...";
             return View(product);
         }
 
@@ -158,10 +140,7 @@ namespace GameStore.Web.Areas.Administration.Controllers
         {
             var product = await _productsService.FindProductAsync(id, true);
 
-            if (product == null)
-            {
-                return NotFound();
-            }
+            if (product == null) return NotFound();
 
             var newProduct = new ProductsViewModel(product);
 
@@ -169,15 +148,16 @@ namespace GameStore.Web.Areas.Administration.Controllers
         }
 
         // POST: Administration/Products/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
+        [ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var product = await _productsService.FindProductAsync(id, true);
             var productName = product.Name;
-            await this._productsService.RemoveProductAsync(product);
+            await _productsService.RemoveProductAsync(product);
 
-            this.StatusMessage = $"Successfully deleted {productName}";
+            StatusMessage = $"Successfully deleted {productName}";
 
             return RedirectToAction(nameof(Index));
         }
@@ -188,31 +168,31 @@ namespace GameStore.Web.Areas.Administration.Controllers
         {
             if (productImage == null)
             {
-                this.StatusMessage = "Error: Please provide an image";
-                return this.RedirectToAction(nameof(Edit), new { id = productId });
+                StatusMessage = "Error: Please provide an image";
+                return RedirectToAction(nameof(Edit), new {id = productId});
             }
 
-            if (!this.IsValidImage(productImage))
+            if (!IsValidImage(productImage))
             {
-                this.StatusMessage = "Error: Please provide a .jpg or .png file smaller than 2MB";
-                return this.RedirectToAction(nameof(Edit), new { id = productId });
+                StatusMessage = "Error: Please provide a .jpg or .png file smaller than 2MB";
+                return RedirectToAction(nameof(Edit), new {id = productId});
             }
 
-            await this._productsService.SaveProductImageAsync(
-                this.GetUploadsRoot(),
+            await _productsService.SaveProductImageAsync(
+                GetUploadsRoot(),
                 productImage.FileName,
                 productImage.OpenReadStream(),
                 productId
             );
 
-            this.StatusMessage = "Product Image Updated Successfully";
+            StatusMessage = "Product Image Updated Successfully";
 
-            return this.RedirectToAction(nameof(Edit), new { id = productId });
+            return RedirectToAction(nameof(Edit), new {id = productId});
         }
 
         private string GetUploadsRoot()
         {
-            var environment = this.HttpContext.RequestServices
+            var environment = HttpContext.RequestServices
                 .GetService(typeof(IHostingEnvironment)) as IHostingEnvironment;
 
             return Path.Combine(environment.WebRootPath, "images", "products");
@@ -220,11 +200,8 @@ namespace GameStore.Web.Areas.Administration.Controllers
 
         private bool IsValidImage(IFormFile image)
         {
-            string type = image.ContentType;
-            if (type != "image/png" && type != "image/jpg" && type != "image/jpeg")
-            {
-                return false;
-            }
+            var type = image.ContentType;
+            if (type != "image/png" && type != "image/jpg" && type != "image/jpeg") return false;
 
             return image.Length <= 2048 * 2048;
         }

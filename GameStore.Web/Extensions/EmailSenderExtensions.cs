@@ -1,6 +1,6 @@
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using GameStore.Web.Services;
+using GameStore.External.Services;
 
 namespace GameStore.Web.Extensions
 {

@@ -6,7 +6,7 @@
 
 <div class="container-fluid">
     <div class="row justify-content-center">
-    <h2 class="mr-auto ml-auto"><span class="fas fa-edit"></span> Manage Products</h2>
+        <h2 class="mr-auto ml-auto"><span class="fas fa-edit"></span> Manage Products</h2>
         <p>
             <a class="btn btn-outline-primary float-right" asp-action="Create">Add Product</a>
         </p>
@@ -24,14 +24,16 @@
             </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model)
-                {
+            @foreach (var item in Model)
+            {
                 <tr scope="row">
                     <th scope="row">
                         <span class="badge badge-pill badge-primary">@Html.DisplayFor(modelItem => item.Id)</span>
                     </th>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id"><span class="badge badge-pill badge-danger">@Html.DisplayFor(modelItem => item.Name)</span></a>
+                        <a asp-action="Edit" asp-route-id="@item.Id">
+                            <span class="badge badge-pill badge-danger">@Html.DisplayFor(modelItem => item.Name)</span>
+                        </a>
                     </td>
                     <td>
                         <span class="badge badge-pill badge-danger text-truncate" style="max-width: 200px;">@Html.DisplayFor(modelItem => item.Publisher)</span>
@@ -60,7 +62,7 @@
                         <a class="btn btn-sm btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                     </td>
                 </tr>
-                }
+            }
             </tbody>
         </table>
     </div>
