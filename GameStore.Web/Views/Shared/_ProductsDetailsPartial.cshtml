@@ -17,25 +17,44 @@
                 <img src="~/images/products/@(Model.ImageName ?? "card.png")" class="img-thumbnail img-fluid" alt="@Model.Name">
             </div>
             <hr />
-            <div class="card-body">
-                <h4 class="card-title">@Model.Name</h4>
-                @if (Model.Genres.Any())
-                {
-                    <p class="card-text text-justify">
-                        Genres: @{
-                            foreach (var genre in Model.Genres)
+            <div class="card-body pt-0">
+                <div class="card-text text-justify">
+                    <div class="alert alert-primary" role="alert">
+                        <h4 class="d-inline">@Model.Name</h4><span class="badge badge-pill badge-success ml-2">$@Model.Price</span>
+                        <hr />
+                        <h5 class="alert-heading">Description</h5>
+                        <i>@Model.Description</i>
+                        <hr />
+                        <h5 class="alert-heading">Genres</h5>
+                        <span>
+                            @if (Model.Genres.Any())
                             {
-                                <span class="badge badge-pill badge-primary">@genre</span>
+                                foreach (var genre in Model.Genres)
+                                {
+                                    <span class="badge badge-pill badge-primary">@genre</span>
+                                }
                             }
-                        }
-                    </p>
+                            else
+                            {
+                                <span class="badge badge-pill badge-primary">None</span>
+                            }
+                        </span>
+                        <hr/>
+                        <h5 class="alert-heading">Publisher</h5>
+                        <i>@Model.Publisher</i>
+                    </div>
+                </div>
+                
+                @if (User.IsInRole("Admin"))
+                {
+                    <div class="float-left">
+                        <a asp-area="Administration" asp-controller="Products" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-danger"><i class="fas fa-edit"></i> Edit Product</a>
+                    </div>
                 }
-
-                <p class="card-text text-justify">Description: @Model.Description</p>
-
-                <a asp-area="" asp-controller="ShoppingCart" asp-action="Add" asp-route-id="@Model.Id" class="btn btn-primary"><i class="fas fa-shopping-bag"></i> Add to Cart</a>
-
-                <a href="#!" class="btn btn-primary"><i class="fas fa-shopping-bag"></i> Buy Now</a>
+                <div class="float-right">
+                    <a asp-area="" asp-controller="ShoppingCart" asp-action="Add" asp-route-id="@Model.Id" class="btn btn-primary"><i class="fas fa-shopping-bag"></i> Add to Cart</a>
+                    <a href="#!" class="btn btn-success"><i class="fas fa-shopping-bag"></i> Buy Now</a>
+                </div>
             </div>
             @if (@Model.LastPurchased != null)
             {

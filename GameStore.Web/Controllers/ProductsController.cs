@@ -25,19 +25,18 @@ namespace GameStore.Web.Controllers
             this._accountsService = accountsService;
         }
 
-        public async Task<IActionResult> Index(string searchString )
+        public async Task<IActionResult> Index(string search)
         {
             IEnumerable<Product> latestProducts;
-            if (searchString !=null)
+            if (search != null)
             {
-                latestProducts = await _productsService.SkipAndTakeLatestProductsAsync(10, x => x.Name.Contains(searchString));
+                latestProducts = await _productsService.SkipAndTakeLatestProductsAsync(10, x => x.Name.Contains(search));
             }
             else
             {
                 latestProducts = await _productsService.SkipAndTakeLatestProductsAsync(10);
             }
-
-
+            
             var productListings = new List<ProductListingViewModel>();
             foreach (var product in latestProducts)
             {
@@ -46,8 +45,6 @@ namespace GameStore.Web.Controllers
 
             return View(productListings);
         }
-
-
 
         public async Task<IActionResult> Details(int id)
         {
@@ -63,11 +60,11 @@ namespace GameStore.Web.Controllers
 
             return View(viewModel);
         }
+
         [Authorize]
         public async Task<IActionResult> AddComment(AddCommentViewModel comment)
         {
             await _commentService.AddCommentToProductAsync(comment.ProductId, _userManager.GetUserId(this.User), comment.Text);
-
 
             return RedirectToAction("Details", "Products", new { id = comment.ProductId });
         }

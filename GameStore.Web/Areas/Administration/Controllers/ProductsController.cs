@@ -47,7 +47,7 @@ namespace GameStore.Web.Areas.Administration.Controllers
         // GET: Administration/Products/Details/5
         public async Task<IActionResult> Details(int id)
         {
-            var product = await _productsService.FindProductAsync(id);
+            var product = await _productsService.FindProductAsync(id, true);
 
             if (product == null)
             {
@@ -94,7 +94,7 @@ namespace GameStore.Web.Areas.Administration.Controllers
         // GET: Administration/Products/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
-            var product = await _productsService.FindProductAsync(id);
+            var product = await _productsService.FindProductAsync(id, true);
             if (product == null)
             {
                 return NotFound();
@@ -156,7 +156,7 @@ namespace GameStore.Web.Areas.Administration.Controllers
         // GET: Administration/Products/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
-            var product = await _productsService.FindProductAsync(id);
+            var product = await _productsService.FindProductAsync(id, true);
 
             if (product == null)
             {
@@ -173,7 +173,7 @@ namespace GameStore.Web.Areas.Administration.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var product = await _productsService.FindProductAsync(id);
+            var product = await _productsService.FindProductAsync(id, true);
             var productName = product.Name;
             await this._productsService.RemoveProductAsync(product);
 

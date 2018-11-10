@@ -30,6 +30,14 @@
                 <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="About"><span class="fas fa-info-circle"></span> About</a></li>
                 <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contact"><span class="fas fa-envelope"></span> Contact</a></li>
             </ul>
+            <form class="form-inline my-2 my-lg-0 pr-2" asp-action="Index" asp-controller="Products" asp-route-search="search" method="get" id="searchNav">
+                <div class="input-group">
+                    <input class="form-control form-control-sm" type="text" placeholder="Search" aria-label="Search" name="Search">
+                    <div class="input-group-append">
+                        <button class="btn btn-dark btn-sm" type="submit" value="Search" form="searchNav"><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+            </form>
             @await Html.PartialAsync("_LoginPartial")
         </div>
     </nav>
