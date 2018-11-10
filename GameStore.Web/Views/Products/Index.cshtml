@@ -4,4 +4,15 @@
 }
 <h3 class="text-center"><i class="fas fa-gamepad mr-2"></i>Products</h3>
 <hr />
+
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by name: <input type="text" name="SearchString" value="@ViewData["currentFilter"]"/>
+            <input type="submit" value="Search" class="btn btn-default" /> |
+        </p>
+        <a asp-action="Index">Back to Full List</a>
+
+    </div>
+</form>
 @await Html.PartialAsync("_ProductsPartialGrid", Model)

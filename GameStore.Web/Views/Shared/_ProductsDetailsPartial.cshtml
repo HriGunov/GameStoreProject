@@ -4,8 +4,11 @@
 @model ProductListingViewModel
 @inject SignInManager<Account> SignInManager
 
+ 
 <div class="container">
+    
     <div class="row justify-content-center">
+
         <div class="card col-lg-8 pl-0 pr-0">
             <div class="card-header text-center">
                 Featured
@@ -67,7 +70,7 @@
             </ul>
             @if (SignInManager.IsSignedIn(User))
             {
-                <hr/>
+                <hr />
                 <div>
                     @(await Html.PartialAsync("_AddCommentPartial", new AddCommentViewModel() { ProductId = Model.Id }))
                 </div>

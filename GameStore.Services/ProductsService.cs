@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using GameStore.Data.Context;
 using GameStore.Data.Models;
@@ -88,9 +89,9 @@ namespace GameStore.Services
             return !products.Any() ? null : products;
         }
 
-        public async Task<IEnumerable<Product>> SkipAndTakeLatestProductsAsync(int productsToTake)
-        {
-            var products = await storeContext.Products.Include(g => g.Genre).OrderByDescending(product => product.CreatedOn)
+        public async Task<IEnumerable<Product>> SkipAndTakeLatestProductsAsync(int productsToTake, Expression<Func<Product, bool>> filter = null)
+        { 
+            var products = await storeContext.Products.Include(g => g.Genre).OrderByDescending(product => product.CreatedOn).Where(filter ?? (prod => true))
                 .Take(productsToTake).ToListAsync();
 
             return !products.Any() ? null : products;

@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using GameStore.Data.Models;
 
@@ -17,7 +19,7 @@ namespace GameStore.Services.Abstract
         Task<Product> RemoveGenreFromProductAsync(string name, Product product);
         Task<string> RemoveProductAsync(int id);
         Task<string> RemoveProductAsync(Product product);
-        Task<IEnumerable<Product>> SkipAndTakeLatestProductsAsync(int productsToTake);
+        Task<IEnumerable<Product>> SkipAndTakeLatestProductsAsync(int productsToTake, Expression<Func<Product, bool>> filter = null);
         Task<Product> UpdateProductAsync(Product product);
         Task<bool> ProductExistsAsync(int id);
         Task SaveProductImageAsync(string root, string filename, Stream stream, int productId);
