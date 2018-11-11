@@ -13,6 +13,7 @@ namespace GameStore.Services.Abstract
         Task<Product> AddProductAsync(Product product);
         Task<Product> FindProductAsync(int id, bool includeDeleted = false);
         Task<Product> FindProductAsync(string productName, bool includeDeleted = false);
+        Task<IEnumerable<Product>> FindProductsByName(Expression<Func<Product, bool>> filter = null);
         Task<IEnumerable<Product>> GetAllProducts();
         Task<IEnumerable<Product>> FindProductsByGenreAsync(Genre productGenre);
         Task<IEnumerable<Product>> FindProductsByGenreAsync(IEnumerable<Genre> productGenre);

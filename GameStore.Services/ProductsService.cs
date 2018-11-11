@@ -97,6 +97,13 @@ namespace GameStore.Services
             return !products.Any() ? null : products;
         }
 
+        public async Task<IEnumerable<Product>> FindProductsByName(Expression<Func<Product, bool>> filter = null)
+        {
+            var products = await storeContext.Products.Include(g => g.Genre).OrderByDescending(product => product.CreatedOn).Where(filter ?? (prod => true))
+                .ToListAsync();
+
+            return !products.Any() ? null : products;
+        }
         public async Task<IEnumerable<Product>> FindProductsByGenreAsync(IEnumerable<Genre> productGenre)
         {
             var products = await storeContext.Products.Include(prod => prod.Genre)

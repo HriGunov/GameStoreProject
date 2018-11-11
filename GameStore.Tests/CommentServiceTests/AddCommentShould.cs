@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using GameStore.Data.Context;
 using GameStore.Data.Models;
 using GameStore.Services;
@@ -15,8 +16,9 @@ namespace GameStore.Tests.CommentServiceTests
     public class AddCommentShould
     {
         [TestMethod]
-        public void AddComment_WhenInput_IsValid()
+        public async Task AddComment_WhenInput_IsValid()
         {
+             
             //Arrange
             var options = new DbContextOptionsBuilder<GameStoreContext>()
                 .UseInMemoryDatabase("AddComment_WhenInput_IsValid").Options;
@@ -29,7 +31,16 @@ namespace GameStore.Tests.CommentServiceTests
                 TimeStamp = DateTime.Now
             };
 
-            var productToBeReturnedByMock = new Product
+            var validUser = new Account
+            {
+
+                UserName = $"TestUsername",
+                FirstName = "FirstName",
+                LastName = "LastName"
+
+            };
+
+            var product = new Product
             {
                 Name = "Test",
                 Description = "test description",
@@ -37,44 +48,22 @@ namespace GameStore.Tests.CommentServiceTests
                 Comments = new List<Comment>()
             };
 
-            var accountToBeReturnedByMock = new Account
-            {
-                UserName = "TestUsername",
-                PasswordHash = "TestPassword",
-                FirstName = "FirstName",
-                LastName = "LastName",
-                CreatedOn = DateTime.Now,
-                ShoppingCart = new ShoppingCart(),
-                OrderProducts = new List<Order>(),
-                Comments = new List<Comment>(),
-                IsAdmin = true
-            };
-            var mockAccountsService = new Mock<IAccountsService>();
-            mockAccountsService.Setup(service => service.FindAccount(It.IsAny<string>(), true))
-                .Returns(accountToBeReturnedByMock);
-
-            var mockProductsService = new Mock<IProductsService>();
-            mockProductsService.Setup(service => service.FindProduct(It.IsAny<string>(), It.IsAny<bool>()))
-                .Returns(productToBeReturnedByMock);
-
-            //Act
             using (var curContext = new GameStoreContext(options))
-            {
-                var sut = new CommentService(curContext, mockAccountsService.Object, mockProductsService.Object);
-                sut.AddCommentToProduct(productToBeReturnedByMock.Name, accountToBeReturnedByMock.UserName,
-                    "TestDescription");
+            { 
+                curContext.Products.Add(product);
+                curContext.Accounts.Add(validUser);
                 curContext.SaveChanges();
-            }
-
-
+                //Act
+                var sut = new CommentService(curContext);
+                var foo = await sut.AddCommentToProductAsync(product.Id, validUser.Id, "TestDescription");
+           
             //Assert
-            using (var curContext = new GameStoreContext(options))
-            {
+            
                 Assert.IsTrue(curContext.Comments.Count() == 1);
                 Assert.IsTrue(curContext.Comments.FirstOrDefault().Text == "TestDescription");
-                Assert.IsTrue(curContext.Comments.Include(c => c.Account).FirstOrDefault().Account.UserName ==
-                              accountToBeReturnedByMock.UserName);
-            }
+                Assert.IsTrue(curContext.Comments.Include(c => c.Account).FirstOrDefault().Account.Id ==
+                              validUser.Id);
+            } 
         }
     }
 }

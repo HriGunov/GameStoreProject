@@ -49,17 +49,18 @@ namespace GameStore.Services
         /// <param name="commandExecutor">The username of the command giver.</param>
         /// <param name="accountName">The username of the account to be removed</param>
         /// <returns></returns>
-        public async Task<string> DeleteAccountAsync(string accountId)
+        public async Task DeleteAccountAsync(string accountId)
         {
             var account = await storeContext.Users.FindAsync(accountId);
+
             if (account == null) throw new Exception("Account not found");
 
-            if (account.IsDeleted) return $"Account {account.UserName} was not found.";
+            if (!account.IsDeleted) // $"Account {account.UserName} was not found.";
 
             account.IsDeleted = true;
             account.ModifiedOn = DateTime.Now;
-            await storeContext.SaveChangesAsync();
-            return $"Account {account.UserName} has been successfully removed.";
+            account.DeletedOn = DateTime.Now;
+            await storeContext.SaveChangesAsync(); // $"Account {account.UserName} has been successfully removed.";
         }
 
         /// <summary>
@@ -81,15 +82,15 @@ namespace GameStore.Services
         /// <param name="commandExecutor">The username of the command giver.</param>
         /// <param name="accountName">The username of the account to be restored</param>
         /// <returns></returns>
-        public async Task<string> RestoreAccountAsync(Account commandExecutor, Account accountName)
+        public async Task RestoreAccountAsync(Account commandExecutor, Account accountName)
         {
             var account = await storeContext.Accounts.Where(a => a.UserName == accountName.UserName).SingleAsync();
-            if (!account.IsDeleted) return $"Account {accountName} is already restored.";
+            if (!account.IsDeleted) return;// $"Account {accountName} is already restored.";
 
             account.IsDeleted = false;
             account.DeletedBy = null;
             await storeContext.SaveChangesAsync();
-            return $"Account {accountName} has been successfully restored.";
+            return;// $"Account {accountName} has been successfully restored.";
         }
          
     }
