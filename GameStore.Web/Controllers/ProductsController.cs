@@ -27,11 +27,11 @@ namespace GameStore.Web.Controllers
             _accountsService = accountsService;
         }
 
-        public async Task<IActionResult> Index(string search,int? page)
+        public async Task<IActionResult> Index(string search, int? page)
         {
             IEnumerable<Product> latestProducts;
             var pageIndex = (page ?? 1) - 1; //MembershipProvider expects a 0 for the first page 
-            int pageSize = 3; //Hardcoded view count
+            const int pageSize = 3; // Hardcoded view products count
 
             if (search != null)
             {
@@ -47,18 +47,12 @@ namespace GameStore.Web.Controllers
             {
                 latestProducts = await _productsService.SkipAndTakeLatestProductsAsync(10);
             }
-
-
-            var productListings = new List<ProductListingViewModel>();
-            foreach (var product in latestProducts) productListings.Add(new ProductListingViewModel(product));
+            
+            var productListings = latestProducts.Select(product => new ProductListingViewModel(product)).ToList();
 
             var currentPage =  productListings.ToPagedList(pageIndex + 1, pageSize);
-
-
-
             var productsAsIPagedList = new StaticPagedList<ProductListingViewModel>(currentPage, pageIndex + 1, pageSize, productListings.Count);
-
-            ViewBag.OnePageOfProducts = productsAsIPagedList; 
+            ViewBag.OnePageOfProducts = productsAsIPagedList;
 
             return View(productsAsIPagedList);
         }
@@ -66,8 +60,10 @@ namespace GameStore.Web.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var product = await _productsService.FindProductAsync(id);
-            var viewModel = new ProductListingViewModel(product);
-            viewModel.Comments = await _commentService.GetCommentsFromProductAsync(id);
+            var viewModel = new ProductListingViewModel(product)
+            {
+                Comments = await _commentService.GetCommentsFromProductAsync(id)
+            };
 
             foreach (var comment in viewModel.Comments)
                 comment.Account = await _accountsService.FindAccountAsync(comment.AccountId);

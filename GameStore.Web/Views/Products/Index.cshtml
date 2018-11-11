@@ -1,5 +1,6 @@
 ﻿@model StaticPagedList<ProductListingViewModel>
 @using X.PagedList;
+@using X.PagedList.Mvc.Common
 @using X.PagedList.Mvc.Core;
 @{
     ViewData["Title"] = "Products";
@@ -15,9 +16,14 @@
         @TempData["Message"]
     </div>
 }
-@await Html.PartialAsync("_ProductsPartialGrid", Model)
-
-
-<h3>Pages</h3>
-@Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }))
- 
+<div class="col-md-12">
+    <div class="row justify-content-center">
+        @await Html.PartialAsync("_ProductsPartialGrid", Model)
+        @Html.PagedListPager((IPagedList) ViewBag.OnePageOfProducts, page => Url.Action("Index", new {page = page}),
+            new PagedListRenderOptions
+            {
+                LiElementClasses = new string[] {"page-item"},
+                PageClasses = new string[] {"page-link"}
+            })
+    </div>
+</div>
