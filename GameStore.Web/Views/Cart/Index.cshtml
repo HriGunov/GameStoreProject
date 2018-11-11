@@ -1,2 +1,66 @@
-﻿@{
+﻿@model IList<ProductListingViewModel>
+@{
+    ViewData["Title"] = "My Cart";
 }
+<div class="container-fluid d-inline">
+    <h3 class="d-inline"><i class="fas fa-shopping-cart mr-2"></i>Your Cart</h3>
+    <button class="btn btn-sm btn-primary float-right" disabled><span class="fa fa-credit-card"></span> Checkout ($@Model.Sum(p => p.Price))</button>
+</div>
+<hr/>
+<div class="container-fluid">
+    <div class="justify-content-center">
+        <div class="text-center">
+            @Html.Partial("_StatusMessage", (string) TempData["StatusMessage"])
+        </div>
+        @if (Model.Any())
+        {
+            <table class="table table-hover table-striped">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Packshot</th>
+                    <th>Product Name</th>
+                    <th>Publisher</th>
+                    <th>Price</th>
+                    <th>Manage</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr scope="row">
+                        <th scope="row">
+                            <img src="~/images/products/@(item.ImageName ?? "card.png")" class="align-self-center rounded border-success border" style="width: 80px" alt="@item.Name">
+                        </th>
+                        <td>
+                            <a asp-area="" asp-action="Details" asp-controller="Products" asp-route-id="@item.Id">
+                                <h5>@Html.DisplayFor(modelItem => item.Name)</h5>
+                            </a>
+                            <small>
+                                <span class="badge badge-pill badge-success">Available</span>
+                            </small>
+                        </td>
+                        <td>
+                            <span class="badge badge-pill badge-danger" style="max-width: 200px;">@Html.DisplayFor(modelItem => item.Publisher)</span>
+                        </td>
+                        <td>
+                            <span class="badge badge-pill badge-success">$@Html.DisplayFor(modelItem => item.Price)</span>
+                        </td>
+                        <td>
+                            <a asp-action="RemoveProduct" asp-controller="Cart" asp-route-id="@item.Id" class="btn btn-sm btn-danger"><i class="fas fa-times"></i> Remove</a>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+            <hr/>
+        }
+        else
+        {
+            <div class="alert alert-primary ml-2 mr-2 mt-2 mb-0" role="alert">
+                <h6 class="alert-heading text-center">
+                    <strong>Hey, You don't have anything in your cart!</strong> <small>*Well ain' this some sh*t*</small>
+                </h6>
+            </div>
+        }
+    </div>
+</div>

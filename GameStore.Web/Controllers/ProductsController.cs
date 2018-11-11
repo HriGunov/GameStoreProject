@@ -27,11 +27,13 @@ namespace GameStore.Web.Controllers
             _accountsService = accountsService;
         }
 
-        public async Task<IActionResult> Index(string search,int? page)
+        [TempData] public string StatusMessage { get; set; }
+
+        public async Task<IActionResult> Index(string search, int? page)
         {
             IEnumerable<Product> latestProducts;
             var pageIndex = (page ?? 1) - 1; //MembershipProvider expects a 0 for the first page 
-            int pageSize = 3; //Hardcoded view count
+            const int pageSize = 3; // Hardcoded view products count
 
             if (search != null)
             {
@@ -40,7 +42,7 @@ namespace GameStore.Web.Controllers
                 if (latestProducts == null || !latestProducts.Any())
                 {
                     latestProducts = await _productsService.SkipAndTakeLatestProductsAsync(10);
-                    TempData["Message"] = $"No products found matching your search ({search}).";
+                    StatusMessage = $"No products found matching your search ({search}).";
                 }
             }
             else
@@ -48,17 +50,13 @@ namespace GameStore.Web.Controllers
                 latestProducts = await _productsService.SkipAndTakeLatestProductsAsync(10);
             }
 
+            var productListings = latestProducts.Select(product => new ProductListingViewModel(product)).ToList();
 
-            var productListings = new List<ProductListingViewModel>();
-            foreach (var product in latestProducts) productListings.Add(new ProductListingViewModel(product));
-
-            var currentPage =  productListings.ToPagedList(pageIndex + 1, pageSize);
-
-
-
-            var productsAsIPagedList = new StaticPagedList<ProductListingViewModel>(currentPage, pageIndex + 1, pageSize, productListings.Count);
-
-            ViewBag.OnePageOfProducts = productsAsIPagedList; 
+            var currentPage = productListings.ToPagedList(pageIndex + 1, pageSize);
+            var productsAsIPagedList =
+                new StaticPagedList<ProductListingViewModel>(currentPage, pageIndex + 1, pageSize,
+                    productListings.Count);
+            ViewBag.OnePageOfProducts = productsAsIPagedList;
 
             return View(productsAsIPagedList);
         }
@@ -66,11 +64,16 @@ namespace GameStore.Web.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var product = await _productsService.FindProductAsync(id);
-            var viewModel = new ProductListingViewModel(product);
-            viewModel.Comments = await _commentService.GetCommentsFromProductAsync(id);
+            var viewModel = new ProductListingViewModel(product)
+            {
+                Comments = await _commentService.GetCommentsFromProductAsync(id)
+            };
 
             foreach (var comment in viewModel.Comments)
                 comment.Account = await _accountsService.FindAccountAsync(comment.AccountId);
+
+            if (TempData != null && (string) TempData["StatusMessage"] != "")
+                StatusMessage = (string) TempData["StatusMessage"];
 
             return View(viewModel);
         }
@@ -82,6 +85,14 @@ namespace GameStore.Web.Controllers
                 comment.Text);
 
             return RedirectToAction("Details", "Products", new {id = comment.ProductId});
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> RemoveComment(int id, int productId)
+        {
+            var comment = await _commentService.RemoveComment(id);
+            StatusMessage = $"Successfully removed {comment.Account.UserName}'s comment.";
+            return RedirectToAction("Details", "Products", new {id = productId});
         }
     }
 }

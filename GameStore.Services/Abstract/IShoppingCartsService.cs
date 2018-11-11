@@ -11,5 +11,6 @@ namespace GameStore.Services.Abstract
         Task ClearUserCartAsync(string accountId);
         Task<ShoppingCart> GetUserCartAsync(string accountId);
         Task<bool> ProductExistsInCartAsync(int productId, string accountId);
+        Task<Product> RemoveProductCartAsync(string accountId, int productId);
     }
 }

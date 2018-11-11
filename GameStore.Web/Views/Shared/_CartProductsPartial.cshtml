@@ -1,0 +1,13 @@
+﻿@model ProductListingViewModel
+
+<div class="media">
+    <img src="~/images/products/@(Model.ImageName ?? "card.png")" class="align-self-center mr-3" style="width: 60px" alt="@Model.Name">
+    <div class="media-body">
+        <h4>
+            <a asp-controller="Products" asp-action="Details" asp-route-id="@Model.Id">@Model.Name</a>
+        </h4>
+        <p>
+            <span class="badge badge-pill badge-success">Available</span>
+        </p>
+    </div>
+</div>

@@ -21,8 +21,8 @@ namespace GameStore.Services
 
         public async Task<IEnumerable<Comment>> GetCommentsFromProductAsync(int productId)
         {
-            var product = await storeContext.Products.Include( prod => prod.Comments).FirstOrDefaultAsync(prod => prod.Id == productId);
-            return product.Comments;
+            var productComments = await storeContext.Comments.Where(c => c.ProductId == productId && !c.IsDeleted).ToListAsync();
+            return productComments;
         }
         public async Task<IEnumerable<Comment>> GetCommentsByUserAsync(string accountId)
         {
@@ -54,7 +54,7 @@ namespace GameStore.Services
             commentor.Comments.Add(newComment);
             storeContext.Accounts.Update(commentor);
 
-            /*  Ako ne raboti mahni komentara
+            /*  If it doesn't work, remove the comment.
             productToBeCommentedTo.Comments.Add(newComment);
             storeContext.Products.Update(productToBeCommentedTo);
             storeContext.Comments.Add(newComment);*/
@@ -84,6 +84,16 @@ namespace GameStore.Services
                 comment.IsDeleted = true;
             storeContext.Update(storeContext.Accounts);
             await storeContext.SaveChangesAsync();
+        }
+
+        public async Task<Comment> RemoveComment(int id)
+        {
+            var comment = await storeContext.Comments.Include(a => a.Account).SingleAsync(c => c.Id == id);
+            var returnComment = comment;
+            storeContext.Comments.Remove(comment);
+            await storeContext.SaveChangesAsync();
+
+            return returnComment;
         }
     }
 }

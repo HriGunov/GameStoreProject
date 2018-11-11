@@ -268,7 +268,7 @@ namespace GameStore.Web.Controllers
                 _userManager.GetUserId(User)
             );
 
-            StatusMessage = "ChangeProductImage updated successfully";
+            StatusMessage = "Avatar updated successfully";
 
             return RedirectToAction(nameof(ChangeAvatar));
         }

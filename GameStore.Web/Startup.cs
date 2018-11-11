@@ -82,7 +82,6 @@ namespace GameStore.Web
             app.UseStaticFiles();
 
             app.UseAuthentication();
-
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -94,6 +93,8 @@ namespace GameStore.Web
                     "default",
                     "{controller=Home}/{action=Index}/{id?}");
             });
+
+            app.UseCookiePolicy();
         }
     }
 }

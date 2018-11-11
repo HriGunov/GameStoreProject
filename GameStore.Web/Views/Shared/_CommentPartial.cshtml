@@ -7,7 +7,13 @@
             <span class="badge badge-pill badge-dark float-left">Posted On: @Model.TimeStamp</span>
             @if (await UserManager.IsInRoleAsync(Model.Account, "Admin"))
             {
-                <span class="badge badge-pill badge-danger float-right">Admin Post</span>
+                <span class="badge badge-pill badge-danger float-right ml-1">Admin Post</span>
+            }
+            @if (User.IsInRole("Admin"))
+            {
+                <a asp-controller="Products" asp-action="RemoveComment" asp-route-id="@Model.Id" asp-route-productId="@Model.ProductId" class="badge badge-pill badge-danger float-right">
+                    <i class="fas fa-times"></i>
+                </a>
             }
         </div>
         <div class="card-body d-flex text-truncate">
