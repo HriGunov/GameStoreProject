@@ -11,5 +11,6 @@ namespace GameStore.Services.Abstract
         Task RemoveCommentsFromProductAsync(int productId);
         Task<IEnumerable<Comment>> GetCommentsByUserAsync(string accountId);
         Task<IEnumerable<Comment>> GetCommentsFromProductAsync(int productId);
+        Task<Comment> RemoveComment(int id);
     }
 }

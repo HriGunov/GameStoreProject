@@ -27,6 +27,8 @@ namespace GameStore.Web.Controllers
             _accountsService = accountsService;
         }
 
+        [TempData] public string StatusMessage { get; set; }
+
         public async Task<IActionResult> Index(string search, int? page)
         {
             IEnumerable<Product> latestProducts;
@@ -40,18 +42,20 @@ namespace GameStore.Web.Controllers
                 if (latestProducts == null || !latestProducts.Any())
                 {
                     latestProducts = await _productsService.SkipAndTakeLatestProductsAsync(10);
-                    TempData["Message"] = $"No products found matching your search ({search}).";
+                    StatusMessage = $"No products found matching your search ({search}).";
                 }
             }
             else
             {
                 latestProducts = await _productsService.SkipAndTakeLatestProductsAsync(10);
             }
-            
+
             var productListings = latestProducts.Select(product => new ProductListingViewModel(product)).ToList();
 
-            var currentPage =  productListings.ToPagedList(pageIndex + 1, pageSize);
-            var productsAsIPagedList = new StaticPagedList<ProductListingViewModel>(currentPage, pageIndex + 1, pageSize, productListings.Count);
+            var currentPage = productListings.ToPagedList(pageIndex + 1, pageSize);
+            var productsAsIPagedList =
+                new StaticPagedList<ProductListingViewModel>(currentPage, pageIndex + 1, pageSize,
+                    productListings.Count);
             ViewBag.OnePageOfProducts = productsAsIPagedList;
 
             return View(productsAsIPagedList);
@@ -68,6 +72,9 @@ namespace GameStore.Web.Controllers
             foreach (var comment in viewModel.Comments)
                 comment.Account = await _accountsService.FindAccountAsync(comment.AccountId);
 
+            if (TempData != null && (string) TempData["StatusMessage"] != "")
+                StatusMessage = (string) TempData["StatusMessage"];
+
             return View(viewModel);
         }
 
@@ -78,6 +85,14 @@ namespace GameStore.Web.Controllers
                 comment.Text);
 
             return RedirectToAction("Details", "Products", new {id = comment.ProductId});
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> RemoveComment(int id, int productId)
+        {
+            var comment = await _commentService.RemoveComment(id);
+            StatusMessage = $"Successfully removed {comment.Account.UserName}'s comment.";
+            return RedirectToAction("Details", "Products", new {id = productId});
         }
     }
 }

@@ -4,14 +4,13 @@
 
 
 <div class="container">
-
     <div class="row justify-content-center">
-
         <div class="card col-lg-8 pl-0 pr-0">
             <div class="card-header text-center">
                 Featured
             </div>
             <div class="card-body text-center">
+                @Html.Partial("_StatusMessage", (string) TempData["StatusMessage"])
                 <img src="~/images/products/@(Model.ImageName ?? "card.png")" class="img-thumbnail img-fluid" alt="@Model.Name">
             </div>
             <hr/>
@@ -49,10 +48,19 @@
                         <a asp-area="Administration" asp-controller="Products" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-danger"><i class="fas fa-edit"></i> Edit Product</a>
                     </div>
                 }
-                <div class="float-right">
-                    <a asp-area="" asp-controller="ShoppingCart" asp-action="Add" asp-route-id="@Model.Id" class="btn btn-primary"><i class="fas fa-shopping-bag"></i> Add to Cart</a>
-                    <a href="#!" class="btn btn-success"><i class="fas fa-shopping-bag"></i> Buy Now</a>
-                </div>
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <div class="float-right">
+                        <a asp-area="" asp-controller="Cart" asp-action="Add" asp-route-id="@Model.Id" class="btn btn-primary"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+                        <a href="#!" class="btn btn-success"><i class="fas fa-credit-card"></i> Buy Now</a>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-danger ml-2 mr-2 mt-2 mb-0" role="alert">
+                        <h6 class="alert-heading text-center">You must be logged in in order to purchase!</h6>
+                    </div>
+                }
             </div>
             @if (Model.LastPurchased != null)
             {
@@ -76,14 +84,23 @@
                 </div>
             }
 
-            <ul class="list-unstyled">
-                <li class="media mb-3">
-                    @foreach (var comment in Model.Comments)
-                    {
-                        @(await Html.PartialAsync("_CommentPartial", comment))
-                    }
-                </li>
-            </ul>
+            @if (Model.Comments.Any())
+            {
+                <ul class="list-unstyled">
+                    <li class="media mb-3">
+                        @foreach (var comment in Model.Comments)
+                        {
+                            @(await Html.PartialAsync("_CommentPartial", comment))
+                        }
+                    </li>
+                </ul>
+            }
+            else
+            {
+                <div class="alert alert-success ml-2 mr-2 mt-2 mb-2" role="alert">
+                    <h6 class="alert-heading text-center">Hey, be the first one to comment!</h6>
+                </div>
+            }
             @if (SignInManager.IsSignedIn(User))
             {
                 <hr/>

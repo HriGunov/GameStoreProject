@@ -106,8 +106,17 @@ namespace GameStore.Services
             var userCartProducts = cart.ShoppingCartProducts.ToList();
             foreach (var product in userCartProducts) storeContext.ShoppingCartProducts.Remove(product);
             await storeContext.SaveChangesAsync();
+        }
 
-            // account.ShoppingCart.ShoppingCartProducts = new List<ShoppingCartProducts>();
+        public async Task<Product> RemoveProductCartAsync(string accountId, int productId)
+        {
+            var cart = await GetUserCartAsync(accountId);
+            var shoppingCartProduct = cart.ShoppingCartProducts.Single(p => productId == p.ProductId);
+            var returnProduct = shoppingCartProduct.Product;
+            cart.ShoppingCartProducts.Remove(shoppingCartProduct);
+
+            await storeContext.SaveChangesAsync();
+            return returnProduct;
         }
 
         /// <summary>
@@ -118,6 +127,7 @@ namespace GameStore.Services
         public async Task<ShoppingCart> GetUserCartAsync(string accountId)
         {
             var account = await storeContext.Accounts.Where(acc => acc.Id == accountId).Include(acc => acc.ShoppingCart)
+                .ThenInclude(sh => sh.ShoppingCartProducts).ThenInclude(s => s.Product)
                 .SingleAsync();
             return account.ShoppingCart;
         }
