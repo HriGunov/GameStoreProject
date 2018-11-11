@@ -68,8 +68,7 @@ namespace GameStore.Services
                 .SingleAsync();
             if (product == null) throw new UserException("Could not find product.");
 
-            foreach (var comment in product.Comments) comment.IsDeleted = true;
-            storeContext.Update(storeContext.Products);
+            foreach (var comment in product.Comments) comment.IsDeleted = true; 
 
             await storeContext.SaveChangesAsync();
         }
@@ -82,7 +81,7 @@ namespace GameStore.Services
             if (tempAccount == null) throw new UserException("Could not find account.");
             foreach (var comment in tempAccount.Comments)
                 comment.IsDeleted = true;
-            storeContext.Update(storeContext.Accounts);
+            
             await storeContext.SaveChangesAsync();
         }
 
@@ -91,6 +90,7 @@ namespace GameStore.Services
             var comment = await storeContext.Comments.Include(a => a.Account).SingleAsync(c => c.Id == id);
             var returnComment = comment;
             storeContext.Comments.Remove(comment);
+
             await storeContext.SaveChangesAsync();
 
             return returnComment;

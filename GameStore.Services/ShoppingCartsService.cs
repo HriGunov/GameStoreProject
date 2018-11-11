@@ -14,8 +14,7 @@ namespace GameStore.Services
     {
         private readonly GameStoreContext storeContext;
 
-        public ShoppingCartsService(GameStoreContext storeContext, IAccountsService accountService,
-            IProductsService productsService)
+        public ShoppingCartsService(GameStoreContext storeContext)
         {
             this.storeContext = storeContext ?? throw new ArgumentNullException(nameof(storeContext));
         }
