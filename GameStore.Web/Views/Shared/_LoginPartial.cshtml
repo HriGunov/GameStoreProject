@@ -16,7 +16,6 @@
                 </button>
                 <div class="dropdown-menu dropdown-menu-right">
                     <a class="dropdown-item" asp-area="" asp-controller="Manage" asp-action="Index" title="Manage"><span class="fas fa-home mr-2"></span> Your Profile</a>
-                    <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="AddAccountToRole" title="Manage"><span class="fas fa-lock mr-2"></span> Make Admin</a>
                     @if (User.IsInRole("Admin"))
                     {
                         <div class="dropdown-divider"></div>

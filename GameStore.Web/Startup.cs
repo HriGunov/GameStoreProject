@@ -4,6 +4,7 @@ using GameStore.Data.Models;
 using GameStore.External.Services;
 using GameStore.Services;
 using GameStore.Services.Abstract;
+using GameStore.Web.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -59,8 +60,7 @@ namespace GameStore.Web
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IShoppingCartsService, ShoppingCartsService>();
             services.AddScoped<ICommentService, CommentService>();
-
-
+            
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
@@ -78,12 +78,17 @@ namespace GameStore.Web
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-
+            app.UserExceptionHandler();
             app.UseStaticFiles();
 
             app.UseAuthentication();
             app.UseMvc(routes =>
             {
+                routes.MapRoute(
+                    name: "userexception",
+                    template: "404",
+                    defaults: new { controller = "Home", action = "error" });
+
                 routes.MapRoute(
                     "areas",
                     "{area:exists}/{controller=Home}/{action=Index}/{id?}"
