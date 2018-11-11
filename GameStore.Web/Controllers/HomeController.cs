@@ -1,6 +1,9 @@
 ﻿using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 using GameStore.Services.Abstract;
 using GameStore.Web.Models;
+using GameStore.Web.Models.ProductsViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GameStore.Web.Controllers
@@ -14,16 +17,11 @@ namespace GameStore.Web.Controllers
             this.productsService = productsService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
-        }
-
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your about page.";
-
-            return View();
+            var productsCarousel = await productsService.SkipAndTakeLatestProductsAsync(4);
+            var viewModel = productsCarousel.Select(p => new ProductListingViewModel(p)).ToList();
+            return View(viewModel);
         }
 
         public IActionResult Contact()

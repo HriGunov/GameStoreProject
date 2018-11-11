@@ -1,3 +1,51 @@
-﻿@{
+﻿@model IList<ProductListingViewModel>
+@{
     ViewData["Title"] = "Home";
+    var firstGame = true;
 }
+<div id="carouselIndicators" class="carousel slide" data-ride="carousel">
+    <ol class="carousel-indicators">
+        <li data-target="#carouselIndicators" data-slide-to="0" class="active"></li>
+        <li data-target="#carouselIndicators" data-slide-to="1"></li>
+        <li data-target="#carouselIndicators" data-slide-to="2"></li>
+        <li data-target="#carouselIndicators" data-slide-to="3"></li>
+    </ol>
+    <div class="carousel-inner">
+        @foreach (var product in Model)
+        {
+            if (firstGame)
+            {
+                <div class="carousel-item active">
+                    <a asp-action="Details" asp-controller="Products" asp-route-id="@product.Id">
+                        <img class="d-block w-100" src="~/images/products/@product.ImageName?auto=yes" alt="@product.Name">
+                    </a>
+                    <div class="carousel-caption d-md-block carousel-text-bg">
+                        <h5 class="text-with-shadow">@product.Name</h5>
+                        <p class="text-with-shadow text-truncate">@product.Description</p>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="carousel-item">
+                    <a asp-action="Details" asp-controller="Products" asp-route-id="@product.Id">
+                        <img class="d-block w-100" src="~/images/products/@product.ImageName?auto=yes" alt="@product.Name">
+                    </a>
+                    <div class="carousel-caption d-md-block carousel-text-bg">
+                        <h5 class="text-with-shadow">@product.Name</h5>
+                        <p class="text-with-shadow text-truncate">@product.Description</p>
+                    </div>
+                </div>
+            }
+            firstGame = false;
+        }
+    </div>
+    <a class="carousel-control-prev" href="#carouselIndicators" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#carouselIndicators" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
