@@ -1,4 +1,8 @@
-@model IList<ProductListingViewModel>
+@model StaticPagedList<ProductListingViewModel>
+
+@using X.PagedList;
+
+
 <div class="container">
     <div class="row justify-content-center">
         @foreach (var item in Model)

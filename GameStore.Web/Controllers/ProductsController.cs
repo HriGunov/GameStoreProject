@@ -7,6 +7,7 @@ using GameStore.Web.Models.ProductsViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using X.PagedList;
 
 namespace GameStore.Web.Controllers
 {
@@ -26,9 +27,11 @@ namespace GameStore.Web.Controllers
             _accountsService = accountsService;
         }
 
-        public async Task<IActionResult> Index(string search)
+        public async Task<IActionResult> Index(string search,int? page)
         {
             IEnumerable<Product> latestProducts;
+            var pageIndex = (page ?? 1) - 1; //MembershipProvider expects a 0 for the first page 
+            int pageSize = 3; //Hardcoded view count
 
             if (search != null)
             {
@@ -45,10 +48,19 @@ namespace GameStore.Web.Controllers
                 latestProducts = await _productsService.SkipAndTakeLatestProductsAsync(10);
             }
 
+
             var productListings = new List<ProductListingViewModel>();
             foreach (var product in latestProducts) productListings.Add(new ProductListingViewModel(product));
 
-            return View(productListings);
+            var currentPage =  productListings.ToPagedList(pageIndex + 1, pageSize);
+
+
+
+            var productsAsIPagedList = new StaticPagedList<ProductListingViewModel>(currentPage, pageIndex + 1, pageSize, productListings.Count);
+
+            ViewBag.OnePageOfProducts = productsAsIPagedList; 
+
+            return View(productsAsIPagedList);
         }
 
         public async Task<IActionResult> Details(int id)
