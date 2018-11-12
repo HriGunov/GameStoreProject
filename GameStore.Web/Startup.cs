@@ -87,7 +87,7 @@ namespace GameStore.Web
                 routes.MapRoute(
                     name: "userexception",
                     template: "404",
-                    defaults: new { controller = "Home", action = "error" });
+                    defaults: new { controller = "Home", action = "Error" });
 
                 routes.MapRoute(
                     "areas",
